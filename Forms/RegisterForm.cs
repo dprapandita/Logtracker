@@ -16,7 +16,6 @@ namespace Logtracker.Forms
             {
                 _authService = app.GetAuthService();
 
-                // HAPUS TANDA // DI DEPAN BARIS INI AGAR FUNGSINYA JALAN:
                 LoadRolesToComboBox();
             }
         }
