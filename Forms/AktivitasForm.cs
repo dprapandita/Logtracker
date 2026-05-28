@@ -13,6 +13,10 @@ namespace Logtracker.Forms
             //cboKategori.SelectedIndex = 0;
             dtpTanggal.Value = DateTime.Today;
             numDurasi.Value = 30;
+
+            cboKategori.Items.Clear();
+            cboKategori.Items.AddRange(["Olahraga", "Belajar", "Membaca", "Istirahat", "Lainnya"]);
+            
         }
 
         public AktivitasForm(Aktivitas aktivitas) : this()

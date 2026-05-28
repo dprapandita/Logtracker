@@ -74,17 +74,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "AktivitasForm.cs",
               "DocumentMoniker": "C:\\Users\\Lenovo\\source\\repos\\Logtracker\\Forms\\AktivitasForm.cs",
               "RelativeDocumentMoniker": "Forms\\AktivitasForm.cs",
-              "ToolTip": "C:\\Users\\Lenovo\\source\\repos\\Logtracker\\Forms\\AktivitasForm.cs*",
-              "RelativeToolTip": "Forms\\AktivitasForm.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAwAAAAsAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Lenovo\\source\\repos\\Logtracker\\Forms\\AktivitasForm.cs",
+              "RelativeToolTip": "Forms\\AktivitasForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-28T08:08:06.033Z",
               "EditorCaption": ""
@@ -238,8 +242,8 @@
               "Title": "AktivitasForm.cs [Design]",
               "DocumentMoniker": "C:\\Users\\Lenovo\\source\\repos\\Logtracker\\Forms\\AktivitasForm.cs",
               "RelativeDocumentMoniker": "Forms\\AktivitasForm.cs",
-              "ToolTip": "C:\\Users\\Lenovo\\source\\repos\\Logtracker\\Forms\\AktivitasForm.cs [Design]*",
-              "RelativeToolTip": "Forms\\AktivitasForm.cs [Design]*",
+              "ToolTip": "C:\\Users\\Lenovo\\source\\repos\\Logtracker\\Forms\\AktivitasForm.cs [Design]",
+              "RelativeToolTip": "Forms\\AktivitasForm.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-25T05:54:04.608Z",
               "EditorCaption": " [Design]"
