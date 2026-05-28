@@ -10,7 +10,7 @@ namespace Logtracker.Forms
         public AktivitasForm()
         {
             InitializeComponent();
-            cboKategori.SelectedIndex = 0;
+            //cboKategori.SelectedIndex = 0;
             dtpTanggal.Value = DateTime.Today;
             numDurasi.Value = 30;
         }

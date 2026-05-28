@@ -75,7 +75,7 @@ namespace Logtracker.Forms
             cboRole.Location = new Point(40, 292);
             cboRole.Size = new Size(320, 28);
             cboRole.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboRole.Items.AddRange(["peserta", "pengawas", "ortu"]);
+            //cboRole.Items.AddRange(["peserta", "penga", "ortu"]);
             cboRole.SelectedIndexChanged += cboRole_SelectedIndexChanged;
 
             lblKodePeserta.Text = "Kode Peserta Anak:";

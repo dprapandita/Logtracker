@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Logtracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91f09c6455fe3f4c6796df3eec9abac8986f7c15")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d4834431e34bdfe436d5b1d05f1d71bc7e8fadc6")]
 [assembly: System.Reflection.AssemblyProductAttribute("Logtracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Logtracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

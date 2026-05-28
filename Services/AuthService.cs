@@ -100,6 +100,11 @@ namespace Logtracker.Services
             }
         }
 
+        public List<string> GetRolesFromDb()
+        {
+            // Panggil method baru yang kita buat di RoleRepository tadi
+            return _roleRepo.GetAllRoleNames();
+        }
         private static string HashPassword(string password)
         {
             var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(password));

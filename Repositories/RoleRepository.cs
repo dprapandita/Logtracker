@@ -21,5 +21,24 @@ namespace Logtracker.Repositories
             cmd.Parameters.AddWithValue("nama", nama);
             return cmd.ExecuteScalar() as int?;
         }
+
+        public List<string> GetAllRoleNames()
+        {
+            var roles = new List<string>();
+
+            using var conn = _db.GetConnection();
+            conn.Open();
+
+            // Menggunakan nama tabel 'roles' dan nama kolom 'nama' sesuai database Anda
+            using var cmd = new NpgsqlCommand("SELECT nama FROM roles", conn);
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                roles.Add(reader.GetString(0));
+            }
+
+            return roles;
+        }
     }
 }
