@@ -7,15 +7,10 @@ namespace Logtracker
 {
     internal static class Program
     {
-        private static AuthService? _authService;
-        private static AktivitasService? _aktivitasService;
-        private static CoachService? _coachService;
-        private static OrangTuaService? _orangTuaService;
-        private static LaporanService? _laporanService;
+        // Cukup simpan 1 instance utama
+        private static ProgramInstance? _instance;
 
-        private const string ConnString = "Host=localhost;Port=5400;Username=postgres;Password=123;Database=logtracker";
-
-        public static string ConnectionString => ConnString;
+        public static string ConnectionString => Logtracker.Data.DatabaseHelper.DefaultConnectionString;
 
         [STAThread]
         static void Main()
@@ -23,8 +18,18 @@ namespace Logtracker
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             ApplicationConfiguration.Initialize();
 
-            var db = new DatabaseHelper(ConnString);
+            // DatabaseHelper sekarang mengurus connection string-nya sendiri
+            var db = new DatabaseHelper();
 
+            // Panggil method untuk setup Dependency / Service
+            InitializeServices(db);
+
+            Application.Run(new LoginForm());
+        }
+
+        private static void InitializeServices(DatabaseHelper db)
+        {
+            // 1. Inisialisasi Repositories
             var akunRepo = new AkunLoginRepository(db);
             var profileRepo = new ProfileRepository(db);
             var aktivitasRepo = new AktivitasRepository(db);
@@ -32,25 +37,20 @@ namespace Logtracker
             var relasiRepo = new RelasiRepository(db);
             var roleRepo = new RoleRepository(db);
 
-            _authService = new AuthService(akunRepo, profileRepo, relasiRepo, roleRepo);
-            _aktivitasService = new AktivitasService(aktivitasRepo);
-            _coachService = new CoachService(profileRepo, aktivitasRepo, feedbackRepo);
-            _orangTuaService = new OrangTuaService(profileRepo, relasiRepo, aktivitasRepo, feedbackRepo);
-            _laporanService = new LaporanService(aktivitasRepo);
-
-            Application.Run(new LoginForm());
+            // 2. Inisialisasi Services dan simpan ke dalam _instance
+            _instance = new ProgramInstance
+            {
+                AuthService = new AuthService(akunRepo, profileRepo, relasiRepo, roleRepo),
+                AktivitasService = new AktivitasService(aktivitasRepo),
+                CoachService = new CoachService(profileRepo, aktivitasRepo, feedbackRepo),
+                OrangTuaService = new OrangTuaService(profileRepo, relasiRepo, aktivitasRepo, feedbackRepo),
+                LaporanService = new LaporanService(aktivitasRepo)
+            };
         }
 
         public static ProgramInstance? GetInstance()
         {
-            return _authService != null ? new ProgramInstance
-            {
-                AuthService = _authService!,
-                AktivitasService = _aktivitasService!,
-                CoachService = _coachService!,
-                OrangTuaService = _orangTuaService!,
-                LaporanService = _laporanService!
-            } : null;
+            return _instance;
         }
     }
 
