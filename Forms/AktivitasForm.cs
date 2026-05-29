@@ -1,4 +1,5 @@
 using Logtracker.Models;
+using Logtracker.Services;
 
 namespace Logtracker.Forms
 {
@@ -10,7 +11,7 @@ namespace Logtracker.Forms
         public AktivitasForm()
         {
             InitializeComponent();
-            cboKategori.SelectedIndex = 0;
+            LoadKategori();
             dtpTanggal.Value = DateTime.Today;
             numDurasi.Value = 30;
         }
@@ -24,6 +25,25 @@ namespace Logtracker.Forms
             numDurasi.Value = aktivitas.Durasi;
             dtpTanggal.Value = aktivitas.Tanggal;
             btnSimpan.Text = "Simpan";
+        }
+
+        private void LoadKategori()
+        {
+            try
+            {
+                var app = Program.GetInstance();
+                if (app == null) return;
+                var list = app.GetKategoriService().GetAll();
+                cboKategori.Items.Clear();
+                foreach (var k in list)
+                    cboKategori.Items.Add(k.NamaLatihan);
+                if (cboKategori.Items.Count > 0)
+                    cboKategori.SelectedIndex = 0;
+            }
+            catch
+            {
+                // if table is empty or error, leave combo empty
+            }
         }
 
         private bool ValidateInput()
@@ -42,6 +62,7 @@ namespace Logtracker.Forms
             if ((int)numDurasi.Value <= 0)
             {
                 MessageBox.Show("Durasi harus lebih dari 0.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                numDurasi.Focus();
                 return false;
             }
             return true;

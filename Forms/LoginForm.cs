@@ -1,5 +1,3 @@
-using Logtracker.Models;
-
 namespace Logtracker.Forms
 {
     public partial class LoginForm : Form
@@ -11,12 +9,12 @@ namespace Logtracker.Forms
 
         private void btnLogin_Click(object? sender, EventArgs e)
         {
-            var email = txtEmail.Text.Trim();
+            var username = txtUsername.Text.Trim();
             var password = txtPassword.Text;
 
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                MessageBox.Show("Masukkan email dan password.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Masukkan username dan password.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -25,10 +23,10 @@ namespace Logtracker.Forms
                 var app = Program.GetInstance();
                 if (app == null) return;
 
-                var result = app.GetAuthService().Login(email, password);
+                var result = app.GetAuthService().Login(username, password);
                 if (result == null)
                 {
-                    MessageBox.Show("Email atau password salah.", "Login Gagal", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Username atau password salah.", "Login Gagal", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 

@@ -145,6 +145,25 @@ namespace Logtracker.Repositories
             return dt;
         }
 
+        private static bool HasColumn(NpgsqlDataReader reader, string name)
+        {
+            try
+            {
+                return reader.GetOrdinal(name) >= 0;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return false;
+            }
+        }
+
+        private static T? GetColumnOrNull<T>(NpgsqlDataReader reader, string name) where T : class
+        {
+            return HasColumn(reader, name) && !reader.IsDBNull(reader.GetOrdinal(name))
+                ? (T)reader[name]
+                : null;
+        }
+
         private static Aktivitas Map(NpgsqlDataReader reader)
         {
             var raw = reader["tanggal"];
@@ -160,7 +179,7 @@ namespace Logtracker.Repositories
                 Tanggal = tanggal,
                 Status = reader["status"] as string ?? "Menunggu",
                 CreatedAt = reader["created_at"] is DateTime dt ? dt : DateTime.Now,
-                NamaPeserta = reader["nama_peserta"] as string
+                NamaPeserta = GetColumnOrNull<string>(reader, "nama_peserta")
             };
         }
     }

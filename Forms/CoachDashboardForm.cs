@@ -121,7 +121,6 @@ namespace Logtracker.Forms
 
             var hasError = false;
 
-            // Update status
             if (cboStatus.SelectedItem != null)
             {
                 var status = cboStatus.SelectedItem.ToString()!;
@@ -133,7 +132,6 @@ namespace Logtracker.Forms
                 }
             }
 
-            // Save new feedback
             var feedbackText = txtFeedbackBaru.Text.Trim();
             if (!string.IsNullOrWhiteSpace(feedbackText))
             {
@@ -152,9 +150,16 @@ namespace Logtracker.Forms
             if (!hasError)
                 MessageBox.Show("Status dan feedback berhasil disimpan.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // Refresh
             if (cboPeserta.SelectedIndex >= 0 && cboPeserta.SelectedIndex < _pesertaList.Count)
                 LoadAktivitas(_pesertaList[cboPeserta.SelectedIndex].Id);
+        }
+
+        private void btnKelolaKategori_Click(object? sender, EventArgs e)
+        {
+            var app = Program.GetInstance();
+            if (app == null) return;
+            var form = new KelolaKategoriForm(app.GetKategoriService());
+            form.ShowDialog();
         }
 
         private void btnRefresh_Click(object? sender, EventArgs e) => LoadPeserta();
@@ -179,6 +184,16 @@ namespace Logtracker.Forms
                     _ => Color.Gray
                 };
             }
+        }
+
+        private void lstExistingFeedback_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cboStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

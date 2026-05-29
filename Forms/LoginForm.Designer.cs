@@ -4,8 +4,8 @@ namespace Logtracker.Forms
     {
         private System.ComponentModel.IContainer components = null;
         private Label lblTitle;
-        private Label lblEmail;
-        private TextBox txtEmail;
+        private Label lblUsername;
+        private TextBox txtUsername;
         private Label lblPassword;
         private TextBox txtPassword;
         private Button btnLogin;
@@ -20,8 +20,8 @@ namespace Logtracker.Forms
         private void InitializeComponent()
         {
             lblTitle = new Label();
-            lblEmail = new Label();
-            txtEmail = new TextBox();
+            lblUsername = new Label();
+            txtUsername = new TextBox();
             lblPassword = new Label();
             txtPassword = new TextBox();
             btnLogin = new Button();
@@ -34,12 +34,12 @@ namespace Logtracker.Forms
             lblTitle.Location = new Point(0, 20);
             lblTitle.Size = new Size(350, 45);
 
-            lblEmail.Text = "Email:";
-            lblEmail.Location = new Point(50, 85);
-            lblEmail.Size = new Size(80, 25);
+            lblUsername.Text = "Username:";
+            lblUsername.Location = new Point(50, 85);
+            lblUsername.Size = new Size(80, 25);
 
-            txtEmail.Location = new Point(50, 112);
-            txtEmail.Size = new Size(250, 27);
+            txtUsername.Location = new Point(50, 112);
+            txtUsername.Size = new Size(250, 27);
 
             lblPassword.Text = "Password:";
             lblPassword.Location = new Point(50, 150);
@@ -69,8 +69,8 @@ namespace Logtracker.Forms
             MaximizeBox = false;
 
             Controls.Add(lblTitle);
-            Controls.Add(lblEmail);
-            Controls.Add(txtEmail);
+            Controls.Add(lblUsername);
+            Controls.Add(txtUsername);
             Controls.Add(lblPassword);
             Controls.Add(txtPassword);
             Controls.Add(btnLogin);

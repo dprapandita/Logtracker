@@ -1,22 +1,32 @@
+using Logtracker.Models;
 using Logtracker.Services;
 
 namespace Logtracker.Forms
 {
     public partial class RegisterForm : Form
     {
+        private readonly AuthService? _authService;
+        private readonly List<Role> _roles = [];
+
         public RegisterForm()
         {
             InitializeComponent();
-            cboRole.SelectedIndex = 0;
-            txtKodePeserta.Visible = false;
-            lblKodePeserta.Visible = false;
 
             var app = Program.GetInstance();
             if (app != null)
+            {
                 _authService = app.GetAuthService();
-        }
+                _roles = _authService.GetRoles();
+                cboRole.Items.Clear();
+                foreach (var r in _roles)
+                    cboRole.Items.Add(r.Nama);
+                if (cboRole.Items.Count > 0)
+                    cboRole.SelectedIndex = 0;
+            }
 
-        private readonly AuthService? _authService;
+            txtKodePeserta.Visible = false;
+            lblKodePeserta.Visible = false;
+        }
 
         private void cboRole_SelectedIndexChanged(object? sender, EventArgs e)
         {
@@ -33,13 +43,20 @@ namespace Logtracker.Forms
                 return;
             }
 
+            var username = txtUsername.Text.Trim();
             var nama = txtNama.Text.Trim();
             var email = txtEmail.Text.Trim();
             var password = txtPassword.Text;
-            var role = cboRole.SelectedItem?.ToString() ?? "peserta";
+            var role = cboRole.SelectedItem?.ToString() ?? "";
             var kodePeserta = txtKodePeserta.Visible ? txtKodePeserta.Text.Trim() : null;
 
-            var (success, message) = _authService.Register(nama, email, password, role, kodePeserta);
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                MessageBox.Show("Pilih role.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var (success, message) = _authService.Register(username, nama, email, password, role, kodePeserta);
 
             if (success)
             {

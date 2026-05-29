@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS profiles (
 -- Tabel akun_login (kredensial login)
 CREATE TABLE IF NOT EXISTS akun_login (
     id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     role_id INT NOT NULL REFERENCES roles(id),
@@ -63,4 +64,10 @@ CREATE TABLE IF NOT EXISTS orang_tua_peserta (
     ortu_id INT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
     peserta_id INT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
     UNIQUE(ortu_id, peserta_id)
+);
+
+-- Tabel kategori latihan
+CREATE TABLE IF NOT EXISTS kategori_latihan (
+    id SERIAL PRIMARY KEY,
+    nama_latihan VARCHAR(50) NOT NULL UNIQUE
 );

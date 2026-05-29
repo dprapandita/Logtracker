@@ -9,7 +9,7 @@ namespace Logtracker.Services
     {
         public Profile Profile { get; set; } = null!;
         public string Role { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
     }
 
     public class AuthService
@@ -27,9 +27,9 @@ namespace Logtracker.Services
             _roleRepo = roleRepo;
         }
 
-        public LoginResult? Login(string email, string password)
+        public LoginResult? Login(string username, string password)
         {
-            var akun = _akunRepo.GetByEmail(email);
+            var akun = _akunRepo.GetByUsername(username);
             if (akun == null) return null;
 
             var hash = HashPassword(password);
@@ -42,14 +42,22 @@ namespace Logtracker.Services
             {
                 Profile = profile,
                 Role = akun.RoleName ?? "",
-                Email = akun.Email
+                Username = akun.Username
             };
         }
 
-        public (bool Success, string Message) Register(string nama, string email, string password, string roleName, string? kodePesertaOrtu = null)
+        public List<Role> GetRoles()
         {
-            if (string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            return _roleRepo.GetAll();
+        }
+
+        public (bool Success, string Message) Register(string username, string nama, string email, string password, string roleName, string? kodePesertaOrtu = null)
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
                 return (false, "Semua field harus diisi.");
+
+            if (_akunRepo.GetByUsername(username) != null)
+                return (false, "Username sudah digunakan.");
 
             if (_akunRepo.GetByEmail(email) != null)
                 return (false, "Email sudah terdaftar.");
@@ -75,6 +83,7 @@ namespace Logtracker.Services
 
                 var akun = new AkunLogin
                 {
+                    Username = username.Trim().ToLower(),
                     Email = email.Trim().ToLower(),
                     PasswordHash = HashPassword(password),
                     RoleId = roleId,
