@@ -5,32 +5,27 @@ namespace Logtracker.Forms
 {
     public partial class RegisterForm : Form
     {
-        private readonly AuthService? _authService;
-        private readonly List<Role> _roles = [];
-
         public RegisterForm()
         {
             InitializeComponent();
+            txtKodePeserta.Visible = false;
+            lblKodePeserta.Visible = false;
 
             var app = Program.GetInstance();
             if (app != null)
             {
                 _authService = app.GetAuthService();
-                _roles = _authService.GetRoles();
-                cboRole.Items.Clear();
-                foreach (var r in _roles)
-                    cboRole.Items.Add(r.Nama);
-                if (cboRole.Items.Count > 0)
-                    cboRole.SelectedIndex = 0;
+                if (_authService != null)
+                    LoadRoles();
             }
-
-            txtKodePeserta.Visible = false;
-            lblKodePeserta.Visible = false;
         }
+
+        private readonly AuthService? _authService;
 
         private void cboRole_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            var isOrtu = cboRole.SelectedItem?.ToString() == "ortu";
+            var role = cboRole.SelectedItem as Role;
+            var isOrtu = role?.Nama == "ortu";
             txtKodePeserta.Visible = isOrtu;
             lblKodePeserta.Visible = isOrtu;
         }
@@ -47,14 +42,8 @@ namespace Logtracker.Forms
             var nama = txtNama.Text.Trim();
             var email = txtEmail.Text.Trim();
             var password = txtPassword.Text;
-            var role = cboRole.SelectedItem?.ToString() ?? "";
+            var role = (cboRole.SelectedItem as Role)?.Nama ?? "peserta";
             var kodePeserta = txtKodePeserta.Visible ? txtKodePeserta.Text.Trim() : null;
-
-            if (string.IsNullOrWhiteSpace(role))
-            {
-                MessageBox.Show("Pilih role.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
 
             var (success, message) = _authService.Register(username, nama, email, password, role, kodePeserta);
 
@@ -74,6 +63,15 @@ namespace Logtracker.Forms
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void LoadRoles()
+        {
+            if (_authService == null) return;
+            var roles = _authService.GetRoles();
+            cboRole.DataSource = roles;
+            cboRole.DisplayMember = "Nama";
+            cboRole.ValueMember = "Nama";
         }
     }
 }

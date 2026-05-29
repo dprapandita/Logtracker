@@ -50,64 +50,64 @@ namespace Logtracker.Forms
             lblTitle.Location = new Point(0, 15);
             lblTitle.Size = new Size(400, 40);
 
-            lblNama.Text = "Nama Lengkap:";
-            lblNama.Location = new Point(40, 65);
-            lblNama.Size = new Size(100, 25);
+            lblNama.Text = "Nama:";
+            lblNama.Location = new Point(40, 70);
+            lblNama.Size = new Size(80, 25);
 
-            txtNama.Location = new Point(40, 92);
+            txtNama.Location = new Point(40, 97);
             txtNama.Size = new Size(320, 27);
 
             lblUsername.Text = "Username:";
-            lblUsername.Location = new Point(40, 130);
+            lblUsername.Location = new Point(40, 135);
             lblUsername.Size = new Size(80, 25);
 
-            txtUsername.Location = new Point(40, 157);
+            txtUsername.Location = new Point(40, 162);
             txtUsername.Size = new Size(320, 27);
 
             lblEmail.Text = "Email:";
-            lblEmail.Location = new Point(40, 195);
+            lblEmail.Location = new Point(40, 200);
             lblEmail.Size = new Size(80, 25);
 
-            txtEmail.Location = new Point(40, 222);
+            txtEmail.Location = new Point(40, 227);
             txtEmail.Size = new Size(320, 27);
 
             lblPassword.Text = "Password:";
-            lblPassword.Location = new Point(40, 260);
+            lblPassword.Location = new Point(40, 265);
             lblPassword.Size = new Size(80, 25);
 
-            txtPassword.Location = new Point(40, 287);
+            txtPassword.Location = new Point(40, 292);
             txtPassword.Size = new Size(320, 27);
             txtPassword.UseSystemPasswordChar = true;
 
             lblRole.Text = "Role:";
-            lblRole.Location = new Point(40, 325);
+            lblRole.Location = new Point(40, 330);
             lblRole.Size = new Size(80, 25);
 
-            cboRole.Location = new Point(40, 352);
+            cboRole.Location = new Point(40, 357);
             cboRole.Size = new Size(320, 28);
             cboRole.DropDownStyle = ComboBoxStyle.DropDownList;
             cboRole.SelectedIndexChanged += cboRole_SelectedIndexChanged;
 
             lblKodePeserta.Text = "Kode Peserta Anak:";
-            lblKodePeserta.Location = new Point(40, 390);
+            lblKodePeserta.Location = new Point(40, 395);
             lblKodePeserta.Size = new Size(140, 25);
 
-            txtKodePeserta.Location = new Point(40, 417);
+            txtKodePeserta.Location = new Point(40, 422);
             txtKodePeserta.Size = new Size(320, 27);
 
             btnRegister.Text = "Daftar";
-            btnRegister.Location = new Point(40, 460);
+            btnRegister.Location = new Point(40, 465);
             btnRegister.Size = new Size(150, 35);
             btnRegister.Click += btnRegister_Click;
 
             btnBatal.Text = "Batal";
-            btnBatal.Location = new Point(210, 460);
+            btnBatal.Location = new Point(210, 465);
             btnBatal.Size = new Size(150, 35);
             btnBatal.Click += btnBatal_Click;
 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(400, 515);
+            ClientSize = new Size(400, 525);
             Text = "LOGTRACKER - Register";
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedSingle;
