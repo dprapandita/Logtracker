@@ -43,82 +43,169 @@ namespace Logtracker.Forms
             grpStatus.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvStatus).BeginInit();
             SuspendLayout();
-
+            // 
+            // lblPeserta
+            // 
+            lblPeserta.Font = new Font("Dungeon", 15.75F, FontStyle.Bold);
+            lblPeserta.ForeColor = Color.FromArgb(55, 36, 20);
+            lblPeserta.Location = new Point(10, 10);
+            lblPeserta.Name = "lblPeserta";
+            lblPeserta.Size = new Size(665, 25);
+            lblPeserta.TabIndex = 0;
             lblPeserta.Text = "Laporan Aktivitas";
-            lblPeserta.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblPeserta.Location = new Point(12, 12);
-            lblPeserta.Size = new Size(760, 30);
-
+            // 
+            // grpKategoriDurasi
+            // 
+            grpKategoriDurasi.Controls.Add(dgvKategoriDurasi);
+            grpKategoriDurasi.FlatStyle = FlatStyle.Flat;
+            grpKategoriDurasi.ForeColor = Color.FromArgb(55, 36, 20);
+            grpKategoriDurasi.Location = new Point(10, 43);
+            grpKategoriDurasi.Margin = new Padding(3, 2, 3, 2);
+            grpKategoriDurasi.Name = "grpKategoriDurasi";
+            grpKategoriDurasi.Padding = new Padding(3, 2, 3, 2);
+            grpKategoriDurasi.Size = new Size(324, 170);
+            grpKategoriDurasi.TabIndex = 1;
+            grpKategoriDurasi.TabStop = false;
             grpKategoriDurasi.Text = "Total Durasi per Kategori";
-            grpKategoriDurasi.Location = new Point(12, 50);
-            grpKategoriDurasi.Size = new Size(370, 200);
-
-            dgvKategoriDurasi.Location = new Point(10, 25);
-            dgvKategoriDurasi.Size = new Size(350, 165);
-            dgvKategoriDurasi.ReadOnly = true;
-            dgvKategoriDurasi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            grpKategoriDurasi.Enter += grpKategoriDurasi_Enter;
+            // 
+            // dgvKategoriDurasi
+            // 
             dgvKategoriDurasi.AllowUserToAddRows = false;
+            dgvKategoriDurasi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvKategoriDurasi.BackgroundColor = Color.FromArgb(111, 77, 56);
+            dgvKategoriDurasi.GridColor = Color.FromArgb(213, 184, 147);
+            dgvKategoriDurasi.Location = new Point(9, 22);
+            dgvKategoriDurasi.Margin = new Padding(3, 2, 3, 2);
+            dgvKategoriDurasi.Name = "dgvKategoriDurasi";
+            dgvKategoriDurasi.ReadOnly = true;
             dgvKategoriDurasi.RowHeadersVisible = false;
             dgvKategoriDurasi.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
+            dgvKategoriDurasi.Size = new Size(306, 141);
+            dgvKategoriDurasi.TabIndex = 0;
+            dgvKategoriDurasi.CellContentClick += dgvKategoriDurasi_CellContentClick;
+            // 
+            // grpKategoriJumlah
+            // 
+            grpKategoriJumlah.Controls.Add(dgvKategoriJumlah);
+            grpKategoriJumlah.FlatStyle = FlatStyle.Flat;
+            grpKategoriJumlah.ForeColor = Color.FromArgb(55, 36, 20);
+            grpKategoriJumlah.Location = new Point(352, 43);
+            grpKategoriJumlah.Margin = new Padding(3, 2, 3, 2);
+            grpKategoriJumlah.Name = "grpKategoriJumlah";
+            grpKategoriJumlah.Padding = new Padding(3, 2, 3, 2);
+            grpKategoriJumlah.Size = new Size(324, 170);
+            grpKategoriJumlah.TabIndex = 2;
+            grpKategoriJumlah.TabStop = false;
             grpKategoriJumlah.Text = "Jumlah per Kategori";
-            grpKategoriJumlah.Location = new Point(402, 50);
-            grpKategoriJumlah.Size = new Size(370, 200);
-
-            dgvKategoriJumlah.Location = new Point(10, 25);
-            dgvKategoriJumlah.Size = new Size(350, 165);
-            dgvKategoriJumlah.ReadOnly = true;
-            dgvKategoriJumlah.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            // 
+            // dgvKategoriJumlah
+            // 
             dgvKategoriJumlah.AllowUserToAddRows = false;
+            dgvKategoriJumlah.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvKategoriJumlah.BackgroundColor = Color.FromArgb(111, 77, 56);
+            dgvKategoriJumlah.GridColor = Color.FromArgb(213, 184, 147);
+            dgvKategoriJumlah.Location = new Point(9, 22);
+            dgvKategoriJumlah.Margin = new Padding(3, 2, 3, 2);
+            dgvKategoriJumlah.Name = "dgvKategoriJumlah";
+            dgvKategoriJumlah.ReadOnly = true;
             dgvKategoriJumlah.RowHeadersVisible = false;
             dgvKategoriJumlah.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
+            dgvKategoriJumlah.Size = new Size(306, 141);
+            dgvKategoriJumlah.TabIndex = 0;
+            // 
+            // grpTanggalDurasi
+            // 
+            grpTanggalDurasi.Controls.Add(dgvTanggalDurasi);
+            grpTanggalDurasi.FlatStyle = FlatStyle.Flat;
+            grpTanggalDurasi.ForeColor = Color.FromArgb(55, 36, 20);
+            grpTanggalDurasi.Location = new Point(10, 221);
+            grpTanggalDurasi.Margin = new Padding(3, 2, 3, 2);
+            grpTanggalDurasi.Name = "grpTanggalDurasi";
+            grpTanggalDurasi.Padding = new Padding(3, 2, 3, 2);
+            grpTanggalDurasi.Size = new Size(324, 170);
+            grpTanggalDurasi.TabIndex = 3;
+            grpTanggalDurasi.TabStop = false;
             grpTanggalDurasi.Text = "Total Durasi per Tanggal";
-            grpTanggalDurasi.Location = new Point(12, 260);
-            grpTanggalDurasi.Size = new Size(370, 200);
-
-            dgvTanggalDurasi.Location = new Point(10, 25);
-            dgvTanggalDurasi.Size = new Size(350, 165);
-            dgvTanggalDurasi.ReadOnly = true;
-            dgvTanggalDurasi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            // 
+            // dgvTanggalDurasi
+            // 
             dgvTanggalDurasi.AllowUserToAddRows = false;
+            dgvTanggalDurasi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvTanggalDurasi.BackgroundColor = Color.FromArgb(111, 77, 56);
+            dgvTanggalDurasi.GridColor = Color.FromArgb(213, 184, 147);
+            dgvTanggalDurasi.Location = new Point(9, 22);
+            dgvTanggalDurasi.Margin = new Padding(3, 2, 3, 2);
+            dgvTanggalDurasi.Name = "dgvTanggalDurasi";
+            dgvTanggalDurasi.ReadOnly = true;
             dgvTanggalDurasi.RowHeadersVisible = false;
             dgvTanggalDurasi.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
+            dgvTanggalDurasi.Size = new Size(306, 141);
+            dgvTanggalDurasi.TabIndex = 0;
+            // 
+            // grpStatus
+            // 
+            grpStatus.Controls.Add(dgvStatus);
+            grpStatus.FlatStyle = FlatStyle.Flat;
+            grpStatus.ForeColor = Color.FromArgb(55, 36, 20);
+            grpStatus.Location = new Point(352, 221);
+            grpStatus.Margin = new Padding(3, 2, 3, 2);
+            grpStatus.Name = "grpStatus";
+            grpStatus.Padding = new Padding(3, 2, 3, 2);
+            grpStatus.Size = new Size(324, 170);
+            grpStatus.TabIndex = 4;
+            grpStatus.TabStop = false;
             grpStatus.Text = "Status Aktivitas";
-            grpStatus.Location = new Point(402, 260);
-            grpStatus.Size = new Size(370, 200);
-
-            dgvStatus.Location = new Point(10, 25);
-            dgvStatus.Size = new Size(350, 165);
-            dgvStatus.ReadOnly = true;
-            dgvStatus.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            // 
+            // dgvStatus
+            // 
             dgvStatus.AllowUserToAddRows = false;
+            dgvStatus.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvStatus.BackgroundColor = Color.FromArgb(111, 77, 56);
+            dgvStatus.GridColor = Color.FromArgb(213, 184, 147);
+            dgvStatus.Location = new Point(9, 22);
+            dgvStatus.Margin = new Padding(3, 2, 3, 2);
+            dgvStatus.Name = "dgvStatus";
+            dgvStatus.ReadOnly = true;
             dgvStatus.RowHeadersVisible = false;
             dgvStatus.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
+            dgvStatus.Size = new Size(306, 141);
+            dgvStatus.TabIndex = 0;
+            // 
+            // btnRefresh
+            // 
+            btnRefresh.BackColor = Color.FromArgb(213, 184, 147);
+            btnRefresh.FlatStyle = FlatStyle.Flat;
+            btnRefresh.ForeColor = Color.FromArgb(55, 36, 20);
+            btnRefresh.Location = new Point(10, 403);
+            btnRefresh.Margin = new Padding(3, 2, 3, 2);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(79, 25);
+            btnRefresh.TabIndex = 5;
             btnRefresh.Text = "Refresh";
-            btnRefresh.Location = new Point(12, 475);
-            btnRefresh.Size = new Size(90, 30);
+            btnRefresh.UseVisualStyleBackColor = false;
             btnRefresh.Click += btnRefresh_Click;
-
+            // 
+            // btnTutup
+            // 
+            btnTutup.BackColor = Color.FromArgb(213, 184, 147);
+            btnTutup.FlatStyle = FlatStyle.Flat;
+            btnTutup.ForeColor = Color.FromArgb(55, 36, 20);
+            btnTutup.Location = new Point(94, 403);
+            btnTutup.Margin = new Padding(3, 2, 3, 2);
+            btnTutup.Name = "btnTutup";
+            btnTutup.Size = new Size(79, 25);
+            btnTutup.TabIndex = 6;
             btnTutup.Text = "Tutup";
-            btnTutup.Location = new Point(108, 475);
-            btnTutup.Size = new Size(90, 30);
+            btnTutup.UseVisualStyleBackColor = false;
             btnTutup.Click += btnTutup_Click;
-
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            // 
+            // LaporanForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(784, 520);
-            Text = "LOGTRACKER - Laporan";
-            StartPosition = FormStartPosition.CenterParent;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
-
-            grpKategoriDurasi.Controls.Add(dgvKategoriDurasi);
-            grpKategoriJumlah.Controls.Add(dgvKategoriJumlah);
-            grpTanggalDurasi.Controls.Add(dgvTanggalDurasi);
-            grpStatus.Controls.Add(dgvStatus);
+            BackColor = Color.FromArgb(183, 160, 135);
+            ClientSize = new Size(686, 442);
             Controls.Add(lblPeserta);
             Controls.Add(grpKategoriDurasi);
             Controls.Add(grpKategoriJumlah);
@@ -126,6 +213,13 @@ namespace Logtracker.Forms
             Controls.Add(grpStatus);
             Controls.Add(btnRefresh);
             Controls.Add(btnTutup);
+            Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(3, 2, 3, 2);
+            MaximizeBox = false;
+            Name = "LaporanForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "LOGTRACKER - Laporan";
             grpKategoriDurasi.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvKategoriDurasi).EndInit();
             grpKategoriJumlah.ResumeLayout(false);

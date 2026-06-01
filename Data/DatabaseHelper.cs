@@ -6,7 +6,7 @@ namespace Logtracker.Data
     public class DatabaseHelper
     {
         public static string DefaultConnectionString { get; private set; }
-            = "Host=localhost;Port=5432;Username=postgres;Password=123;Database=logtracker_db";
+            = "Host=localhost;Port=5432;Username=postgres;Password=1234;Database=pbo1";
 
         private readonly string _connectionString;
 

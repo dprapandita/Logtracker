@@ -90,5 +90,15 @@ namespace Logtracker.Forms
             DialogResult = DialogResult.Cancel;
             Close();
         }
+
+        private void lblTitle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblKategori_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

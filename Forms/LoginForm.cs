@@ -53,5 +53,10 @@ namespace Logtracker.Forms
             var registerForm = new RegisterForm();
             registerForm.ShowDialog();
         }
+
+        private void lblPassword_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

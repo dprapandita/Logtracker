@@ -28,54 +28,107 @@ namespace Logtracker.Forms
             dgvKategori = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dgvKategori).BeginInit();
             SuspendLayout();
-
+            // 
+            // lblTitle
+            // 
+            lblTitle.Font = new Font("Dungeon", 15.75F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.FromArgb(55, 36, 20);
+            lblTitle.Location = new Point(10, 10);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(402, 25);
+            lblTitle.TabIndex = 0;
             lblTitle.Text = "Kelola Kategori Latihan";
-            lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblTitle.Location = new Point(12, 12);
-            lblTitle.Size = new Size(460, 30);
-
-            txtNama.Location = new Point(12, 50);
-            txtNama.Size = new Size(280, 27);
-
+            // 
+            // txtNama
+            // 
+            txtNama.BackColor = Color.FromArgb(111, 77, 56);
+            txtNama.ForeColor = Color.FromArgb(247, 235, 223);
+            txtNama.Location = new Point(9, 41);
+            txtNama.Margin = new Padding(3, 2, 3, 2);
+            txtNama.Name = "txtNama";
+            txtNama.Size = new Size(246, 24);
+            txtNama.TabIndex = 1;
+            txtNama.TextChanged += txtNama_TextChanged;
+            // 
+            // btnTambah
+            // 
+            btnTambah.BackColor = Color.FromArgb(213, 184, 147);
+            btnTambah.FlatStyle = FlatStyle.Flat;
+            btnTambah.ForeColor = Color.FromArgb(55, 36, 20);
+            btnTambah.Location = new Point(261, 41);
+            btnTambah.Margin = new Padding(3, 2, 3, 2);
+            btnTambah.Name = "btnTambah";
+            btnTambah.Size = new Size(70, 25);
+            btnTambah.TabIndex = 2;
             btnTambah.Text = "Tambah";
-            btnTambah.Location = new Point(298, 48);
-            btnTambah.Size = new Size(80, 30);
+            btnTambah.UseVisualStyleBackColor = false;
             btnTambah.Click += btnTambah_Click;
-
-            dgvKategori.Location = new Point(12, 90);
-            dgvKategori.Size = new Size(460, 250);
-            dgvKategori.ReadOnly = true;
-            dgvKategori.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvKategori.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvKategori.AllowUserToAddRows = false;
-            dgvKategori.RowHeadersVisible = false;
-            dgvKategori.MultiSelect = false;
-
+            // 
+            // btnEdit
+            // 
+            btnEdit.BackColor = Color.FromArgb(213, 184, 147);
+            btnEdit.FlatStyle = FlatStyle.Flat;
+            btnEdit.ForeColor = Color.FromArgb(55, 36, 20);
+            btnEdit.Location = new Point(10, 297);
+            btnEdit.Margin = new Padding(3, 2, 3, 2);
+            btnEdit.Name = "btnEdit";
+            btnEdit.Size = new Size(79, 25);
+            btnEdit.TabIndex = 4;
             btnEdit.Text = "Edit";
-            btnEdit.Location = new Point(12, 350);
-            btnEdit.Size = new Size(90, 30);
+            btnEdit.UseVisualStyleBackColor = false;
             btnEdit.Click += btnEdit_Click;
-
+            // 
+            // btnHapus
+            // 
+            btnHapus.BackColor = Color.FromArgb(213, 184, 147);
+            btnHapus.FlatStyle = FlatStyle.Flat;
+            btnHapus.ForeColor = Color.FromArgb(55, 36, 20);
+            btnHapus.Location = new Point(94, 297);
+            btnHapus.Margin = new Padding(3, 2, 3, 2);
+            btnHapus.Name = "btnHapus";
+            btnHapus.Size = new Size(79, 25);
+            btnHapus.TabIndex = 5;
             btnHapus.Text = "Hapus";
-            btnHapus.Location = new Point(108, 350);
-            btnHapus.Size = new Size(90, 30);
+            btnHapus.UseVisualStyleBackColor = false;
             btnHapus.Click += btnHapus_Click;
-
+            // 
+            // btnTutup
+            // 
+            btnTutup.BackColor = Color.FromArgb(213, 184, 147);
+            btnTutup.FlatStyle = FlatStyle.Flat;
+            btnTutup.ForeColor = Color.FromArgb(55, 36, 20);
+            btnTutup.Location = new Point(334, 297);
+            btnTutup.Margin = new Padding(3, 2, 3, 2);
+            btnTutup.Name = "btnTutup";
+            btnTutup.Size = new Size(79, 25);
+            btnTutup.TabIndex = 6;
             btnTutup.Text = "Tutup";
-            btnTutup.Location = new Point(382, 350);
-            btnTutup.Size = new Size(90, 30);
+            btnTutup.UseVisualStyleBackColor = false;
             btnTutup.Click += btnTutup_Click;
-
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            // 
+            // dgvKategori
+            // 
+            dgvKategori.AllowUserToAddRows = false;
+            dgvKategori.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvKategori.BackgroundColor = Color.FromArgb(111, 77, 56);
+            dgvKategori.GridColor = Color.FromArgb(213, 184, 147);
+            dgvKategori.Location = new Point(10, 77);
+            dgvKategori.Margin = new Padding(3, 2, 3, 2);
+            dgvKategori.MultiSelect = false;
+            dgvKategori.Name = "dgvKategori";
+            dgvKategori.ReadOnly = true;
+            dgvKategori.RowHeadersVisible = false;
+            dgvKategori.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvKategori.Size = new Size(402, 213);
+            dgvKategori.TabIndex = 3;
+            dgvKategori.CellContentClick += dgvKategori_CellContentClick;
+            // 
+            // KelolaKategoriForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(484, 395);
-            Text = "Kelola Kategori Latihan";
-            StartPosition = FormStartPosition.CenterParent;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            ShowInTaskbar = false;
-
+            BackColor = Color.FromArgb(183, 160, 135);
+            ClientSize = new Size(424, 335);
             Controls.Add(lblTitle);
             Controls.Add(txtNama);
             Controls.Add(btnTambah);
@@ -83,6 +136,15 @@ namespace Logtracker.Forms
             Controls.Add(btnEdit);
             Controls.Add(btnHapus);
             Controls.Add(btnTutup);
+            Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(3, 2, 3, 2);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "KelolaKategoriForm";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Kelola Kategori Latihan";
             ((System.ComponentModel.ISupportInitialize)dgvKategori).EndInit();
             ResumeLayout(false);
             PerformLayout();

@@ -32,63 +32,140 @@ namespace Logtracker.Forms
             dgvAktivitas = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).BeginInit();
             SuspendLayout();
-
+            // 
+            // lblUserInfo
+            // 
+            lblUserInfo.BackColor = Color.FromArgb(183, 160, 135);
+            lblUserInfo.Font = new Font("Dungeon", 15.75F, FontStyle.Bold);
+            lblUserInfo.ForeColor = Color.FromArgb(55, 36, 20);
+            lblUserInfo.Location = new Point(10, 10);
+            lblUserInfo.Name = "lblUserInfo";
+            lblUserInfo.Size = new Size(665, 25);
+            lblUserInfo.TabIndex = 0;
             lblUserInfo.Text = "Peserta";
-            lblUserInfo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblUserInfo.Location = new Point(12, 12);
-            lblUserInfo.Size = new Size(760, 30);
-
+            // 
+            // btnTambah
+            // 
+            btnTambah.BackColor = Color.FromArgb(213, 184, 147);
+            btnTambah.FlatStyle = FlatStyle.Flat;
+            btnTambah.ForeColor = Color.FromArgb(55, 36, 20);
+            btnTambah.Location = new Point(10, 46);
+            btnTambah.Margin = new Padding(3, 2, 3, 2);
+            btnTambah.Name = "btnTambah";
+            btnTambah.Size = new Size(79, 25);
+            btnTambah.TabIndex = 1;
             btnTambah.Text = "Tambah";
-            btnTambah.Location = new Point(12, 55);
-            btnTambah.Size = new Size(90, 30);
+            btnTambah.UseVisualStyleBackColor = false;
             btnTambah.Click += btnTambah_Click;
-
+            // 
+            // btnEdit
+            // 
+            btnEdit.BackColor = Color.FromArgb(213, 184, 147);
+            btnEdit.FlatStyle = FlatStyle.Flat;
+            btnEdit.ForeColor = Color.FromArgb(55, 36, 20);
+            btnEdit.Location = new Point(94, 46);
+            btnEdit.Margin = new Padding(3, 2, 3, 2);
+            btnEdit.Name = "btnEdit";
+            btnEdit.Size = new Size(79, 25);
+            btnEdit.TabIndex = 2;
             btnEdit.Text = "Edit";
-            btnEdit.Location = new Point(108, 55);
-            btnEdit.Size = new Size(90, 30);
+            btnEdit.UseVisualStyleBackColor = false;
             btnEdit.Click += btnEdit_Click;
-
+            // 
+            // btnHapus
+            // 
+            btnHapus.BackColor = Color.FromArgb(213, 184, 147);
+            btnHapus.FlatStyle = FlatStyle.Flat;
+            btnHapus.ForeColor = Color.FromArgb(55, 36, 20);
+            btnHapus.Location = new Point(178, 46);
+            btnHapus.Margin = new Padding(3, 2, 3, 2);
+            btnHapus.Name = "btnHapus";
+            btnHapus.Size = new Size(79, 25);
+            btnHapus.TabIndex = 3;
             btnHapus.Text = "Hapus";
-            btnHapus.Location = new Point(204, 55);
-            btnHapus.Size = new Size(90, 30);
+            btnHapus.UseVisualStyleBackColor = false;
             btnHapus.Click += btnHapus_Click;
-
+            // 
+            // btnRefresh
+            // 
+            btnRefresh.BackColor = Color.FromArgb(213, 184, 147);
+            btnRefresh.FlatStyle = FlatStyle.Flat;
+            btnRefresh.ForeColor = Color.FromArgb(55, 36, 20);
+            btnRefresh.Location = new Point(262, 46);
+            btnRefresh.Margin = new Padding(3, 2, 3, 2);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(79, 25);
+            btnRefresh.TabIndex = 4;
             btnRefresh.Text = "Refresh";
-            btnRefresh.Location = new Point(300, 55);
-            btnRefresh.Size = new Size(90, 30);
+            btnRefresh.UseVisualStyleBackColor = false;
             btnRefresh.Click += btnRefresh_Click;
-
+            // 
+            // btnPilihCoach
+            // 
+            btnPilihCoach.BackColor = Color.FromArgb(213, 184, 147);
+            btnPilihCoach.FlatStyle = FlatStyle.Flat;
+            btnPilihCoach.ForeColor = Color.FromArgb(55, 36, 20);
+            btnPilihCoach.Location = new Point(368, 46);
+            btnPilihCoach.Margin = new Padding(3, 2, 3, 2);
+            btnPilihCoach.Name = "btnPilihCoach";
+            btnPilihCoach.Size = new Size(114, 25);
+            btnPilihCoach.TabIndex = 5;
             btnPilihCoach.Text = "Pilih Coach";
-            btnPilihCoach.Location = new Point(420, 55);
-            btnPilihCoach.Size = new Size(130, 30);
+            btnPilihCoach.UseVisualStyleBackColor = false;
             btnPilihCoach.Click += btnPilihCoach_Click;
-
+            // 
+            // btnFeedback
+            // 
+            btnFeedback.BackColor = Color.FromArgb(213, 184, 147);
+            btnFeedback.FlatStyle = FlatStyle.Flat;
+            btnFeedback.ForeColor = Color.FromArgb(55, 36, 20);
+            btnFeedback.Location = new Point(486, 46);
+            btnFeedback.Margin = new Padding(3, 2, 3, 2);
+            btnFeedback.Name = "btnFeedback";
+            btnFeedback.Size = new Size(88, 25);
+            btnFeedback.TabIndex = 6;
             btnFeedback.Text = "Feedback";
-            btnFeedback.Location = new Point(556, 55);
-            btnFeedback.Size = new Size(100, 30);
+            btnFeedback.UseVisualStyleBackColor = false;
             btnFeedback.Click += btnFeedback_Click;
-
+            // 
+            // btnLaporan
+            // 
+            btnLaporan.BackColor = Color.FromArgb(213, 184, 147);
+            btnLaporan.FlatStyle = FlatStyle.Flat;
+            btnLaporan.ForeColor = Color.FromArgb(55, 36, 20);
+            btnLaporan.Location = new Point(579, 46);
+            btnLaporan.Margin = new Padding(3, 2, 3, 2);
+            btnLaporan.Name = "btnLaporan";
+            btnLaporan.Size = new Size(96, 25);
+            btnLaporan.TabIndex = 7;
             btnLaporan.Text = "Laporan";
-            btnLaporan.Location = new Point(662, 55);
-            btnLaporan.Size = new Size(110, 30);
+            btnLaporan.UseVisualStyleBackColor = false;
             btnLaporan.Click += btnLaporan_Click;
-
-            dgvAktivitas.Location = new Point(12, 95);
-            dgvAktivitas.Size = new Size(760, 430);
-            dgvAktivitas.ReadOnly = true;
-            dgvAktivitas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAktivitas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            // 
+            // dgvAktivitas
+            // 
             dgvAktivitas.AllowUserToAddRows = false;
-            dgvAktivitas.RowHeadersVisible = false;
+            dgvAktivitas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvAktivitas.BackgroundColor = Color.FromArgb(111, 77, 56);
+            dgvAktivitas.GridColor = Color.FromArgb(213, 184, 147);
+            dgvAktivitas.Location = new Point(10, 80);
+            dgvAktivitas.Margin = new Padding(3, 2, 3, 2);
             dgvAktivitas.MultiSelect = false;
+            dgvAktivitas.Name = "dgvAktivitas";
+            dgvAktivitas.ReadOnly = true;
+            dgvAktivitas.RowHeadersVisible = false;
+            dgvAktivitas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvAktivitas.Size = new Size(665, 365);
+            dgvAktivitas.TabIndex = 8;
+            dgvAktivitas.CellContentClick += dgvAktivitas_CellContentClick;
             dgvAktivitas.CellFormatting += dgvAktivitas_CellFormatting;
-
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            // 
+            // PesertaDashboardForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(784, 540);
-            Text = "LOGTRACKER - Dashboard Peserta";
-            StartPosition = FormStartPosition.CenterScreen;
-
+            BackColor = Color.FromArgb(183, 160, 135);
+            ClientSize = new Size(686, 459);
             Controls.Add(lblUserInfo);
             Controls.Add(btnTambah);
             Controls.Add(btnEdit);
@@ -98,6 +175,12 @@ namespace Logtracker.Forms
             Controls.Add(btnFeedback);
             Controls.Add(btnLaporan);
             Controls.Add(dgvAktivitas);
+            Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
+            ForeColor = Color.FromArgb(247, 235, 223);
+            Margin = new Padding(3, 2, 3, 2);
+            Name = "PesertaDashboardForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "LOGTRACKER - Dashboard Peserta";
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).EndInit();
             ResumeLayout(false);
         }

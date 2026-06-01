@@ -73,5 +73,10 @@ namespace Logtracker.Forms
             cboRole.DisplayMember = "Nama";
             cboRole.ValueMember = "Nama";
         }
+
+        private void lblKodePeserta_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

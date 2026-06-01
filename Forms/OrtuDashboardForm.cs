@@ -127,5 +127,10 @@ namespace Logtracker.Forms
 
             return form.ShowDialog() == DialogResult.OK ? textBox.Text.Trim() : null;
         }
+
+        private void dgvAktivitas_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

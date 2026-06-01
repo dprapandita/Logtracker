@@ -205,5 +205,10 @@ namespace Logtracker.Forms
 
             return form.ShowDialog() == DialogResult.OK ? combo.SelectedIndex : -1;
         }
+
+        private void dgvAktivitas_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

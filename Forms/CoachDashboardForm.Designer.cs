@@ -48,27 +48,31 @@ namespace Logtracker.Forms
             // 
             // lblUserInfo
             // 
-            lblUserInfo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblUserInfo.Location = new Point(12, 12);
+            lblUserInfo.Font = new Font("Dungeon", 15.75F, FontStyle.Bold);
+            lblUserInfo.Location = new Point(10, 10);
             lblUserInfo.Name = "lblUserInfo";
-            lblUserInfo.Size = new Size(760, 30);
+            lblUserInfo.Size = new Size(665, 25);
             lblUserInfo.TabIndex = 0;
             lblUserInfo.Text = "Coach";
             // 
             // lblPeserta
             // 
-            lblPeserta.Location = new Point(12, 55);
+            lblPeserta.Location = new Point(10, 46);
             lblPeserta.Name = "lblPeserta";
-            lblPeserta.Size = new Size(100, 25);
+            lblPeserta.Size = new Size(88, 22);
             lblPeserta.TabIndex = 1;
             lblPeserta.Text = "Pilih Peserta:";
             // 
             // cboPeserta
             // 
+            cboPeserta.BackColor = Color.FromArgb(111, 77, 56);
             cboPeserta.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboPeserta.Location = new Point(12, 82);
+            cboPeserta.FlatStyle = FlatStyle.Flat;
+            cboPeserta.ForeColor = Color.FromArgb(247, 235, 223);
+            cboPeserta.Location = new Point(10, 70);
+            cboPeserta.Margin = new Padding(3, 2, 3, 2);
             cboPeserta.Name = "cboPeserta";
-            cboPeserta.Size = new Size(350, 28);
+            cboPeserta.Size = new Size(307, 25);
             cboPeserta.TabIndex = 2;
             cboPeserta.SelectedIndexChanged += cboPeserta_SelectedIndexChanged;
             // 
@@ -76,67 +80,82 @@ namespace Logtracker.Forms
             // 
             dgvAktivitas.AllowUserToAddRows = false;
             dgvAktivitas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvAktivitas.BackgroundColor = Color.FromArgb(111, 77, 56);
             dgvAktivitas.ColumnHeadersHeight = 29;
-            dgvAktivitas.Location = new Point(12, 118);
+            dgvAktivitas.GridColor = Color.FromArgb(213, 184, 147);
+            dgvAktivitas.Location = new Point(10, 100);
+            dgvAktivitas.Margin = new Padding(3, 2, 3, 2);
             dgvAktivitas.MultiSelect = false;
             dgvAktivitas.Name = "dgvAktivitas";
             dgvAktivitas.ReadOnly = true;
             dgvAktivitas.RowHeadersVisible = false;
             dgvAktivitas.RowHeadersWidth = 51;
             dgvAktivitas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAktivitas.Size = new Size(760, 200);
+            dgvAktivitas.Size = new Size(665, 170);
             dgvAktivitas.TabIndex = 6;
             dgvAktivitas.CellFormatting += dgvAktivitas_CellFormatting;
             dgvAktivitas.SelectionChanged += dgvAktivitas_SelectionChanged;
             // 
             // lblStatus
             // 
-            lblStatus.Location = new Point(10, 115);
+            lblStatus.Location = new Point(9, 97);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(60, 25);
+            lblStatus.Size = new Size(52, 22);
             lblStatus.TabIndex = 1;
             lblStatus.Text = "Status:";
             // 
             // cboStatus
             // 
+            cboStatus.BackColor = Color.FromArgb(111, 77, 56);
             cboStatus.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboStatus.FlatStyle = FlatStyle.Flat;
+            cboStatus.ForeColor = Color.FromArgb(247, 235, 223);
             cboStatus.Items.AddRange(new object[] { "Disetujui", "Revisi" });
-            cboStatus.Location = new Point(10, 142);
+            cboStatus.Location = new Point(9, 120);
+            cboStatus.Margin = new Padding(3, 2, 3, 2);
             cboStatus.Name = "cboStatus";
-            cboStatus.Size = new Size(160, 28);
+            cboStatus.Size = new Size(140, 25);
             cboStatus.TabIndex = 2;
             cboStatus.SelectedIndexChanged += cboStatus_SelectedIndexChanged;
             // 
             // lblFeedbackBaru
             // 
-            lblFeedbackBaru.Location = new Point(190, 115);
+            lblFeedbackBaru.Location = new Point(166, 97);
             lblFeedbackBaru.Name = "lblFeedbackBaru";
-            lblFeedbackBaru.Size = new Size(160, 25);
+            lblFeedbackBaru.Size = new Size(140, 22);
             lblFeedbackBaru.TabIndex = 3;
             lblFeedbackBaru.Text = "Tambah Feedback Baru:";
             // 
             // txtFeedbackBaru
             // 
-            txtFeedbackBaru.Location = new Point(190, 142);
+            txtFeedbackBaru.BackColor = Color.FromArgb(111, 77, 56);
+            txtFeedbackBaru.BorderStyle = BorderStyle.None;
+            txtFeedbackBaru.ForeColor = Color.FromArgb(247, 235, 223);
+            txtFeedbackBaru.Location = new Point(166, 120);
+            txtFeedbackBaru.Margin = new Padding(3, 2, 3, 2);
             txtFeedbackBaru.Multiline = true;
             txtFeedbackBaru.Name = "txtFeedbackBaru";
-            txtFeedbackBaru.Size = new Size(400, 50);
+            txtFeedbackBaru.Size = new Size(350, 43);
             txtFeedbackBaru.TabIndex = 4;
             // 
             // btnSimpan
             // 
-            btnSimpan.Location = new Point(610, 142);
+            btnSimpan.BackColor = Color.FromArgb(213, 184, 147);
+            btnSimpan.FlatStyle = FlatStyle.Flat;
+            btnSimpan.Location = new Point(534, 120);
+            btnSimpan.Margin = new Padding(3, 2, 3, 2);
             btnSimpan.Name = "btnSimpan";
-            btnSimpan.Size = new Size(140, 50);
+            btnSimpan.Size = new Size(122, 43);
             btnSimpan.TabIndex = 5;
             btnSimpan.Text = "Simpan";
+            btnSimpan.UseVisualStyleBackColor = false;
             btnSimpan.Click += btnSimpan_Click;
             // 
             // lblNoData
             // 
-            lblNoData.Location = new Point(12, 200);
+            lblNoData.Location = new Point(10, 170);
             lblNoData.Name = "lblNoData";
-            lblNoData.Size = new Size(760, 25);
+            lblNoData.Size = new Size(665, 22);
             lblNoData.TabIndex = 7;
             lblNoData.Text = "Belum ada peserta yang memilih Anda sebagai coach.";
             lblNoData.TextAlign = ContentAlignment.MiddleCenter;
@@ -144,29 +163,41 @@ namespace Logtracker.Forms
             // 
             // btnRefresh
             // 
-            btnRefresh.Location = new Point(370, 80);
+            btnRefresh.BackColor = Color.FromArgb(213, 184, 147);
+            btnRefresh.FlatStyle = FlatStyle.Flat;
+            btnRefresh.Location = new Point(324, 68);
+            btnRefresh.Margin = new Padding(3, 2, 3, 2);
             btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(90, 30);
+            btnRefresh.Size = new Size(79, 25);
             btnRefresh.TabIndex = 3;
             btnRefresh.Text = "Refresh";
+            btnRefresh.UseVisualStyleBackColor = false;
             btnRefresh.Click += btnRefresh_Click;
             // 
             // btnLaporan
             // 
-            btnLaporan.Location = new Point(466, 80);
+            btnLaporan.BackColor = Color.FromArgb(213, 184, 147);
+            btnLaporan.FlatStyle = FlatStyle.Flat;
+            btnLaporan.Location = new Point(408, 68);
+            btnLaporan.Margin = new Padding(3, 2, 3, 2);
             btnLaporan.Name = "btnLaporan";
-            btnLaporan.Size = new Size(90, 30);
+            btnLaporan.Size = new Size(79, 25);
             btnLaporan.TabIndex = 4;
             btnLaporan.Text = "Laporan";
+            btnLaporan.UseVisualStyleBackColor = false;
             btnLaporan.Click += btnLaporan_Click;
             // 
             // btnKelolaKategori
             // 
-            btnKelolaKategori.Location = new Point(562, 80);
+            btnKelolaKategori.BackColor = Color.FromArgb(213, 184, 147);
+            btnKelolaKategori.FlatStyle = FlatStyle.Flat;
+            btnKelolaKategori.Location = new Point(492, 68);
+            btnKelolaKategori.Margin = new Padding(3, 2, 3, 2);
             btnKelolaKategori.Name = "btnKelolaKategori";
-            btnKelolaKategori.Size = new Size(120, 30);
+            btnKelolaKategori.Size = new Size(105, 25);
             btnKelolaKategori.TabIndex = 5;
             btnKelolaKategori.Text = "Kelola Kategori";
+            btnKelolaKategori.UseVisualStyleBackColor = false;
             btnKelolaKategori.Click += btnKelolaKategori_Click;
             // 
             // grpFeedback
@@ -177,28 +208,35 @@ namespace Logtracker.Forms
             grpFeedback.Controls.Add(lblFeedbackBaru);
             grpFeedback.Controls.Add(txtFeedbackBaru);
             grpFeedback.Controls.Add(btnSimpan);
-            grpFeedback.Location = new Point(12, 326);
+            grpFeedback.Location = new Point(10, 277);
+            grpFeedback.Margin = new Padding(3, 2, 3, 2);
             grpFeedback.Name = "grpFeedback";
-            grpFeedback.Size = new Size(760, 230);
+            grpFeedback.Padding = new Padding(3, 2, 3, 2);
+            grpFeedback.Size = new Size(665, 195);
             grpFeedback.TabIndex = 8;
             grpFeedback.TabStop = false;
             grpFeedback.Text = "Feedback";
             // 
             // lstExistingFeedback
             // 
-            lstExistingFeedback.Font = new Font("Segoe UI", 9F);
+            lstExistingFeedback.BackColor = Color.FromArgb(111, 77, 56);
+            lstExistingFeedback.BorderStyle = BorderStyle.None;
+            lstExistingFeedback.Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
+            lstExistingFeedback.ForeColor = Color.FromArgb(247, 235, 223);
             lstExistingFeedback.HorizontalScrollbar = true;
-            lstExistingFeedback.Location = new Point(10, 25);
+            lstExistingFeedback.Location = new Point(9, 22);
+            lstExistingFeedback.Margin = new Padding(3, 2, 3, 2);
             lstExistingFeedback.Name = "lstExistingFeedback";
-            lstExistingFeedback.Size = new Size(740, 64);
+            lstExistingFeedback.Size = new Size(648, 34);
             lstExistingFeedback.TabIndex = 0;
             lstExistingFeedback.SelectedIndexChanged += lstExistingFeedback_SelectedIndexChanged;
             // 
             // CoachDashboardForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(784, 570);
+            BackColor = Color.FromArgb(183, 160, 135);
+            ClientSize = new Size(686, 485);
             Controls.Add(lblUserInfo);
             Controls.Add(lblPeserta);
             Controls.Add(cboPeserta);
@@ -208,6 +246,9 @@ namespace Logtracker.Forms
             Controls.Add(dgvAktivitas);
             Controls.Add(lblNoData);
             Controls.Add(grpFeedback);
+            Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
+            ForeColor = Color.FromArgb(55, 36, 20);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "CoachDashboardForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "LOGTRACKER - Dashboard Coach";

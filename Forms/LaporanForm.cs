@@ -43,5 +43,15 @@ namespace Logtracker.Forms
         {
             Close();
         }
+
+        private void grpKategoriDurasi_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvKategoriDurasi_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
