@@ -25,22 +25,24 @@ namespace Logtracker
 
         private static void InitializeServices(DatabaseHelper db)
         {
-            var akunRepo = new AkunLoginRepository(db);
+            var userRepo = new UserRepository(db);
             var profileRepo = new ProfileRepository(db);
             var aktivitasRepo = new AktivitasRepository(db);
             var feedbackRepo = new FeedbackRepository(db);
             var relasiRepo = new RelasiRepository(db);
             var roleRepo = new RoleRepository(db);
             var kategoriRepo = new KategoriRepository(db);
+            var statusRepo = new StatusRepository(db);
 
             _instance = new ProgramInstance
             {
-                AuthService = new AuthService(akunRepo, profileRepo, relasiRepo, roleRepo),
+                AuthService = new AuthService(userRepo, profileRepo, relasiRepo, roleRepo),
                 AktivitasService = new AktivitasService(aktivitasRepo),
                 CoachService = new CoachService(profileRepo, aktivitasRepo, feedbackRepo),
                 OrangTuaService = new OrangTuaService(profileRepo, relasiRepo, aktivitasRepo, feedbackRepo),
                 LaporanService = new LaporanService(aktivitasRepo),
-                KategoriService = new KategoriService(kategoriRepo)
+                KategoriService = new KategoriService(kategoriRepo),
+                StatusService = new StatusService(statusRepo)
             };
         }
 
@@ -55,6 +57,7 @@ namespace Logtracker
         public required OrangTuaService OrangTuaService { get; set; }
         public required LaporanService LaporanService { get; set; }
         public required KategoriService KategoriService { get; set; }
+        public required StatusService StatusService { get; set; }
 
         public AuthService GetAuthService() => AuthService;
         public AktivitasService GetAktivitasService() => AktivitasService;
@@ -62,5 +65,6 @@ namespace Logtracker
         public OrangTuaService GetOrangTuaService() => OrangTuaService;
         public LaporanService GetLaporanService() => LaporanService;
         public KategoriService GetKategoriService() => KategoriService;
+        public StatusService GetStatusService() => StatusService;
     }
 }

@@ -31,11 +31,11 @@ namespace Logtracker.Forms
             // 
             // lblTitle
             // 
-            lblTitle.Font = new Font("Dungeon", 15.75F, FontStyle.Bold);
+            lblTitle.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(55, 36, 20);
             lblTitle.Location = new Point(10, 10);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(402, 25);
+            lblTitle.Size = new Size(402, 36);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Kelola Kategori Latihan";
             // 
@@ -46,7 +46,7 @@ namespace Logtracker.Forms
             txtNama.Location = new Point(9, 41);
             txtNama.Margin = new Padding(3, 2, 3, 2);
             txtNama.Name = "txtNama";
-            txtNama.Size = new Size(246, 24);
+            txtNama.Size = new Size(246, 28);
             txtNama.TabIndex = 1;
             txtNama.TextChanged += txtNama_TextChanged;
             // 
@@ -58,7 +58,7 @@ namespace Logtracker.Forms
             btnTambah.Location = new Point(261, 41);
             btnTambah.Margin = new Padding(3, 2, 3, 2);
             btnTambah.Name = "btnTambah";
-            btnTambah.Size = new Size(70, 25);
+            btnTambah.Size = new Size(70, 28);
             btnTambah.TabIndex = 2;
             btnTambah.Text = "Tambah";
             btnTambah.UseVisualStyleBackColor = false;
@@ -72,7 +72,7 @@ namespace Logtracker.Forms
             btnEdit.Location = new Point(10, 297);
             btnEdit.Margin = new Padding(3, 2, 3, 2);
             btnEdit.Name = "btnEdit";
-            btnEdit.Size = new Size(79, 25);
+            btnEdit.Size = new Size(79, 32);
             btnEdit.TabIndex = 4;
             btnEdit.Text = "Edit";
             btnEdit.UseVisualStyleBackColor = false;
@@ -86,7 +86,7 @@ namespace Logtracker.Forms
             btnHapus.Location = new Point(94, 297);
             btnHapus.Margin = new Padding(3, 2, 3, 2);
             btnHapus.Name = "btnHapus";
-            btnHapus.Size = new Size(79, 25);
+            btnHapus.Size = new Size(79, 32);
             btnHapus.TabIndex = 5;
             btnHapus.Text = "Hapus";
             btnHapus.UseVisualStyleBackColor = false;
@@ -100,7 +100,7 @@ namespace Logtracker.Forms
             btnTutup.Location = new Point(334, 297);
             btnTutup.Margin = new Padding(3, 2, 3, 2);
             btnTutup.Name = "btnTutup";
-            btnTutup.Size = new Size(79, 25);
+            btnTutup.Size = new Size(79, 32);
             btnTutup.TabIndex = 6;
             btnTutup.Text = "Tutup";
             btnTutup.UseVisualStyleBackColor = false;
@@ -111,6 +111,7 @@ namespace Logtracker.Forms
             dgvKategori.AllowUserToAddRows = false;
             dgvKategori.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvKategori.BackgroundColor = Color.FromArgb(111, 77, 56);
+            dgvKategori.ColumnHeadersHeight = 29;
             dgvKategori.GridColor = Color.FromArgb(213, 184, 147);
             dgvKategori.Location = new Point(10, 77);
             dgvKategori.Margin = new Padding(3, 2, 3, 2);
@@ -118,6 +119,7 @@ namespace Logtracker.Forms
             dgvKategori.Name = "dgvKategori";
             dgvKategori.ReadOnly = true;
             dgvKategori.RowHeadersVisible = false;
+            dgvKategori.RowHeadersWidth = 51;
             dgvKategori.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvKategori.Size = new Size(402, 213);
             dgvKategori.TabIndex = 3;
@@ -125,7 +127,7 @@ namespace Logtracker.Forms
             // 
             // KelolaKategoriForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(10F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
             ClientSize = new Size(424, 335);

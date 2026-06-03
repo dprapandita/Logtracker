@@ -20,7 +20,12 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                "SELECT * FROM aktivitas WHERE peserta_id = @pid ORDER BY tanggal DESC, created_at DESC", conn);
+                @"SELECT a.*, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
+                  FROM aktivitas a
+                  JOIN kategori_latihan kl ON a.kategori_id = kl.id
+                  JOIN status_aktivitas sa ON a.status_id = sa.id
+                  WHERE a.peserta_id = @pid
+                  ORDER BY a.tanggal DESC, a.created_at DESC", conn);
             cmd.Parameters.AddWithValue("pid", pesertaId);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -34,9 +39,11 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                @"SELECT a.*, p.nama AS nama_peserta
+                @"SELECT a.*, p.nama AS nama_peserta, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
                   FROM aktivitas a
                   JOIN profiles p ON a.peserta_id = p.id
+                  JOIN kategori_latihan kl ON a.kategori_id = kl.id
+                  JOIN status_aktivitas sa ON a.status_id = sa.id
                   WHERE a.peserta_id = @pid
                   ORDER BY a.tanggal DESC, a.created_at DESC", conn);
             cmd.Parameters.AddWithValue("pid", pesertaId);
@@ -50,7 +57,12 @@ namespace Logtracker.Repositories
         {
             using var conn = _db.GetConnection();
             conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT * FROM aktivitas WHERE id = @id", conn);
+            using var cmd = new NpgsqlCommand(
+                @"SELECT a.*, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
+                  FROM aktivitas a
+                  JOIN kategori_latihan kl ON a.kategori_id = kl.id
+                  JOIN status_aktivitas sa ON a.status_id = sa.id
+                  WHERE a.id = @id", conn);
             cmd.Parameters.AddWithValue("id", id);
             using var reader = cmd.ExecuteReader();
             return reader.Read() ? Map(reader) : null;
@@ -61,10 +73,10 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                "INSERT INTO aktivitas (peserta_id, nama, kategori, durasi, tanggal) VALUES (@pid, @nama, @kategori, @durasi, @tanggal)", conn);
+                "INSERT INTO aktivitas (peserta_id, nama, kategori_id, durasi, tanggal) VALUES (@pid, @nama, @kid, @durasi, @tanggal)", conn);
             cmd.Parameters.AddWithValue("pid", a.PesertaId);
             cmd.Parameters.AddWithValue("nama", a.Nama);
-            cmd.Parameters.AddWithValue("kategori", a.Kategori);
+            cmd.Parameters.AddWithValue("kid", a.KategoriId);
             cmd.Parameters.AddWithValue("durasi", a.Durasi);
             cmd.Parameters.AddWithValue("tanggal", a.Tanggal);
             cmd.ExecuteNonQuery();
@@ -75,10 +87,10 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                "UPDATE aktivitas SET nama=@nama, kategori=@kategori, durasi=@durasi, tanggal=@tanggal WHERE id=@id AND status='Menunggu'", conn);
+                "UPDATE aktivitas SET nama=@nama, kategori_id=@kid, durasi=@durasi, tanggal=@tanggal WHERE id=@id AND status_id=1", conn);
             cmd.Parameters.AddWithValue("id", a.Id);
             cmd.Parameters.AddWithValue("nama", a.Nama);
-            cmd.Parameters.AddWithValue("kategori", a.Kategori);
+            cmd.Parameters.AddWithValue("kid", a.KategoriId);
             cmd.Parameters.AddWithValue("durasi", a.Durasi);
             cmd.Parameters.AddWithValue("tanggal", a.Tanggal);
             cmd.ExecuteNonQuery();
@@ -88,18 +100,18 @@ namespace Logtracker.Repositories
         {
             using var conn = _db.GetConnection();
             conn.Open();
-            using var cmd = new NpgsqlCommand("DELETE FROM aktivitas WHERE id=@id AND status='Menunggu'", conn);
+            using var cmd = new NpgsqlCommand("DELETE FROM aktivitas WHERE id=@id AND status_id=1", conn);
             cmd.Parameters.AddWithValue("id", id);
             cmd.ExecuteNonQuery();
         }
 
-        public void UpdateStatus(int aktivitasId, string status)
+        public void UpdateStatus(int aktivitasId, int statusId)
         {
             using var conn = _db.GetConnection();
             conn.Open();
-            using var cmd = new NpgsqlCommand("UPDATE aktivitas SET status=@status WHERE id=@id", conn);
+            using var cmd = new NpgsqlCommand("UPDATE aktivitas SET status_id=@sid WHERE id=@id", conn);
             cmd.Parameters.AddWithValue("id", aktivitasId);
-            cmd.Parameters.AddWithValue("status", status);
+            cmd.Parameters.AddWithValue("sid", statusId);
             cmd.ExecuteNonQuery();
         }
 
@@ -112,7 +124,13 @@ namespace Logtracker.Repositories
             conn.Open();
             var ph = string.Join(",", pesertaIds.Select((_, i) => $"@p{i}"));
             using var cmd = new NpgsqlCommand(
-                $"SELECT a.*, p.nama AS nama_peserta FROM aktivitas a JOIN profiles p ON a.peserta_id = p.id WHERE a.peserta_id IN ({ph}) ORDER BY a.tanggal DESC", conn);
+                $@"SELECT a.*, p.nama AS nama_peserta, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
+                   FROM aktivitas a
+                   JOIN profiles p ON a.peserta_id = p.id
+                   JOIN kategori_latihan kl ON a.kategori_id = kl.id
+                   JOIN status_aktivitas sa ON a.status_id = sa.id
+                   WHERE a.peserta_id IN ({ph})
+                   ORDER BY a.tanggal DESC", conn);
             for (int i = 0; i < pesertaIds.Count; i++)
                 cmd.Parameters.AddWithValue($"p{i}", pesertaIds[i]);
             using var reader = cmd.ExecuteReader();
@@ -122,16 +140,35 @@ namespace Logtracker.Repositories
         }
 
         public DataTable GetTotalDurasiPerKategori(int pesertaId)
-            => GetReport("SELECT kategori, SUM(durasi) AS total_durasi FROM aktivitas WHERE peserta_id=@pid GROUP BY kategori ORDER BY total_durasi DESC", pesertaId);
+            => GetReport(
+                @"SELECT kl.nama_latihan AS kategori, SUM(a.durasi) AS total_durasi
+                  FROM aktivitas a
+                  JOIN kategori_latihan kl ON a.kategori_id = kl.id
+                  WHERE a.peserta_id = @pid
+                  GROUP BY kl.nama_latihan
+                  ORDER BY total_durasi DESC", pesertaId);
 
         public DataTable GetJumlahAktivitasPerKategori(int pesertaId)
-            => GetReport("SELECT kategori, COUNT(*) AS jumlah_aktivitas FROM aktivitas WHERE peserta_id=@pid GROUP BY kategori ORDER BY jumlah_aktivitas DESC", pesertaId);
+            => GetReport(
+                @"SELECT kl.nama_latihan AS kategori, COUNT(*) AS jumlah_aktivitas
+                  FROM aktivitas a
+                  JOIN kategori_latihan kl ON a.kategori_id = kl.id
+                  WHERE a.peserta_id = @pid
+                  GROUP BY kl.nama_latihan
+                  ORDER BY jumlah_aktivitas DESC", pesertaId);
 
         public DataTable GetTotalDurasiPerTanggal(int pesertaId)
-            => GetReport("SELECT tanggal, SUM(durasi) AS total_durasi FROM aktivitas WHERE peserta_id=@pid GROUP BY tanggal ORDER BY tanggal DESC", pesertaId);
+            => GetReport(
+                "SELECT tanggal, SUM(durasi) AS total_durasi FROM aktivitas WHERE peserta_id=@pid GROUP BY tanggal ORDER BY tanggal DESC", pesertaId);
 
         public DataTable GetStatusCount(int pesertaId)
-            => GetReport("SELECT status, COUNT(*) AS jumlah FROM aktivitas WHERE peserta_id=@pid GROUP BY status ORDER BY status", pesertaId);
+            => GetReport(
+                @"SELECT sa.nama AS status, COUNT(*) AS jumlah
+                  FROM aktivitas a
+                  JOIN status_aktivitas sa ON a.status_id = sa.id
+                  WHERE a.peserta_id = @pid
+                  GROUP BY sa.nama
+                  ORDER BY sa.nama", pesertaId);
 
         private DataTable GetReport(string sql, int pesertaId)
         {
@@ -147,14 +184,8 @@ namespace Logtracker.Repositories
 
         private static bool HasColumn(NpgsqlDataReader reader, string name)
         {
-            try
-            {
-                return reader.GetOrdinal(name) >= 0;
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return false;
-            }
+            try { return reader.GetOrdinal(name) >= 0; }
+            catch (IndexOutOfRangeException) { return false; }
         }
 
         private static T? GetColumnOrNull<T>(NpgsqlDataReader reader, string name) where T : class
@@ -168,17 +199,22 @@ namespace Logtracker.Repositories
         {
             var raw = reader["tanggal"];
             var tanggal = raw is DateOnly d ? d.ToDateTime(TimeOnly.MinValue) : (DateTime)raw;
+            var rawCreated = reader["created_at"];
+            var rawUpdated = reader["updated_at"];
 
             return new Aktivitas
             {
                 Id = (int)reader["id"],
                 PesertaId = (int)reader["peserta_id"],
+                KategoriId = (int)reader["kategori_id"],
+                NamaKategori = reader["nama_kategori"] as string,
+                StatusId = reader["status_id"] is int sid ? sid : 1,
+                NamaStatus = reader["nama_status"] as string,
                 Nama = (string)reader["nama"],
-                Kategori = (string)reader["kategori"],
                 Durasi = (int)reader["durasi"],
                 Tanggal = tanggal,
-                Status = reader["status"] as string ?? "Menunggu",
-                CreatedAt = reader["created_at"] is DateTime dt ? dt : DateTime.Now,
+                CreatedAt = rawCreated is DateTime ct ? ct : DateTime.Now,
+                UpdatedAt = rawUpdated is DateTime ut ? ut : DateTime.Now,
                 NamaPeserta = GetColumnOrNull<string>(reader, "nama_peserta")
             };
         }

@@ -7,19 +7,32 @@ namespace Logtracker.Forms
     {
         private readonly CoachService _coachService;
         private readonly LaporanService _laporanService;
+        private readonly StatusService _statusService;
         private readonly Profile _profile;
         private List<Profile> _pesertaList = [];
+        private List<StatusAktivitas> _statusList = [];
         private int _selectedAktivitasId;
 
-        public CoachDashboardForm(CoachService coachService, LaporanService laporanService, Profile profile)
+        public CoachDashboardForm(CoachService coachService, LaporanService laporanService, StatusService statusService, Profile profile)
         {
             InitializeComponent();
             _coachService = coachService;
             _laporanService = laporanService;
+            _statusService = statusService;
             _profile = profile;
 
             lblUserInfo.Text = $"Coach: {_profile.Nama}";
+            LoadStatusList();
             LoadPeserta();
+        }
+
+        private void LoadStatusList()
+        {
+            _statusList = _statusService.GetAll();
+            cboStatus.Items.Clear();
+            foreach (var s in _statusList)
+                cboStatus.Items.Add(s);
+            cboStatus.DisplayMember = nameof(StatusAktivitas.Nama);
         }
 
         private void LoadPeserta()
@@ -62,7 +75,11 @@ namespace Logtracker.Forms
                 dgvAktivitas.DataSource = null;
                 dgvAktivitas.DataSource = _coachService.GetAktivitasPeserta(pesertaId);
                 if (dgvAktivitas.Columns["PesertaId"] != null) dgvAktivitas.Columns["PesertaId"].Visible = false;
+                if (dgvAktivitas.Columns["KategoriId"] != null) dgvAktivitas.Columns["KategoriId"].Visible = false;
+                if (dgvAktivitas.Columns["StatusId"] != null) dgvAktivitas.Columns["StatusId"].Visible = false;
                 if (dgvAktivitas.Columns["CreatedAt"] != null) dgvAktivitas.Columns["CreatedAt"].Visible = false;
+                if (dgvAktivitas.Columns["UpdatedAt"] != null) dgvAktivitas.Columns["UpdatedAt"].Visible = false;
+                if (dgvAktivitas.Columns["NamaPeserta"] != null) dgvAktivitas.Columns["NamaPeserta"].Visible = false;
                 if (dgvAktivitas.Columns["Tanggal"] != null)
                     dgvAktivitas.Columns["Tanggal"].DefaultCellStyle.Format = "yyyy-MM-dd";
 
@@ -90,7 +107,7 @@ namespace Logtracker.Forms
             if (selected == null) return;
 
             _selectedAktivitasId = selected.Id;
-            cboStatus.SelectedItem = selected.Status;
+            cboStatus.SelectedItem = _statusList.FirstOrDefault(s => s.Id == selected.StatusId);
             LoadExistingFeedback(selected.Id);
         }
 
@@ -121,10 +138,9 @@ namespace Logtracker.Forms
 
             var hasError = false;
 
-            if (cboStatus.SelectedItem != null)
+            if (cboStatus.SelectedItem is StatusAktivitas selectedStatus)
             {
-                var status = cboStatus.SelectedItem.ToString()!;
-                var (suc1, msg1) = _coachService.UpdateStatus(_selectedAktivitasId, status);
+                var (suc1, msg1) = _coachService.UpdateStatus(_selectedAktivitasId, selectedStatus.Id);
                 if (!suc1)
                 {
                     MessageBox.Show(msg1, "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -174,7 +190,7 @@ namespace Logtracker.Forms
 
         private void dgvAktivitas_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvAktivitas.Columns[e.ColumnIndex].Name == "Status" && e.Value != null)
+            if (dgvAktivitas.Columns[e.ColumnIndex].Name == "NamaStatus" && e.Value != null)
             {
                 e.CellStyle.Font = new Font(dgvAktivitas.Font, FontStyle.Bold);
                 e.CellStyle.ForeColor = e.Value.ToString() switch

@@ -47,14 +47,14 @@ namespace Logtracker.Services
             }
         }
 
-        public (bool Success, string Message) UpdateStatus(int aktivitasId, string status)
+        public (bool Success, string Message) UpdateStatus(int aktivitasId, int statusId)
         {
-            if (string.IsNullOrWhiteSpace(status))
+            if (statusId <= 0)
                 return (false, "Pilih status.");
 
             try
             {
-                _aktivitasRepo.UpdateStatus(aktivitasId, status);
+                _aktivitasRepo.UpdateStatus(aktivitasId, statusId);
                 return (true, "Status berhasil diperbarui.");
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@ namespace Logtracker.Forms
         private Button btnHapus;
         private Button btnRefresh;
         private Button btnPilihCoach;
-        private Button btnFeedback;
+        private Button btnDetail;
         private Button btnLaporan;
         private DataGridView dgvAktivitas;
 
@@ -27,25 +27,25 @@ namespace Logtracker.Forms
             btnHapus = new Button();
             btnRefresh = new Button();
             btnPilihCoach = new Button();
-            btnFeedback = new Button();
+            btnDetail = new Button();
             btnLaporan = new Button();
             dgvAktivitas = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).BeginInit();
             SuspendLayout();
-            // 
+            //
             // lblUserInfo
-            // 
+            //
             lblUserInfo.BackColor = Color.FromArgb(183, 160, 135);
-            lblUserInfo.Font = new Font("Dungeon", 15.75F, FontStyle.Bold);
+            lblUserInfo.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold);
             lblUserInfo.ForeColor = Color.FromArgb(55, 36, 20);
             lblUserInfo.Location = new Point(10, 10);
             lblUserInfo.Name = "lblUserInfo";
             lblUserInfo.Size = new Size(665, 25);
             lblUserInfo.TabIndex = 0;
             lblUserInfo.Text = "Peserta";
-            // 
+            //
             // btnTambah
-            // 
+            //
             btnTambah.BackColor = Color.FromArgb(213, 184, 147);
             btnTambah.FlatStyle = FlatStyle.Flat;
             btnTambah.ForeColor = Color.FromArgb(55, 36, 20);
@@ -57,9 +57,9 @@ namespace Logtracker.Forms
             btnTambah.Text = "Tambah";
             btnTambah.UseVisualStyleBackColor = false;
             btnTambah.Click += btnTambah_Click;
-            // 
+            //
             // btnEdit
-            // 
+            //
             btnEdit.BackColor = Color.FromArgb(213, 184, 147);
             btnEdit.FlatStyle = FlatStyle.Flat;
             btnEdit.ForeColor = Color.FromArgb(55, 36, 20);
@@ -71,9 +71,9 @@ namespace Logtracker.Forms
             btnEdit.Text = "Edit";
             btnEdit.UseVisualStyleBackColor = false;
             btnEdit.Click += btnEdit_Click;
-            // 
+            //
             // btnHapus
-            // 
+            //
             btnHapus.BackColor = Color.FromArgb(213, 184, 147);
             btnHapus.FlatStyle = FlatStyle.Flat;
             btnHapus.ForeColor = Color.FromArgb(55, 36, 20);
@@ -85,9 +85,9 @@ namespace Logtracker.Forms
             btnHapus.Text = "Hapus";
             btnHapus.UseVisualStyleBackColor = false;
             btnHapus.Click += btnHapus_Click;
-            // 
+            //
             // btnRefresh
-            // 
+            //
             btnRefresh.BackColor = Color.FromArgb(213, 184, 147);
             btnRefresh.FlatStyle = FlatStyle.Flat;
             btnRefresh.ForeColor = Color.FromArgb(55, 36, 20);
@@ -99,9 +99,9 @@ namespace Logtracker.Forms
             btnRefresh.Text = "Refresh";
             btnRefresh.UseVisualStyleBackColor = false;
             btnRefresh.Click += btnRefresh_Click;
-            // 
+            //
             // btnPilihCoach
-            // 
+            //
             btnPilihCoach.BackColor = Color.FromArgb(213, 184, 147);
             btnPilihCoach.FlatStyle = FlatStyle.Flat;
             btnPilihCoach.ForeColor = Color.FromArgb(55, 36, 20);
@@ -113,23 +113,23 @@ namespace Logtracker.Forms
             btnPilihCoach.Text = "Pilih Coach";
             btnPilihCoach.UseVisualStyleBackColor = false;
             btnPilihCoach.Click += btnPilihCoach_Click;
-            // 
-            // btnFeedback
-            // 
-            btnFeedback.BackColor = Color.FromArgb(213, 184, 147);
-            btnFeedback.FlatStyle = FlatStyle.Flat;
-            btnFeedback.ForeColor = Color.FromArgb(55, 36, 20);
-            btnFeedback.Location = new Point(486, 46);
-            btnFeedback.Margin = new Padding(3, 2, 3, 2);
-            btnFeedback.Name = "btnFeedback";
-            btnFeedback.Size = new Size(88, 25);
-            btnFeedback.TabIndex = 6;
-            btnFeedback.Text = "Feedback";
-            btnFeedback.UseVisualStyleBackColor = false;
-            btnFeedback.Click += btnFeedback_Click;
-            // 
+            //
+            // btnDetail
+            //
+            btnDetail.BackColor = Color.FromArgb(213, 184, 147);
+            btnDetail.FlatStyle = FlatStyle.Flat;
+            btnDetail.ForeColor = Color.FromArgb(55, 36, 20);
+            btnDetail.Location = new Point(486, 46);
+            btnDetail.Margin = new Padding(3, 2, 3, 2);
+            btnDetail.Name = "btnDetail";
+            btnDetail.Size = new Size(88, 25);
+            btnDetail.TabIndex = 6;
+            btnDetail.Text = "Detail";
+            btnDetail.UseVisualStyleBackColor = false;
+            btnDetail.Click += btnDetail_Click;
+            //
             // btnLaporan
-            // 
+            //
             btnLaporan.BackColor = Color.FromArgb(213, 184, 147);
             btnLaporan.FlatStyle = FlatStyle.Flat;
             btnLaporan.ForeColor = Color.FromArgb(55, 36, 20);
@@ -141,12 +141,13 @@ namespace Logtracker.Forms
             btnLaporan.Text = "Laporan";
             btnLaporan.UseVisualStyleBackColor = false;
             btnLaporan.Click += btnLaporan_Click;
-            // 
+            //
             // dgvAktivitas
-            // 
+            //
             dgvAktivitas.AllowUserToAddRows = false;
             dgvAktivitas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvAktivitas.BackgroundColor = Color.FromArgb(111, 77, 56);
+            dgvAktivitas.ColumnHeadersHeight = 29;
             dgvAktivitas.GridColor = Color.FromArgb(213, 184, 147);
             dgvAktivitas.Location = new Point(10, 80);
             dgvAktivitas.Margin = new Padding(3, 2, 3, 2);
@@ -154,15 +155,16 @@ namespace Logtracker.Forms
             dgvAktivitas.Name = "dgvAktivitas";
             dgvAktivitas.ReadOnly = true;
             dgvAktivitas.RowHeadersVisible = false;
+            dgvAktivitas.RowHeadersWidth = 51;
             dgvAktivitas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvAktivitas.Size = new Size(665, 365);
             dgvAktivitas.TabIndex = 8;
             dgvAktivitas.CellContentClick += dgvAktivitas_CellContentClick;
             dgvAktivitas.CellFormatting += dgvAktivitas_CellFormatting;
-            // 
+            //
             // PesertaDashboardForm
-            // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            //
+            AutoScaleDimensions = new SizeF(10F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
             ClientSize = new Size(686, 459);
@@ -172,11 +174,11 @@ namespace Logtracker.Forms
             Controls.Add(btnHapus);
             Controls.Add(btnRefresh);
             Controls.Add(btnPilihCoach);
-            Controls.Add(btnFeedback);
+            Controls.Add(btnDetail);
             Controls.Add(btnLaporan);
             Controls.Add(dgvAktivitas);
             Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
-            ForeColor = Color.FromArgb(247, 235, 223);
+            ForeColor = Color.FromArgb(64, 64, 64);
             Margin = new Padding(3, 2, 3, 2);
             Name = "PesertaDashboardForm";
             StartPosition = FormStartPosition.CenterScreen;

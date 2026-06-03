@@ -21,7 +21,7 @@ namespace Logtracker.Forms
             IsEdit = true;
             Aktivitas = aktivitas;
             txtNama.Text = aktivitas.Nama;
-            cboKategori.SelectedItem = aktivitas.Kategori;
+            cboKategori.SelectedItem = aktivitas.NamaKategori;
             numDurasi.Value = aktivitas.Durasi;
             dtpTanggal.Value = aktivitas.Tanggal;
             btnSimpan.Text = "Simpan";
@@ -76,7 +76,7 @@ namespace Logtracker.Forms
             {
                 Id = Aktivitas?.Id ?? 0,
                 Nama = txtNama.Text.Trim(),
-                Kategori = cboKategori.SelectedItem.ToString()!,
+                NamaKategori = cboKategori.SelectedItem.ToString()!,
                 Durasi = (int)numDurasi.Value,
                 Tanggal = dtpTanggal.Value
             };

@@ -33,7 +33,7 @@ namespace Logtracker.Forms
                 Form dashboard = result.Role switch
                 {
                     "peserta" => new PesertaDashboardForm(app.GetAktivitasService(), app.GetCoachService(), app.GetLaporanService(), result.Profile),
-                    "coach" => new CoachDashboardForm(app.GetCoachService(), app.GetLaporanService(), result.Profile),
+                    "coach" => new CoachDashboardForm(app.GetCoachService(), app.GetLaporanService(), app.GetStatusService(), result.Profile),
                     "ortu" => new OrtuDashboardForm(app.GetOrangTuaService(), app.GetLaporanService(), result.Profile),
                     _ => throw new InvalidOperationException("Role tidak dikenal.")
                 };

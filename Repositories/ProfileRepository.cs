@@ -21,13 +21,18 @@ namespace Logtracker.Repositories
             cmd.Parameters.AddWithValue("id", id);
             using var reader = cmd.ExecuteReader();
             if (!reader.Read()) return null;
+            return Map(reader);
+        }
 
-            return new Profile
-            {
-                Id = (int)reader["id"],
-                Nama = (string)reader["nama"],
-                KodePeserta = reader["kode_peserta"] as string
-            };
+        public Profile? GetByUserId(int userId)
+        {
+            using var conn = _db.GetConnection();
+            conn.Open();
+            using var cmd = new NpgsqlCommand("SELECT * FROM profiles WHERE user_id = @uid", conn);
+            cmd.Parameters.AddWithValue("uid", userId);
+            using var reader = cmd.ExecuteReader();
+            if (!reader.Read()) return null;
+            return Map(reader);
         }
 
         public int Insert(Profile profile)
@@ -35,7 +40,8 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                "INSERT INTO profiles (nama, kode_peserta) VALUES (@nama, @kode) RETURNING id", conn);
+                "INSERT INTO profiles (user_id, nama, kode_peserta) VALUES (@uid, @nama, @kode) RETURNING id", conn);
+            cmd.Parameters.AddWithValue("uid", profile.UserId);
             cmd.Parameters.AddWithValue("nama", profile.Nama);
             cmd.Parameters.AddWithValue("kode", profile.KodePeserta is null ? DBNull.Value : profile.KodePeserta);
             return (int)cmd.ExecuteScalar()!;
@@ -56,17 +62,14 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                "SELECT p.* FROM profiles p JOIN akun_login a ON p.id = a.profile_id JOIN roles r ON a.role_id = r.id WHERE p.kode_peserta = @kode AND r.nama = 'peserta'", conn);
+                @"SELECT p.* FROM profiles p
+                  JOIN users u ON p.user_id = u.id
+                  JOIN roles r ON u.role_id = r.id
+                  WHERE p.kode_peserta = @kode AND r.nama = 'peserta'", conn);
             cmd.Parameters.AddWithValue("kode", kode);
             using var reader = cmd.ExecuteReader();
             if (!reader.Read()) return null;
-
-            return new Profile
-            {
-                Id = (int)reader["id"],
-                Nama = (string)reader["nama"],
-                KodePeserta = (string)reader["kode_peserta"]
-            };
+            return Map(reader);
         }
 
         public List<Profile> GetPesertaByCoach(int coachId)
@@ -82,14 +85,7 @@ namespace Logtracker.Repositories
             cmd.Parameters.AddWithValue("coachId", coachId);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
-            {
-                list.Add(new Profile
-                {
-                    Id = (int)reader["id"],
-                    Nama = (string)reader["nama"],
-                    KodePeserta = reader["kode_peserta"] as string
-                });
-            }
+                list.Add(Map(reader));
             return list;
         }
 
@@ -100,19 +96,13 @@ namespace Logtracker.Repositories
             conn.Open();
             using var cmd = new NpgsqlCommand(
                 @"SELECT p.* FROM profiles p
-                  JOIN akun_login a ON p.id = a.profile_id
-                  JOIN roles r ON a.role_id = r.id
+                  JOIN users u ON p.user_id = u.id
+                  JOIN roles r ON u.role_id = r.id
                   WHERE r.nama = 'coach'
                   ORDER BY p.nama", conn);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
-            {
-                list.Add(new Profile
-                {
-                    Id = (int)reader["id"],
-                    Nama = (string)reader["nama"]
-                });
-            }
+                list.Add(Map(reader));
             return list;
         }
 
@@ -129,15 +119,21 @@ namespace Logtracker.Repositories
             cmd.Parameters.AddWithValue("ortuId", ortuId);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
-            {
-                list.Add(new Profile
-                {
-                    Id = (int)reader["id"],
-                    Nama = (string)reader["nama"],
-                    KodePeserta = reader["kode_peserta"] as string
-                });
-            }
+                list.Add(Map(reader));
             return list;
+        }
+
+        private static Profile Map(NpgsqlDataReader reader)
+        {
+            return new Profile
+            {
+                Id = (int)reader["id"],
+                UserId = reader["user_id"] is int uid ? uid : 0,
+                Nama = (string)reader["nama"],
+                KodePeserta = reader["kode_peserta"] as string,
+                CreatedAt = reader["created_at"] is DateTime ct ? ct : DateTime.Now,
+                UpdatedAt = reader["updated_at"] is DateTime ut ? ut : DateTime.Now
+            };
         }
     }
 }

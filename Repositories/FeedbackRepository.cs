@@ -67,11 +67,7 @@ namespace Logtracker.Repositories
             var rawTgl = reader["tanggal_aktivitas"];
             DateTime? tglAktivitas = null;
             if (rawTgl != DBNull.Value)
-            {
-                tglAktivitas = rawTgl is DateOnly d
-                    ? d.ToDateTime(TimeOnly.MinValue)
-                    : (DateTime)rawTgl;
-            }
+                tglAktivitas = rawTgl is DateOnly d ? d.ToDateTime(TimeOnly.MinValue) : (DateTime)rawTgl;
 
             return new FeedbackAktivitas
             {
@@ -79,7 +75,8 @@ namespace Logtracker.Repositories
                 AktivitasId = (int)reader["aktivitas_id"],
                 CoachId = (int)reader["coach_id"],
                 Feedback = (string)reader["feedback"],
-                CreatedAt = (DateTime)reader["created_at"],
+                CreatedAt = reader["created_at"] is DateTime ct ? ct : DateTime.Now,
+                UpdatedAt = reader["updated_at"] is DateTime ut ? ut : DateTime.Now,
                 NamaCoach = reader["nama_coach"] as string,
                 NamaAktivitas = reader["nama_aktivitas"] as string,
                 TanggalAktivitas = tglAktivitas

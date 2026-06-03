@@ -48,10 +48,10 @@ namespace Logtracker.Forms
             // 
             // lblUserInfo
             // 
-            lblUserInfo.Font = new Font("Dungeon", 15.75F, FontStyle.Bold);
+            lblUserInfo.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold);
             lblUserInfo.Location = new Point(10, 10);
             lblUserInfo.Name = "lblUserInfo";
-            lblUserInfo.Size = new Size(665, 25);
+            lblUserInfo.Size = new Size(665, 36);
             lblUserInfo.TabIndex = 0;
             lblUserInfo.Text = "Coach";
             // 
@@ -72,7 +72,7 @@ namespace Logtracker.Forms
             cboPeserta.Location = new Point(10, 70);
             cboPeserta.Margin = new Padding(3, 2, 3, 2);
             cboPeserta.Name = "cboPeserta";
-            cboPeserta.Size = new Size(307, 25);
+            cboPeserta.Size = new Size(307, 29);
             cboPeserta.TabIndex = 2;
             cboPeserta.SelectedIndexChanged += cboPeserta_SelectedIndexChanged;
             // 
@@ -110,11 +110,10 @@ namespace Logtracker.Forms
             cboStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cboStatus.FlatStyle = FlatStyle.Flat;
             cboStatus.ForeColor = Color.FromArgb(247, 235, 223);
-            cboStatus.Items.AddRange(new object[] { "Disetujui", "Revisi" });
             cboStatus.Location = new Point(9, 120);
             cboStatus.Margin = new Padding(3, 2, 3, 2);
             cboStatus.Name = "cboStatus";
-            cboStatus.Size = new Size(140, 25);
+            cboStatus.Size = new Size(140, 29);
             cboStatus.TabIndex = 2;
             cboStatus.SelectedIndexChanged += cboStatus_SelectedIndexChanged;
             // 
@@ -165,10 +164,10 @@ namespace Logtracker.Forms
             // 
             btnRefresh.BackColor = Color.FromArgb(213, 184, 147);
             btnRefresh.FlatStyle = FlatStyle.Flat;
-            btnRefresh.Location = new Point(324, 68);
+            btnRefresh.Location = new Point(327, 65);
             btnRefresh.Margin = new Padding(3, 2, 3, 2);
             btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(79, 25);
+            btnRefresh.Size = new Size(79, 31);
             btnRefresh.TabIndex = 3;
             btnRefresh.Text = "Refresh";
             btnRefresh.UseVisualStyleBackColor = false;
@@ -178,10 +177,10 @@ namespace Logtracker.Forms
             // 
             btnLaporan.BackColor = Color.FromArgb(213, 184, 147);
             btnLaporan.FlatStyle = FlatStyle.Flat;
-            btnLaporan.Location = new Point(408, 68);
+            btnLaporan.Location = new Point(411, 65);
             btnLaporan.Margin = new Padding(3, 2, 3, 2);
             btnLaporan.Name = "btnLaporan";
-            btnLaporan.Size = new Size(79, 25);
+            btnLaporan.Size = new Size(79, 31);
             btnLaporan.TabIndex = 4;
             btnLaporan.Text = "Laporan";
             btnLaporan.UseVisualStyleBackColor = false;
@@ -191,10 +190,10 @@ namespace Logtracker.Forms
             // 
             btnKelolaKategori.BackColor = Color.FromArgb(213, 184, 147);
             btnKelolaKategori.FlatStyle = FlatStyle.Flat;
-            btnKelolaKategori.Location = new Point(492, 68);
+            btnKelolaKategori.Location = new Point(495, 65);
             btnKelolaKategori.Margin = new Padding(3, 2, 3, 2);
             btnKelolaKategori.Name = "btnKelolaKategori";
-            btnKelolaKategori.Size = new Size(105, 25);
+            btnKelolaKategori.Size = new Size(105, 31);
             btnKelolaKategori.TabIndex = 5;
             btnKelolaKategori.Text = "Kelola Kategori";
             btnKelolaKategori.UseVisualStyleBackColor = false;
@@ -227,13 +226,13 @@ namespace Logtracker.Forms
             lstExistingFeedback.Location = new Point(9, 22);
             lstExistingFeedback.Margin = new Padding(3, 2, 3, 2);
             lstExistingFeedback.Name = "lstExistingFeedback";
-            lstExistingFeedback.Size = new Size(648, 34);
+            lstExistingFeedback.Size = new Size(648, 21);
             lstExistingFeedback.TabIndex = 0;
             lstExistingFeedback.SelectedIndexChanged += lstExistingFeedback_SelectedIndexChanged;
             // 
             // CoachDashboardForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(10F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
             ClientSize = new Size(686, 485);

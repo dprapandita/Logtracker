@@ -14,14 +14,14 @@ namespace Logtracker.Services
 
     public class AuthService
     {
-        private readonly AkunLoginRepository _akunRepo;
+        private readonly UserRepository _userRepo;
         private readonly ProfileRepository _profileRepo;
         private readonly RelasiRepository _relasiRepo;
         private readonly RoleRepository _roleRepo;
 
-        public AuthService(AkunLoginRepository akunRepo, ProfileRepository profileRepo, RelasiRepository relasiRepo, RoleRepository roleRepo)
+        public AuthService(UserRepository userRepo, ProfileRepository profileRepo, RelasiRepository relasiRepo, RoleRepository roleRepo)
         {
-            _akunRepo = akunRepo;
+            _userRepo = userRepo;
             _profileRepo = profileRepo;
             _relasiRepo = relasiRepo;
             _roleRepo = roleRepo;
@@ -29,20 +29,20 @@ namespace Logtracker.Services
 
         public LoginResult? Login(string username, string password)
         {
-            var akun = _akunRepo.GetByUsername(username);
-            if (akun == null) return null;
+            var user = _userRepo.GetByUsername(username);
+            if (user == null) return null;
 
             var hash = HashPassword(password);
-            if (akun.PasswordHash != hash) return null;
+            if (user.PasswordHash != hash) return null;
 
-            var profile = _profileRepo.GetById(akun.ProfileId);
+            var profile = _profileRepo.GetByUserId(user.Id);
             if (profile == null) return null;
 
             return new LoginResult
             {
                 Profile = profile,
-                Role = akun.RoleName ?? "",
-                Username = akun.Username
+                Role = user.RoleName ?? "",
+                Username = user.Username
             };
         }
 
@@ -51,15 +51,15 @@ namespace Logtracker.Services
             return _roleRepo.GetAll();
         }
 
-        public (bool Success, string Message) Register(string username, string nama, string email, string password, string roleName, string? kodePesertaOrtu = null)
+        public (bool Success, string Message) Register(string username, string nama, string? email, string password, string roleName, string? kodePesertaOrtu = null)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(password))
                 return (false, "Semua field harus diisi.");
 
-            if (_akunRepo.GetByUsername(username) != null)
+            if (_userRepo.GetByUsername(username) != null)
                 return (false, "Username sudah digunakan.");
 
-            if (_akunRepo.GetByEmail(email) != null)
+            if (_userRepo.GetByEmail(email) != null)
                 return (false, "Email sudah terdaftar.");
 
             if (roleName == "ortu")
@@ -72,24 +72,30 @@ namespace Logtracker.Services
 
             try
             {
-                var profile = new Profile { Nama = nama.Trim() };
-                if (roleName == "peserta")
-                    profile.KodePeserta = _profileRepo.GenerateKodePeserta();
-
-                var profileId = _profileRepo.Insert(profile);
-
                 var roleId = _roleRepo.GetRoleIdByName(roleName)
                     ?? throw new InvalidOperationException("Role tidak ditemukan di database.");
 
-                var akun = new AkunLogin
+                var user = new User
                 {
                     Username = username.Trim().ToLower(),
                     Email = email.Trim().ToLower(),
                     PasswordHash = HashPassword(password),
-                    RoleId = roleId,
-                    ProfileId = profileId
+                    Nama = nama.Trim(),
+                    RoleId = roleId
                 };
-                _akunRepo.Insert(akun);
+                var userId = _userRepo.Insert(user);
+
+                string? kodePeserta = null;
+                if (roleName == "peserta")
+                    kodePeserta = _profileRepo.GenerateKodePeserta();
+
+                var profile = new Profile
+                {
+                    UserId = userId,
+                    Nama = nama.Trim(),
+                    KodePeserta = kodePeserta
+                };
+                var profileId = _profileRepo.Insert(profile);
 
                 if (roleName == "ortu" && !string.IsNullOrWhiteSpace(kodePesertaOrtu))
                 {
@@ -99,7 +105,7 @@ namespace Logtracker.Services
                 }
 
                 var msg = roleName == "peserta"
-                    ? $"Registrasi berhasil! Kode peserta Anda: {profile.KodePeserta}"
+                    ? $"Registrasi berhasil! Kode peserta Anda: {kodePeserta}"
                     : "Registrasi berhasil!";
                 return (true, msg);
             }

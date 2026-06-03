@@ -7,6 +7,9 @@
     <Compile Update="Forms\CoachDashboardForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\DetailAktivitasForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\KelolaKategoriForm.cs">
       <SubType>Form</SubType>
     </Compile>

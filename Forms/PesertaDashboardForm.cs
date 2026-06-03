@@ -32,6 +32,11 @@ namespace Logtracker.Forms
                 dgvAktivitas.DataSource = _aktivitasService.GetAllByPesertaId(_profile.Id);
                 if (dgvAktivitas.Columns["PesertaId"] != null) dgvAktivitas.Columns["PesertaId"].Visible = false;
                 if (dgvAktivitas.Columns["CreatedAt"] != null) dgvAktivitas.Columns["CreatedAt"].Visible = false;
+                if (dgvAktivitas.Columns["UpdatedAt"] != null) dgvAktivitas.Columns["UpdatedAt"].Visible = false;
+                if (dgvAktivitas.Columns["KategoriId"] != null) dgvAktivitas.Columns["KategoriId"].Visible = false;
+                if (dgvAktivitas.Columns["StatusId"] != null) dgvAktivitas.Columns["StatusId"].Visible = false;
+                if (dgvAktivitas.Columns["NamaKategori"] != null) dgvAktivitas.Columns["NamaKategori"].HeaderText = "Kategori";
+                if (dgvAktivitas.Columns["NamaStatus"] != null) dgvAktivitas.Columns["NamaStatus"].HeaderText = "Status";
                 if (dgvAktivitas.Columns["NamaPeserta"] != null) dgvAktivitas.Columns["NamaPeserta"].Visible = false;
                 if (dgvAktivitas.Columns["Tanggal"] != null)
                     dgvAktivitas.Columns["Tanggal"].DefaultCellStyle.Format = "yyyy-MM-dd";
@@ -66,9 +71,9 @@ namespace Logtracker.Forms
             var selected = dgvAktivitas.CurrentRow.DataBoundItem as Aktivitas;
             if (selected == null) return;
 
-            if (selected.Status != "Menunggu")
+            if (selected.StatusId != 1)
             {
-                MessageBox.Show($"Aktivitas berstatus \"{selected.Status}\" tidak dapat diedit.", "Validasi",
+                MessageBox.Show($"Aktivitas berstatus \"{selected.NamaStatus}\" tidak dapat diedit.", "Validasi",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -78,7 +83,7 @@ namespace Logtracker.Forms
             {
                 form.Aktivitas.Id = selected.Id;
                 form.Aktivitas.PesertaId = _profile.Id;
-                form.Aktivitas.Status = selected.Status;
+                form.Aktivitas.StatusId = selected.StatusId;
                 var (success, msg) = _aktivitasService.Update(form.Aktivitas);
                 MessageBox.Show(msg, success ? "Sukses" : "Gagal",
                     MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
@@ -97,9 +102,9 @@ namespace Logtracker.Forms
             var selected = dgvAktivitas.CurrentRow.DataBoundItem as Aktivitas;
             if (selected == null) return;
 
-            if (selected.Status != "Menunggu")
+            if (selected.StatusId != 1)
             {
-                MessageBox.Show($"Aktivitas berstatus \"{selected.Status}\" tidak dapat dihapus.", "Validasi",
+                MessageBox.Show($"Aktivitas berstatus \"{selected.NamaStatus}\" tidak dapat dihapus.", "Validasi",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -146,21 +151,19 @@ namespace Logtracker.Forms
             }
         }
 
-        private void btnFeedback_Click(object? sender, EventArgs e)
+        private void btnDetail_Click(object? sender, EventArgs e)
         {
-            var feedbackRepo = new FeedbackRepository(
-                new Data.DatabaseHelper(Program.ConnectionString));
-            var feedbackList = feedbackRepo.GetFeedbackForPeserta(_profile.Id);
-
-            if (feedbackList.Count == 0)
+            if (dgvAktivitas.CurrentRow == null)
             {
-                MessageBox.Show("Belum ada feedback dari coach.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Pilih aktivitas terlebih dahulu.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            var msg = string.Join("\n\n", feedbackList.Select(f =>
-                $"[{f.TanggalAktivitas:yyyy-MM-dd}] {f.NamaAktivitas}\nCoach: {f.NamaCoach}\nFeedback: {f.Feedback}"));
-            MessageBox.Show(msg, "Feedback Coach", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var selected = dgvAktivitas.CurrentRow.DataBoundItem as Aktivitas;
+            if (selected == null) return;
+
+            var form = new DetailAktivitasForm(selected, _coachService);
+            form.ShowDialog();
         }
 
         private void btnLaporan_Click(object? sender, EventArgs e)
@@ -171,14 +174,14 @@ namespace Logtracker.Forms
 
         private void dgvAktivitas_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvAktivitas.Columns[e.ColumnIndex].Name == "Status" && e.Value != null)
+            if (dgvAktivitas.Columns[e.ColumnIndex].Name == "NamaStatus" && e.Value != null)
             {
                 e.CellStyle.Font = new Font(dgvAktivitas.Font, FontStyle.Bold);
                 e.CellStyle.ForeColor = e.Value.ToString() switch
                 {
                     "Disetujui" => Color.Green,
                     "Revisi" => Color.OrangeRed,
-                    _ => Color.Gray
+                    _ => Color.Black
                 };
             }
         }
@@ -208,7 +211,6 @@ namespace Logtracker.Forms
 
         private void dgvAktivitas_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
         }
     }
 }

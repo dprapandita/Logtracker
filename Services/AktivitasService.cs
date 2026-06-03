@@ -22,7 +22,7 @@ namespace Logtracker.Services
         {
             if (string.IsNullOrWhiteSpace(a.Nama))
                 return (false, "Nama aktivitas tidak boleh kosong.");
-            if (string.IsNullOrWhiteSpace(a.Kategori))
+            if (a.KategoriId <= 0)
                 return (false, "Pilih kategori.");
             if (a.Durasi <= 0)
                 return (false, "Durasi harus lebih dari 0.");
@@ -41,7 +41,7 @@ namespace Logtracker.Services
         {
             var existing = _repo.GetById(a.Id);
             if (existing == null) return (false, "Data tidak ditemukan.");
-            if (existing.Status != "Menunggu") return (false, $"Aktivitas berstatus \"{existing.Status}\" tidak dapat diedit.");
+            if (existing.StatusId != 1) return (false, $"Aktivitas berstatus \"{existing.NamaStatus}\" tidak dapat diedit.");
 
             var (valid, msg) = Validate(a);
             if (!valid) return (false, msg);
@@ -53,7 +53,7 @@ namespace Logtracker.Services
         {
             var existing = _repo.GetById(id);
             if (existing == null) return (false, "Data tidak ditemukan.");
-            if (existing.Status != "Menunggu") return (false, $"Aktivitas berstatus \"{existing.Status}\" tidak dapat dihapus.");
+            if (existing.StatusId != 1) return (false, $"Aktivitas berstatus \"{existing.NamaStatus}\" tidak dapat dihapus.");
 
             try { _repo.Delete(id); return (true, "Aktivitas berhasil dihapus."); }
             catch (Exception ex) { return (false, $"Gagal: {ex.Message}"); }
