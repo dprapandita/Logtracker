@@ -78,7 +78,7 @@ namespace Logtracker.Services
                 var user = new User
                 {
                     Username = username.Trim().ToLower(),
-                    Email = email.Trim().ToLower(),
+                    Email = string.IsNullOrWhiteSpace(email) ? null : email.Trim().ToLower(),
                     PasswordHash = HashPassword(password),
                     Nama = nama.Trim(),
                     RoleId = roleId

@@ -51,7 +51,7 @@ namespace Logtracker.Repositories
             using var cmd = new NpgsqlCommand(
                 "INSERT INTO users (username, email, password_hash, nama, role_id) VALUES (@username, @email, @pass, @nama, @roleId) RETURNING id", conn);
             cmd.Parameters.AddWithValue("username", user.Username);
-            cmd.Parameters.AddWithValue("email", user.Email);
+            cmd.Parameters.AddWithValue("email", (object)user.Email ?? DBNull.Value);
             cmd.Parameters.AddWithValue("pass", user.PasswordHash);
             cmd.Parameters.AddWithValue("nama", user.Nama);
             cmd.Parameters.AddWithValue("roleId", user.RoleId);
