@@ -8,16 +8,22 @@ namespace Logtracker.Services
         private readonly ProfileRepository _profileRepo;
         private readonly AktivitasRepository _aktivitasRepo;
         private readonly FeedbackRepository _feedbackRepo;
+        private readonly RelasiRepository _relasiRepo;
 
-        public CoachService(ProfileRepository profileRepo, AktivitasRepository aktivitasRepo, FeedbackRepository feedbackRepo)
+        public CoachService(ProfileRepository profileRepo, AktivitasRepository aktivitasRepo,
+            FeedbackRepository feedbackRepo, RelasiRepository relasiRepo)
         {
             _profileRepo = profileRepo;
             _aktivitasRepo = aktivitasRepo;
             _feedbackRepo = feedbackRepo;
+            _relasiRepo = relasiRepo;
         }
 
         public List<Profile> GetPesertaList(int coachId)
             => _profileRepo.GetPesertaByCoach(coachId);
+
+        public List<Profile> GetAllPeserta()
+            => _profileRepo.GetAllPeserta();
 
         public List<Aktivitas> GetAktivitasPeserta(int pesertaId)
             => _aktivitasRepo.GetAllByPesertaIdWithName(pesertaId);
@@ -56,6 +62,19 @@ namespace Logtracker.Services
             {
                 _aktivitasRepo.UpdateStatus(aktivitasId, statusId);
                 return (true, "Status berhasil diperbarui.");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Gagal: {ex.Message}");
+            }
+        }
+
+        public (bool Success, string Message) AddPeserta(int coachId, int pesertaId)
+        {
+            try
+            {
+                _relasiRepo.SetCoach(pesertaId, coachId);
+                return (true, "Peserta berhasil ditambahkan.");
             }
             catch (Exception ex)
             {

@@ -42,7 +42,7 @@ namespace Logtracker
             {
                 AuthService = new AuthService(userRepo, profileRepo, pesertaDetailRepo, relasiRepo, roleRepo),
                 AktivitasService = new AktivitasService(aktivitasRepo),
-                CoachService = new CoachService(profileRepo, aktivitasRepo, feedbackRepo),
+                CoachService = new CoachService(profileRepo, aktivitasRepo, feedbackRepo, relasiRepo),
                 OrangTuaService = new OrangTuaService(profileRepo, relasiRepo, aktivitasRepo, feedbackRepo),
                 LaporanService = new LaporanService(aktivitasRepo),
                 KategoriService = new KategoriService(kategoriRepo),

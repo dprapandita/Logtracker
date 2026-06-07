@@ -20,7 +20,8 @@ namespace Logtracker.Forms
             _laporanService = laporanService;
             _profile = profile;
 
-            lblUserInfo.Text = $"{_profile.Nama} | Kode: {_profile.KodePeserta}";
+            var kode = string.IsNullOrEmpty(_profile.KodePeserta) ? "(belum ada)" : _profile.KodePeserta;
+            lblUserInfo.Text = $"{_profile.Nama} | Kode: {kode}";
             LoadData();
         }
 

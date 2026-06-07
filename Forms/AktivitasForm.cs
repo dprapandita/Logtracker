@@ -21,7 +21,20 @@ namespace Logtracker.Forms
             IsEdit = true;
             Aktivitas = aktivitas;
             txtNama.Text = aktivitas.Nama;
-            cboKategori.SelectedItem = aktivitas.NamaKategori;
+
+            var target = aktivitas.NamaKategori?.Trim() ?? "";
+            var matchedIndex = -1;
+            for (int i = 0; i < cboKategori.Items.Count; i++)
+            {
+                if (cboKategori.Items[i] is KategoriLatihan k &&
+                    string.Equals(k.NamaLatihan?.Trim(), target, StringComparison.OrdinalIgnoreCase))
+                {
+                    matchedIndex = i;
+                    break;
+                }
+            }
+            cboKategori.SelectedIndex = matchedIndex;
+
             numDurasi.Value = aktivitas.Durasi;
             dtpTanggal.Value = aktivitas.Tanggal;
             btnSimpan.Text = "Simpan";
@@ -32,17 +45,31 @@ namespace Logtracker.Forms
             try
             {
                 var app = Program.GetInstance();
-                if (app == null) return;
+                if (app == null)
+                {
+                    MessageBox.Show("Service tidak tersedia.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 var list = app.GetKategoriService().GetAll();
                 cboKategori.Items.Clear();
+                cboKategori.DisplayMember = "NamaLatihan";
                 foreach (var k in list)
-                    cboKategori.Items.Add(k.NamaLatihan);
+                    cboKategori.Items.Add(k);
+
                 if (cboKategori.Items.Count > 0)
                     cboKategori.SelectedIndex = 0;
+                else
+                {
+                    MessageBox.Show("Belum ada kategori. Tambahkan kategori terlebih dahulu.",
+                        "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                // if table is empty or error, leave combo empty
+                MessageBox.Show($"Gagal memuat kategori: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -72,11 +99,13 @@ namespace Logtracker.Forms
         {
             if (!ValidateInput()) return;
 
+            var selectedKategori = cboKategori.SelectedItem as KategoriLatihan;
             Aktivitas = new Aktivitas
             {
                 Id = Aktivitas?.Id ?? 0,
                 Nama = txtNama.Text.Trim(),
-                NamaKategori = cboKategori.SelectedItem.ToString()!,
+                KategoriId = selectedKategori?.Id ?? 0,
+                NamaKategori = selectedKategori?.NamaLatihan ?? "",
                 Durasi = (int)numDurasi.Value,
                 Tanggal = dtpTanggal.Value
             };

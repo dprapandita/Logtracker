@@ -16,6 +16,7 @@ namespace Logtracker.Forms
         private Button btnRefresh;
         private Button btnLaporan;
         private Button btnKelolaKategori;
+        private Button btnPilihPeserta;
         private GroupBox grpFeedback;
         private ListBox lstExistingFeedback;
 
@@ -40,6 +41,7 @@ namespace Logtracker.Forms
             btnRefresh = new Button();
             btnLaporan = new Button();
             btnKelolaKategori = new Button();
+            btnPilihPeserta = new Button();
             grpFeedback = new GroupBox();
             lstExistingFeedback = new ListBox();
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).BeginInit();
@@ -199,6 +201,19 @@ namespace Logtracker.Forms
             btnKelolaKategori.UseVisualStyleBackColor = false;
             btnKelolaKategori.Click += btnKelolaKategori_Click;
             // 
+            // btnPilihPeserta
+            // 
+            btnPilihPeserta.BackColor = Color.FromArgb(213, 184, 147);
+            btnPilihPeserta.FlatStyle = FlatStyle.Flat;
+            btnPilihPeserta.Location = new Point(605, 65);
+            btnPilihPeserta.Margin = new Padding(3, 2, 3, 2);
+            btnPilihPeserta.Name = "btnPilihPeserta";
+            btnPilihPeserta.Size = new Size(70, 31);
+            btnPilihPeserta.TabIndex = 9;
+            btnPilihPeserta.Text = "+ Peserta";
+            btnPilihPeserta.UseVisualStyleBackColor = false;
+            btnPilihPeserta.Click += btnPilihPeserta_Click;
+            // 
             // grpFeedback
             // 
             grpFeedback.Controls.Add(lstExistingFeedback);
@@ -242,6 +257,7 @@ namespace Logtracker.Forms
             Controls.Add(btnRefresh);
             Controls.Add(btnLaporan);
             Controls.Add(btnKelolaKategori);
+            Controls.Add(btnPilihPeserta);
             Controls.Add(dgvAktivitas);
             Controls.Add(lblNoData);
             Controls.Add(grpFeedback);
