@@ -20,17 +20,15 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabel profiles
+-- Tabel profiles (3NF: nama lives in users; kode_peserta lives in peserta_details)
 CREATE TABLE IF NOT EXISTS profiles (
     id SERIAL PRIMARY KEY,
     user_id INT UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    nama VARCHAR(100) NOT NULL,
-    kode_peserta VARCHAR(20)  UNIQUE NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabel peserta_details
+-- Tabel peserta_details (3NF: role-specific data for peserta only)
 CREATE TABLE IF NOT EXISTS peserta_details (
     user_id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
     kode_peserta VARCHAR(20) UNIQUE NOT NULL
@@ -109,4 +107,8 @@ FOR EACH ROW EXECUTE FUNCTION set_updated_timestamp();
 
 CREATE TRIGGER trg_feedback_updated_at
 BEFORE UPDATE ON feedback_aktivitas
+FOR EACH ROW EXECUTE FUNCTION set_updated_timestamp();
+
+CREATE TRIGGER trg_profiles_updated_at
+BEFORE UPDATE ON profiles
 FOR EACH ROW EXECUTE FUNCTION set_updated_timestamp();

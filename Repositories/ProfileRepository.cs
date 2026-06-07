@@ -17,7 +17,14 @@ namespace Logtracker.Repositories
         {
             using var conn = _db.GetConnection();
             conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT * FROM profiles WHERE id = @id", conn);
+            using var cmd = new NpgsqlCommand(
+                @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
+                         u.nama,
+                         pd.kode_peserta
+                  FROM profiles p
+                  JOIN users u ON p.user_id = u.id
+                  LEFT JOIN peserta_details pd ON p.user_id = pd.user_id
+                  WHERE p.id = @id", conn);
             cmd.Parameters.AddWithValue("id", id);
             using var reader = cmd.ExecuteReader();
             if (!reader.Read()) return null;
@@ -28,7 +35,14 @@ namespace Logtracker.Repositories
         {
             using var conn = _db.GetConnection();
             conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT * FROM profiles WHERE user_id = @uid", conn);
+            using var cmd = new NpgsqlCommand(
+                @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
+                         u.nama,
+                         pd.kode_peserta
+                  FROM profiles p
+                  JOIN users u ON p.user_id = u.id
+                  LEFT JOIN peserta_details pd ON p.user_id = pd.user_id
+                  WHERE p.user_id = @uid", conn);
             cmd.Parameters.AddWithValue("uid", userId);
             using var reader = cmd.ExecuteReader();
             if (!reader.Read()) return null;
@@ -40,21 +54,9 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                "INSERT INTO profiles (user_id, nama, kode_peserta) VALUES (@uid, @nama, @kode) RETURNING id", conn);
+                "INSERT INTO profiles (user_id) VALUES (@uid) RETURNING id", conn);
             cmd.Parameters.AddWithValue("uid", profile.UserId);
-            cmd.Parameters.AddWithValue("nama", profile.Nama);
-            cmd.Parameters.AddWithValue("kode", profile.KodePeserta is null ? DBNull.Value : profile.KodePeserta);
             return (int)cmd.ExecuteScalar()!;
-        }
-
-        public string GenerateKodePeserta()
-        {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand(
-                "SELECT COALESCE(MAX(CAST(SUBSTRING(kode_peserta FROM 5) AS INTEGER)), 0) + 1 FROM profiles WHERE kode_peserta IS NOT NULL", conn);
-            var next = (int)cmd.ExecuteScalar()!;
-            return $"PST-{next:D4}";
         }
 
         public Profile? GetPesertaByKode(string kode)
@@ -62,10 +64,14 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                @"SELECT p.* FROM profiles p
+                @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
+                         u.nama,
+                         pd.kode_peserta
+                  FROM peserta_details pd
+                  JOIN profiles p ON pd.user_id = p.user_id
                   JOIN users u ON p.user_id = u.id
                   JOIN roles r ON u.role_id = r.id
-                  WHERE p.kode_peserta = @kode AND r.nama = 'peserta'", conn);
+                  WHERE pd.kode_peserta = @kode AND r.nama = 'peserta'", conn);
             cmd.Parameters.AddWithValue("kode", kode);
             using var reader = cmd.ExecuteReader();
             if (!reader.Read()) return null;
@@ -78,10 +84,15 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                @"SELECT p.* FROM profiles p
+                @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
+                         u.nama,
+                         pd.kode_peserta
+                  FROM profiles p
+                  JOIN users u ON p.user_id = u.id
                   JOIN peserta_coach pc ON p.id = pc.peserta_id
+                  LEFT JOIN peserta_details pd ON p.user_id = pd.user_id
                   WHERE pc.coach_id = @coachId
-                  ORDER BY p.nama", conn);
+                  ORDER BY u.nama", conn);
             cmd.Parameters.AddWithValue("coachId", coachId);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -95,11 +106,15 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                @"SELECT p.* FROM profiles p
+                @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
+                         u.nama,
+                         pd.kode_peserta
+                  FROM profiles p
                   JOIN users u ON p.user_id = u.id
                   JOIN roles r ON u.role_id = r.id
+                  LEFT JOIN peserta_details pd ON p.user_id = pd.user_id
                   WHERE r.nama = 'coach'
-                  ORDER BY p.nama", conn);
+                  ORDER BY u.nama", conn);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
                 list.Add(Map(reader));
@@ -112,10 +127,15 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                @"SELECT p.* FROM profiles p
+                @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
+                         u.nama,
+                         pd.kode_peserta
+                  FROM profiles p
+                  JOIN users u ON p.user_id = u.id
                   JOIN orang_tua_peserta otp ON p.id = otp.peserta_id
+                  LEFT JOIN peserta_details pd ON p.user_id = pd.user_id
                   WHERE otp.ortu_id = @ortuId
-                  ORDER BY p.nama", conn);
+                  ORDER BY u.nama", conn);
             cmd.Parameters.AddWithValue("ortuId", ortuId);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())

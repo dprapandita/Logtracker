@@ -10,6 +10,8 @@ namespace Logtracker.Data
 
         private readonly string _connectionString;
 
+        public static string? ConfigLoadError { get; private set; }
+
         static DatabaseHelper()
         {
             try
@@ -22,10 +24,12 @@ namespace Logtracker.Data
                 var conn = config.GetConnectionString("DefaultConnection");
                 if (!string.IsNullOrWhiteSpace(conn))
                     DefaultConnectionString = conn;
+                else
+                    ConfigLoadError = $"appsettings.json not found or missing DefaultConnection. Base dir: {AppDomain.CurrentDomain.BaseDirectory}";
             }
-            catch
+            catch (Exception ex)
             {
-                // fallback ke default
+                ConfigLoadError = ex.Message;
             }
         }
 

@@ -64,7 +64,7 @@ namespace Logtracker.Repositories
             {
                 Id = (int)reader["id"],
                 Username = (string)reader["username"],
-                Email = (string)reader["email"],
+                Email = reader.IsDBNull(reader.GetOrdinal("email")) ? "" : (string)reader["email"],
                 PasswordHash = (string)reader["password_hash"],
                 Nama = (string)reader["nama"],
                 RoleId = (int)reader["role_id"],

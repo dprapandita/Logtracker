@@ -16,13 +16,20 @@ namespace Logtracker.Services
     {
         private readonly UserRepository _userRepo;
         private readonly ProfileRepository _profileRepo;
+        private readonly PesertaDetailRepository _pesertaDetailRepo;
         private readonly RelasiRepository _relasiRepo;
         private readonly RoleRepository _roleRepo;
 
-        public AuthService(UserRepository userRepo, ProfileRepository profileRepo, RelasiRepository relasiRepo, RoleRepository roleRepo)
+        public AuthService(
+            UserRepository userRepo,
+            ProfileRepository profileRepo,
+            PesertaDetailRepository pesertaDetailRepo,
+            RelasiRepository relasiRepo,
+            RoleRepository roleRepo)
         {
             _userRepo = userRepo;
             _profileRepo = profileRepo;
+            _pesertaDetailRepo = pesertaDetailRepo;
             _relasiRepo = relasiRepo;
             _roleRepo = roleRepo;
         }
@@ -66,7 +73,7 @@ namespace Logtracker.Services
             {
                 if (string.IsNullOrWhiteSpace(kodePesertaOrtu))
                     return (false, "Masukkan kode peserta anak.");
-                if (_profileRepo.GetPesertaByKode(kodePesertaOrtu.Trim().ToUpper()) == null)
+                if (_pesertaDetailRepo.GetByKode(kodePesertaOrtu.Trim().ToUpper()) == null)
                     return (false, "Kode peserta tidak ditemukan.");
             }
 
@@ -85,23 +92,28 @@ namespace Logtracker.Services
                 };
                 var userId = _userRepo.Insert(user);
 
-                string? kodePeserta = null;
-                if (roleName == "peserta")
-                    kodePeserta = _profileRepo.GenerateKodePeserta();
-
                 var profile = new Profile
                 {
-                    UserId = userId,
-                    Nama = nama.Trim(),
-                    KodePeserta = kodePeserta
+                    UserId = userId
                 };
                 var profileId = _profileRepo.Insert(profile);
 
+                string? kodePeserta = null;
+                if (roleName == "peserta")
+                {
+                    kodePeserta = _pesertaDetailRepo.GenerateKodePeserta();
+                    _pesertaDetailRepo.Insert(new PesertaDetail
+                    {
+                        UserId = userId,
+                        KodePeserta = kodePeserta
+                    });
+                }
+
                 if (roleName == "ortu" && !string.IsNullOrWhiteSpace(kodePesertaOrtu))
                 {
-                    var peserta = _profileRepo.GetPesertaByKode(kodePesertaOrtu.Trim().ToUpper());
+                    var peserta = _pesertaDetailRepo.GetByKode(kodePesertaOrtu.Trim().ToUpper());
                     if (peserta != null)
-                        _relasiRepo.ConnectAnak(profileId, peserta.Id);
+                        _relasiRepo.ConnectAnak(profileId, peserta.UserId);
                 }
 
                 var msg = roleName == "peserta"

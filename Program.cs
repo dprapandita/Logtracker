@@ -17,6 +17,9 @@ namespace Logtracker
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             ApplicationConfiguration.Initialize();
 
+            if (DatabaseHelper.ConfigLoadError != null)
+                MessageBox.Show(DatabaseHelper.ConfigLoadError, "Config Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             var db = new DatabaseHelper();
             InitializeServices(db);
 
@@ -27,6 +30,7 @@ namespace Logtracker
         {
             var userRepo = new UserRepository(db);
             var profileRepo = new ProfileRepository(db);
+            var pesertaDetailRepo = new PesertaDetailRepository(db);
             var aktivitasRepo = new AktivitasRepository(db);
             var feedbackRepo = new FeedbackRepository(db);
             var relasiRepo = new RelasiRepository(db);
@@ -36,7 +40,7 @@ namespace Logtracker
 
             _instance = new ProgramInstance
             {
-                AuthService = new AuthService(userRepo, profileRepo, relasiRepo, roleRepo),
+                AuthService = new AuthService(userRepo, profileRepo, pesertaDetailRepo, relasiRepo, roleRepo),
                 AktivitasService = new AktivitasService(aktivitasRepo),
                 CoachService = new CoachService(profileRepo, aktivitasRepo, feedbackRepo),
                 OrangTuaService = new OrangTuaService(profileRepo, relasiRepo, aktivitasRepo, feedbackRepo),
