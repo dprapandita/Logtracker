@@ -102,7 +102,7 @@ namespace Logtracker.Forms
             // 
             lblStatus.Location = new Point(9, 97);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(52, 22);
+            lblStatus.Size = new Size(79, 22);
             lblStatus.TabIndex = 1;
             lblStatus.Text = "Status:";
             // 
@@ -241,7 +241,7 @@ namespace Logtracker.Forms
             lstExistingFeedback.Location = new Point(9, 22);
             lstExistingFeedback.Margin = new Padding(3, 2, 3, 2);
             lstExistingFeedback.Name = "lstExistingFeedback";
-            lstExistingFeedback.Size = new Size(648, 21);
+            lstExistingFeedback.Size = new Size(648, 63);
             lstExistingFeedback.TabIndex = 0;
             lstExistingFeedback.SelectedIndexChanged += lstExistingFeedback_SelectedIndexChanged;
             // 

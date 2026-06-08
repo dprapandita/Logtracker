@@ -80,15 +80,22 @@ namespace Logtracker.Forms
                 if (dgvAktivitas.Columns["CreatedAt"] != null) dgvAktivitas.Columns["CreatedAt"].Visible = false;
                 if (dgvAktivitas.Columns["UpdatedAt"] != null) dgvAktivitas.Columns["UpdatedAt"].Visible = false;
                 if (dgvAktivitas.Columns["NamaPeserta"] != null) dgvAktivitas.Columns["NamaPeserta"].Visible = false;
+                if (dgvAktivitas.Columns["NamaKategori"] != null) dgvAktivitas.Columns["NamaKategori"].HeaderText = "Kategori";
+                if (dgvAktivitas.Columns["NamaStatus"] != null) dgvAktivitas.Columns["NamaStatus"].HeaderText = "Status";
                 if (dgvAktivitas.Columns["Tanggal"] != null)
                     dgvAktivitas.Columns["Tanggal"].DefaultCellStyle.Format = "yyyy-MM-dd";
-
-                ClearFeedbackPanel();
 
                 if (dgvAktivitas.Rows.Count > 0)
                 {
                     dgvAktivitas.CurrentCell = dgvAktivitas.Rows[0].Cells[0];
                     dgvAktivitas.Rows[0].Selected = true;
+                    // The grid auto-selects row 0 on binding, so SelectionChanged may not
+                    // re-fire here. Populate the panel explicitly.
+                    PopulateFeedbackPanel(dgvAktivitas.Rows[0].DataBoundItem as Aktivitas);
+                }
+                else
+                {
+                    ClearFeedbackPanel();
                 }
             }
             catch (Exception ex)
@@ -109,7 +116,11 @@ namespace Logtracker.Forms
         {
             if (dgvAktivitas.CurrentRow == null) return;
 
-            var selected = dgvAktivitas.CurrentRow.DataBoundItem as Aktivitas;
+            PopulateFeedbackPanel(dgvAktivitas.CurrentRow.DataBoundItem as Aktivitas);
+        }
+
+        private void PopulateFeedbackPanel(Aktivitas? selected)
+        {
             if (selected == null) return;
 
             _selectedAktivitasId = selected.Id;
@@ -128,9 +139,9 @@ namespace Logtracker.Forms
                     lstExistingFeedback.Items.Add($"[{fb.CreatedAt:dd-MM-yyyy HH:mm}] {fb.NamaCoach}: {fb.Feedback}");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // silently ignore feedback load errors
+                MessageBox.Show($"Gagal memuat feedback: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -171,6 +182,7 @@ namespace Logtracker.Forms
                 else
                 {
                     txtFeedbackBaru.Clear();
+                    LoadExistingFeedback(_selectedAktivitasId);
                 }
             }
 

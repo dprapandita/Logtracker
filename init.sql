@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabel profiles (3NF: nama lives in users; kode_peserta lives in peserta_details)
+-- Tabel profiles
 CREATE TABLE IF NOT EXISTS profiles (
     id SERIAL PRIMARY KEY,
     user_id INT UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS profiles (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabel peserta_details (3NF: role-specific data for peserta only)
+-- Tabel peserta_details
 CREATE TABLE IF NOT EXISTS peserta_details (
     user_id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
     kode_peserta VARCHAR(20) UNIQUE NOT NULL

@@ -62,12 +62,23 @@ namespace Logtracker.Repositories
             return list;
         }
 
+        private static bool HasColumn(NpgsqlDataReader reader, string name)
+        {
+            for (int i = 0; i < reader.FieldCount; i++)
+                if (string.Equals(reader.GetName(i), name, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            return false;
+        }
+
         private static FeedbackAktivitas Map(NpgsqlDataReader reader)
         {
-            var rawTgl = reader["tanggal_aktivitas"];
             DateTime? tglAktivitas = null;
-            if (rawTgl != DBNull.Value)
-                tglAktivitas = rawTgl is DateOnly d ? d.ToDateTime(TimeOnly.MinValue) : (DateTime)rawTgl;
+            if (HasColumn(reader, "tanggal_aktivitas"))
+            {
+                var rawTgl = reader["tanggal_aktivitas"];
+                if (rawTgl != DBNull.Value)
+                    tglAktivitas = rawTgl is DateOnly d ? d.ToDateTime(TimeOnly.MinValue) : (DateTime)rawTgl;
+            }
 
             return new FeedbackAktivitas
             {
@@ -78,7 +89,7 @@ namespace Logtracker.Repositories
                 CreatedAt = reader["created_at"] is DateTime ct ? ct : DateTime.Now,
                 UpdatedAt = reader["updated_at"] is DateTime ut ? ut : DateTime.Now,
                 NamaCoach = reader["nama_coach"] as string,
-                NamaAktivitas = reader["nama_aktivitas"] as string,
+                NamaAktivitas = HasColumn(reader, "nama_aktivitas") ? reader["nama_aktivitas"] as string : null,
                 TanggalAktivitas = tglAktivitas
             };
         }
