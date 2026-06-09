@@ -69,11 +69,13 @@ namespace Logtracker.Services
             if (_userRepo.GetByEmail(email) != null)
                 return (false, "Email sudah terdaftar.");
 
+            Profile? anakProfile = null;
             if (roleName == "ortu")
             {
                 if (string.IsNullOrWhiteSpace(kodePesertaOrtu))
                     return (false, "Masukkan kode peserta anak.");
-                if (_pesertaDetailRepo.GetByKode(kodePesertaOrtu.Trim().ToUpper()) == null)
+                anakProfile = _profileRepo.GetPesertaByKode(kodePesertaOrtu.Trim().ToUpper());
+                if (anakProfile == null)
                     return (false, "Kode peserta tidak ditemukan.");
             }
 
@@ -109,11 +111,9 @@ namespace Logtracker.Services
                     });
                 }
 
-                if (roleName == "ortu" && !string.IsNullOrWhiteSpace(kodePesertaOrtu))
+                if (roleName == "ortu" && anakProfile != null)
                 {
-                    var peserta = _pesertaDetailRepo.GetByKode(kodePesertaOrtu.Trim().ToUpper());
-                    if (peserta != null)
-                        _relasiRepo.ConnectAnak(profileId, peserta.UserId);
+                    _relasiRepo.ConnectAnak(profileId, anakProfile.Id);
                 }
 
                 var msg = roleName == "peserta"

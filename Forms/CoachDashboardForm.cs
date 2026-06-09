@@ -201,67 +201,17 @@ namespace Logtracker.Forms
             form.ShowDialog();
         }
 
-        private void btnPilihPeserta_Click(object? sender, EventArgs e)
+        private void btnDetailAktivitas_Click(object? sender, EventArgs e)
         {
-            try
+            if (dgvAktivitas.CurrentRow?.DataBoundItem is not Aktivitas selected)
             {
-                var allPeserta = _coachService.GetAllPeserta();
-                if (allPeserta.Count == 0)
-                {
-                    MessageBox.Show("Belum ada peserta terdaftar.", "Info",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                var labels = allPeserta
-                    .Select(p => string.IsNullOrEmpty(p.KodePeserta)
-                        ? p.Nama
-                        : $"{p.Nama} ({p.KodePeserta})")
-                    .ToArray();
-
-                var selected = ShowInputComboBox("Pilih Peserta",
-                    "Pilih peserta yang ingin Anda bimbing:", labels);
-                if (selected < 0) return;
-
-                var peserta = allPeserta[selected];
-                var (success, msg) = _coachService.AddPeserta(_profile.Id, peserta.Id);
-                MessageBox.Show(msg, success ? "Sukses" : "Gagal",
-                    MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
-                if (success) LoadPeserta();
+                MessageBox.Show("Pilih aktivitas terlebih dahulu.", "Info",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Gagal: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
-        private static int ShowInputComboBox(string title, string prompt, string[] items)
-        {
-            var form = new Form();
-            var label = new Label { Text = prompt, Location = new Point(12, 15), Size = new Size(350, 25) };
-            var combo = new ComboBox
-            {
-                Location = new Point(12, 45),
-                Size = new Size(350, 28),
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-            combo.Items.AddRange(items);
-            if (combo.Items.Count > 0) combo.SelectedIndex = 0;
-            var btnOk = new Button { Text = "OK", Location = new Point(12, 85), Size = new Size(160, 30), DialogResult = DialogResult.OK };
-            var btnCancel = new Button { Text = "Batal", Location = new Point(202, 85), Size = new Size(160, 30), DialogResult = DialogResult.Cancel };
-
-            form.Text = title;
-            form.StartPosition = FormStartPosition.CenterParent;
-            form.FormBorderStyle = FormBorderStyle.FixedDialog;
-            form.MaximizeBox = false;
-            form.MinimizeBox = false;
-            form.ClientSize = new Size(374, 130);
-            form.Controls.AddRange([label, combo, btnOk, btnCancel]);
-            form.AcceptButton = btnOk;
-            form.CancelButton = btnCancel;
-
-            return form.ShowDialog() == DialogResult.OK ? combo.SelectedIndex : -1;
+            var form = new DetailAktivitasForm(selected, _coachService);
+            form.ShowDialog();
         }
 
         private void btnRefresh_Click(object? sender, EventArgs e) => LoadPeserta();

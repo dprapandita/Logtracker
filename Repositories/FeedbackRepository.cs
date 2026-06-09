@@ -31,9 +31,10 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                @"SELECT f.*, p.nama AS nama_coach
+                @"SELECT f.*, u.nama AS nama_coach
                   FROM feedback_aktivitas f
                   JOIN profiles p ON f.coach_id = p.id
+                  JOIN users u ON p.user_id = u.id
                   WHERE f.aktivitas_id = @aid
                   ORDER BY f.created_at DESC", conn);
             cmd.Parameters.AddWithValue("aid", aktivitasId);
@@ -49,9 +50,10 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                @"SELECT f.*, p.nama AS nama_coach, a.nama AS nama_aktivitas, a.tanggal AS tanggal_aktivitas
+                @"SELECT f.*, u.nama AS nama_coach, a.nama AS nama_aktivitas, a.tanggal AS tanggal_aktivitas
                   FROM feedback_aktivitas f
                   JOIN profiles p ON f.coach_id = p.id
+                  JOIN users u ON p.user_id = u.id
                   JOIN aktivitas a ON f.aktivitas_id = a.id
                   WHERE a.peserta_id = @pid
                   ORDER BY f.created_at DESC", conn);

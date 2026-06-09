@@ -72,7 +72,7 @@ namespace Logtracker.Forms
             var selected = dgvAktivitas.CurrentRow.DataBoundItem as Aktivitas;
             if (selected == null) return;
 
-            if (selected.StatusId != 1)
+            if (selected.StatusId == 2)
             {
                 MessageBox.Show($"Aktivitas berstatus \"{selected.NamaStatus}\" tidak dapat diedit.", "Validasi",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -103,7 +103,7 @@ namespace Logtracker.Forms
             var selected = dgvAktivitas.CurrentRow.DataBoundItem as Aktivitas;
             if (selected == null) return;
 
-            if (selected.StatusId != 1)
+            if (selected.StatusId == 2)
             {
                 MessageBox.Show($"Aktivitas berstatus \"{selected.NamaStatus}\" tidak dapat dihapus.", "Validasi",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);

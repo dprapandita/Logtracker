@@ -211,7 +211,7 @@ namespace Logtracker.Repositories
             {
                 Id = (int)reader["id"],
                 UserId = reader["user_id"] is int uid ? uid : 0,
-                Nama = (string)reader["nama"],
+                Nama = reader["nama"] as string ?? string.Empty,
                 KodePeserta = reader["kode_peserta"] as string,
                 CreatedAt = reader["created_at"] is DateTime ct ? ct : DateTime.Now,
                 UpdatedAt = reader["updated_at"] is DateTime ut ? ut : DateTime.Now

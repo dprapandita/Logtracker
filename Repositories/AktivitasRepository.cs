@@ -39,9 +39,10 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                @"SELECT a.*, p.nama AS nama_peserta, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
+                @"SELECT a.*, u.nama AS nama_peserta, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
                   FROM aktivitas a
                   JOIN profiles p ON a.peserta_id = p.id
+                  JOIN users u ON p.user_id = u.id
                   JOIN kategori_latihan kl ON a.kategori_id = kl.id
                   JOIN status_aktivitas sa ON a.status_id = sa.id
                   WHERE a.peserta_id = @pid
@@ -87,7 +88,7 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                "UPDATE aktivitas SET nama=@nama, kategori_id=@kid, durasi=@durasi, tanggal=@tanggal WHERE id=@id AND status_id=1", conn);
+                "UPDATE aktivitas SET nama=@nama, kategori_id=@kid, durasi=@durasi, tanggal=@tanggal, status_id=1 WHERE id=@id AND status_id IN (1, 3)", conn);
             cmd.Parameters.AddWithValue("id", a.Id);
             cmd.Parameters.AddWithValue("nama", a.Nama);
             cmd.Parameters.AddWithValue("kid", a.KategoriId);
@@ -100,7 +101,7 @@ namespace Logtracker.Repositories
         {
             using var conn = _db.GetConnection();
             conn.Open();
-            using var cmd = new NpgsqlCommand("DELETE FROM aktivitas WHERE id=@id AND status_id=1", conn);
+            using var cmd = new NpgsqlCommand("DELETE FROM aktivitas WHERE id=@id AND status_id IN (1, 3)", conn);
             cmd.Parameters.AddWithValue("id", id);
             cmd.ExecuteNonQuery();
         }
@@ -124,9 +125,10 @@ namespace Logtracker.Repositories
             conn.Open();
             var ph = string.Join(",", pesertaIds.Select((_, i) => $"@p{i}"));
             using var cmd = new NpgsqlCommand(
-                $@"SELECT a.*, p.nama AS nama_peserta, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
+                $@"SELECT a.*, u.nama AS nama_peserta, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
                    FROM aktivitas a
                    JOIN profiles p ON a.peserta_id = p.id
+                   JOIN users u ON p.user_id = u.id
                    JOIN kategori_latihan kl ON a.kategori_id = kl.id
                    JOIN status_aktivitas sa ON a.status_id = sa.id
                    WHERE a.peserta_id IN ({ph})
