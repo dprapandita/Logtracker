@@ -39,7 +39,7 @@ namespace Logtracker.Services
             var user = _userRepo.GetByUsername(username);
             if (user == null) return null;
 
-            var hash = HashPassword(password);
+            var hash = password;
             if (user.PasswordHash != hash) return null;
 
             var profile = _profileRepo.GetByUserId(user.Id);
@@ -88,7 +88,7 @@ namespace Logtracker.Services
                 {
                     Username = username.Trim().ToLower(),
                     Email = string.IsNullOrWhiteSpace(email) ? null : email.Trim().ToLower(),
-                    PasswordHash = HashPassword(password),
+                    PasswordHash = password,
                     Nama = nama.Trim(),
                     RoleId = roleId
                 };
