@@ -61,6 +61,11 @@ namespace Logtracker.Forms
                 dgvAktivitas.DataSource = null;
                 dgvAktivitas.DataSource = _orangTuaService.GetAktivitasAnak(pesertaId);
                 if (dgvAktivitas.Columns["PesertaId"] != null) dgvAktivitas.Columns["PesertaId"].Visible = false;
+                if (dgvAktivitas.Columns["StatusId"] != null) dgvAktivitas.Columns["StatusId"].Visible = false;
+                if (dgvAktivitas.Columns["KategoriId"] != null) dgvAktivitas.Columns["KategoriId"].Visible = false;
+                if (dgvAktivitas.Columns["NamaKategori"] != null) dgvAktivitas.Columns["NamaKategori"].HeaderText = "Kategori";
+                if (dgvAktivitas.Columns["NamaStatus"] != null) dgvAktivitas.Columns["NamaStatus"].HeaderText = "Status";
+                if (dgvAktivitas.Columns["UpdatedAt"] != null) dgvAktivitas.Columns["UpdatedAt"].HeaderText = "Di ubah pada";
                 if (dgvAktivitas.Columns["CreatedAt"] != null) dgvAktivitas.Columns["CreatedAt"].Visible = false;
                 if (dgvAktivitas.Columns["NamaPeserta"] != null) dgvAktivitas.Columns["NamaPeserta"].Visible = false;
                 if (dgvAktivitas.Columns["Tanggal"] != null)
