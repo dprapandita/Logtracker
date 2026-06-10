@@ -159,30 +159,51 @@ namespace Logtracker.Forms
             }
 
             var hasError = false;
-
-            if (cboStatus.SelectedItem is StatusAktivitas selectedStatus)
-            {
-                var (suc1, msg1) = _coachService.UpdateStatus(_selectedAktivitasId, selectedStatus.Id);
-                if (!suc1)
-                {
-                    MessageBox.Show(msg1, "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    hasError = true;
-                }
-            }
-
             var feedbackText = txtFeedbackBaru.Text.Trim();
-            if (!string.IsNullOrWhiteSpace(feedbackText))
+            var selectedStatus = cboStatus.SelectedItem as StatusAktivitas;
+            var adaFeedback = !string.IsNullOrWhiteSpace(feedbackText);
+            var adaKeputusan = selectedStatus != null && (selectedStatus.Id == 2 || selectedStatus.Id == 3);
+
+            if (adaFeedback && adaKeputusan)
             {
-                var (suc2, msg2) = _coachService.SaveFeedback(_selectedAktivitasId, _profile.Id, feedbackText);
-                if (!suc2)
+                // Feedback + keputusan (Disetujui/Revisi) → satu transaksi via stored procedure.
+                var (suc, msg) = _coachService.BeriFeedback(_selectedAktivitasId, _profile.Id, feedbackText, selectedStatus!.Id);
+                if (!suc)
                 {
-                    MessageBox.Show(msg2, "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(msg, "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     hasError = true;
                 }
                 else
                 {
                     txtFeedbackBaru.Clear();
                     LoadExistingFeedback(_selectedAktivitasId);
+                }
+            }
+            else
+            {
+                if (selectedStatus != null)
+                {
+                    var (suc1, msg1) = _coachService.UpdateStatus(_selectedAktivitasId, selectedStatus.Id);
+                    if (!suc1)
+                    {
+                        MessageBox.Show(msg1, "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        hasError = true;
+                    }
+                }
+
+                if (adaFeedback)
+                {
+                    var (suc2, msg2) = _coachService.SaveFeedback(_selectedAktivitasId, _profile.Id, feedbackText);
+                    if (!suc2)
+                    {
+                        MessageBox.Show(msg2, "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        hasError = true;
+                    }
+                    else
+                    {
+                        txtFeedbackBaru.Clear();
+                        LoadExistingFeedback(_selectedAktivitasId);
+                    }
                 }
             }
 

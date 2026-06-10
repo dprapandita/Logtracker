@@ -53,6 +53,24 @@ namespace Logtracker.Services
             }
         }
 
+        // Jalur transaksional: feedback + keputusan status (Disetujui/Revisi) sekaligus,
+        // lewat stored procedure sp_beri_feedback.
+        public (bool Success, string Message) BeriFeedback(int aktivitasId, int coachId, string feedback, int statusId)
+        {
+            if (string.IsNullOrWhiteSpace(feedback))
+                return (false, "Feedback tidak boleh kosong.");
+
+            try
+            {
+                _feedbackRepo.BeriFeedbackTransaksional(aktivitasId, coachId, feedback.Trim(), statusId);
+                return (true, "Feedback & status berhasil disimpan.");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Gagal: {ex.Message}");
+            }
+        }
+
         public (bool Success, string Message) UpdateStatus(int aktivitasId, int statusId)
         {
             if (statusId <= 0)

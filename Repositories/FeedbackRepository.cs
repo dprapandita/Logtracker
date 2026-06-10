@@ -25,6 +25,21 @@ namespace Logtracker.Repositories
             cmd.ExecuteNonQuery();
         }
 
+        // Memanggil stored procedure sp_beri_feedback: menyimpan feedback DAN
+        // mengubah status aktivitas dalam satu transaksi (COMMIT/ROLLBACK di DB).
+        // Tidak dibungkus NpgsqlTransaction agar COMMIT/ROLLBACK dalam prosedur berjalan.
+        public void BeriFeedbackTransaksional(int aktivitasId, int coachId, string feedback, int statusId)
+        {
+            using var conn = _db.GetConnection();
+            conn.Open();
+            using var cmd = new NpgsqlCommand("CALL sp_beri_feedback(@aid, @cid, @fb, @sid)", conn);
+            cmd.Parameters.AddWithValue("aid", aktivitasId);
+            cmd.Parameters.AddWithValue("cid", coachId);
+            cmd.Parameters.AddWithValue("fb", feedback);
+            cmd.Parameters.AddWithValue("sid", statusId);
+            cmd.ExecuteNonQuery();
+        }
+
         public List<FeedbackAktivitas> GetByAktivitasId(int aktivitasId)
         {
             var list = new List<FeedbackAktivitas>();

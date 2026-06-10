@@ -15,7 +15,6 @@ namespace Logtracker.Forms
             _pesertaId = pesertaId;
             _pesertaNama = pesertaNama;
 
-            lblPeserta.Text = $"Laporan Aktivitas: {_pesertaNama}";
             LoadLaporan();
         }
 
@@ -27,6 +26,11 @@ namespace Logtracker.Forms
                 dgvKategoriJumlah.DataSource = _laporanService.JumlahAktivitasPerKategori(_pesertaId);
                 dgvTanggalDurasi.DataSource = _laporanService.TotalDurasiPerTanggal(_pesertaId);
                 dgvStatus.DataSource = _laporanService.StatusCount(_pesertaId);
+
+                // Stored function: total durasi disetujui + level keaktifan.
+                var total = _laporanService.TotalDurasiDisetujui(_pesertaId);
+                var level = _laporanService.LevelKeaktifan(_pesertaId);
+                lblPeserta.Text = $"Laporan Aktivitas: {_pesertaNama}  |  Total Durasi Disetujui: {total} menit  |  Keaktifan: {level}";
             }
             catch (Exception ex)
             {

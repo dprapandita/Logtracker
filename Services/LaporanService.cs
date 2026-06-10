@@ -23,5 +23,13 @@ namespace Logtracker.Services
 
         public DataTable StatusCount(int pesertaId)
             => _aktivitasRepo.GetStatusCount(pesertaId);
+
+        // Stored function hitung_total_durasi(): total durasi latihan 'Disetujui'.
+        public int TotalDurasiDisetujui(int pesertaId)
+            => _aktivitasRepo.GetTotalDurasiDisetujui(pesertaId);
+
+        // Stored function level_keaktifan(): klasifikasi keaktifan peserta.
+        public string LevelKeaktifan(int pesertaId)
+            => _aktivitasRepo.GetLevelKeaktifan(pesertaId);
     }
 }

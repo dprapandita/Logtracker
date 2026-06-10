@@ -39,14 +39,9 @@ namespace Logtracker.Repositories
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new NpgsqlCommand(
-                @"SELECT a.*, u.nama AS nama_peserta, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
-                  FROM aktivitas a
-                  JOIN profiles p ON a.peserta_id = p.id
-                  JOIN users u ON p.user_id = u.id
-                  JOIN kategori_latihan kl ON a.kategori_id = kl.id
-                  JOIN status_aktivitas sa ON a.status_id = sa.id
-                  WHERE a.peserta_id = @pid
-                  ORDER BY a.tanggal DESC, a.created_at DESC", conn);
+                @"SELECT * FROM v_aktivitas_lengkap
+                  WHERE peserta_id = @pid
+                  ORDER BY tanggal DESC, created_at DESC", conn);
             cmd.Parameters.AddWithValue("pid", pesertaId);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -87,8 +82,10 @@ namespace Logtracker.Repositories
         {
             using var conn = _db.GetConnection();
             conn.Open();
+            // status_id sengaja tidak di-set di sini: trigger trg_reset_status_saat_edit
+            // otomatis mengembalikannya ke 'Menunggu' (1) saat data latihan berubah.
             using var cmd = new NpgsqlCommand(
-                "UPDATE aktivitas SET nama=@nama, kategori_id=@kid, durasi=@durasi, tanggal=@tanggal, status_id=1 WHERE id=@id AND status_id IN (1, 3)", conn);
+                "UPDATE aktivitas SET nama=@nama, kategori_id=@kid, durasi=@durasi, tanggal=@tanggal WHERE id=@id AND status_id IN (1, 3)", conn);
             cmd.Parameters.AddWithValue("id", a.Id);
             cmd.Parameters.AddWithValue("nama", a.Nama);
             cmd.Parameters.AddWithValue("kid", a.KategoriId);
@@ -125,14 +122,9 @@ namespace Logtracker.Repositories
             conn.Open();
             var ph = string.Join(",", pesertaIds.Select((_, i) => $"@p{i}"));
             using var cmd = new NpgsqlCommand(
-                $@"SELECT a.*, u.nama AS nama_peserta, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
-                   FROM aktivitas a
-                   JOIN profiles p ON a.peserta_id = p.id
-                   JOIN users u ON p.user_id = u.id
-                   JOIN kategori_latihan kl ON a.kategori_id = kl.id
-                   JOIN status_aktivitas sa ON a.status_id = sa.id
-                   WHERE a.peserta_id IN ({ph})
-                   ORDER BY a.tanggal DESC", conn);
+                $@"SELECT * FROM v_aktivitas_lengkap
+                   WHERE peserta_id IN ({ph})
+                   ORDER BY tanggal DESC", conn);
             for (int i = 0; i < pesertaIds.Count; i++)
                 cmd.Parameters.AddWithValue($"p{i}", pesertaIds[i]);
             using var reader = cmd.ExecuteReader();
@@ -171,6 +163,27 @@ namespace Logtracker.Repositories
                   WHERE a.peserta_id = @pid
                   GROUP BY sa.nama
                   ORDER BY sa.nama", pesertaId);
+
+        // Memanggil stored function hitung_total_durasi() — total durasi latihan
+        // berstatus 'Disetujui' milik peserta.
+        public int GetTotalDurasiDisetujui(int pesertaId)
+        {
+            using var conn = _db.GetConnection();
+            conn.Open();
+            using var cmd = new NpgsqlCommand("SELECT hitung_total_durasi(@pid)", conn);
+            cmd.Parameters.AddWithValue("pid", pesertaId);
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+
+        // Memanggil stored function level_keaktifan() — klasifikasi keaktifan peserta.
+        public string GetLevelKeaktifan(int pesertaId)
+        {
+            using var conn = _db.GetConnection();
+            conn.Open();
+            using var cmd = new NpgsqlCommand("SELECT level_keaktifan(@pid)", conn);
+            cmd.Parameters.AddWithValue("pid", pesertaId);
+            return cmd.ExecuteScalar() as string ?? "-";
+        }
 
         private DataTable GetReport(string sql, int pesertaId)
         {
