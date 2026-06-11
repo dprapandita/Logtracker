@@ -2,10 +2,35 @@ namespace Logtracker.Models
 {
     public class Profile
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Nama { get; set; } = string.Empty;
-        public string? KodePeserta { get; set; }
+        // ENKAPSULASI berkondisi: field privat + setter berlogika (bukan auto-property).
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set => _id = value < 0 ? 0 : value;
+        }
+
+        private int _userId;
+        public int UserId
+        {
+            get => _userId;
+            set => _userId = value < 0 ? 0 : value;
+        }
+
+        private string _nama = string.Empty;
+        public string Nama
+        {
+            get => _nama;
+            set => _nama = value?.Trim() ?? string.Empty;
+        }
+
+        private string? _kodePeserta;
+        public string? KodePeserta
+        {
+            get => _kodePeserta;
+            set => _kodePeserta = value?.Trim();
+        }
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

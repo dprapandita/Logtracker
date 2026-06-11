@@ -36,6 +36,7 @@ namespace Logtracker.Services
 
         public LoginResult? Login(string username, string password)
         {
+            // Inti login: cari user lalu verifikasi password; null = gagal.
             var user = _userRepo.GetByUsername(username);
             if (user == null) return null;
 
@@ -69,6 +70,7 @@ namespace Logtracker.Services
             if (_userRepo.GetByEmail(email) != null)
                 return (false, "Email sudah terdaftar.");
 
+            // Khusus ortu: wajib mencantumkan kode peserta anak yang valid sebelum daftar.
             Profile? anakProfile = null;
             if (roleName == "ortu")
             {

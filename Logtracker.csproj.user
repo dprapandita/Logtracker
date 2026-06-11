@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Compile Update="Forms\AktivitasForm.cs">
+    <Compile Update="Forms\Components\AktivitasForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\CoachDashboardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\DetailAktivitasForm.cs">
+    <Compile Update="Forms\Components\DetailAktivitasForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\KelolaKategoriForm.cs">
+    <Compile Update="Forms\Components\KelolaKategoriForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\LaporanForm.cs">
+    <Compile Update="Forms\Components\LaporanForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\LoginForm.cs">
+    <Compile Update="Forms\AuthForms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\OrtuDashboardForm.cs">
@@ -25,7 +25,7 @@
     <Compile Update="Forms\PesertaDashboardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\RegisterForm.cs">
+    <Compile Update="Forms\AuthForms\RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

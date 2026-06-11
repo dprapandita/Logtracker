@@ -142,9 +142,7 @@ JOIN users u             ON p.user_id    = u.id
 JOIN kategori_latihan kl ON a.kategori_id = kl.id
 JOIN status_aktivitas sa ON a.status_id  = sa.id;
 
--- ---------------------------------------------------------------------------
 -- 3.1  GROUP BY + Agregasi  — HAVING, ROLLUP, CUBE
--- ---------------------------------------------------------------------------
 -- (a) HAVING: kategori dengan total durasi signifikan (> 60 menit) per peserta.
 CREATE OR REPLACE VIEW v_rekap_kategori_signifikan AS
 SELECT a.peserta_id,
@@ -184,9 +182,7 @@ JOIN kategori_latihan kl ON a.kategori_id = kl.id
 JOIN status_aktivitas sa ON a.status_id  = sa.id
 GROUP BY CUBE (a.peserta_id, kl.nama_latihan, sa.nama);
 
--- ---------------------------------------------------------------------------
 -- 3.3  SUBQUERY  — IN / EXISTS pada klausa WHERE
--- ---------------------------------------------------------------------------
 -- Peserta yang belum pernah mendapat evaluasi (feedback) dari coach.
 CREATE OR REPLACE VIEW v_peserta_belum_dievaluasi AS
 SELECT p.id AS peserta_id,
@@ -202,9 +198,7 @@ WHERE r.nama = 'peserta'
         WHERE a.peserta_id = p.id
   );
 
--- ---------------------------------------------------------------------------
 -- 3.6  SET OPERATIONS  — UNION / EXCEPT
--- ---------------------------------------------------------------------------
 -- (a) UNION: semua pihak (coach + orang tua) yang terhubung dgn seorang peserta.
 CREATE OR REPLACE FUNCTION pihak_terkait_peserta(p_peserta_id INT)
 RETURNS TABLE(peran TEXT, nama TEXT)
@@ -318,9 +312,7 @@ BEGIN
 END;
 $$;
 
--- ---------------------------------------------------------------------------
--- 3.10  TRIGGER ATURAN BISNIS (bukan sekadar timestamp)
--- ---------------------------------------------------------------------------
+-- 3.10  TRIGGER Stored Procedure
 -- Jika peserta mengubah data latihan (nama/durasi/tanggal/kategori), status
 -- otomatis dikembalikan ke 'Menunggu' (1) agar coach mengevaluasi ulang.
 -- Perubahan status saja (mis. coach approve) TIDAK memicu reset ini.

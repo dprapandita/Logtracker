@@ -7,6 +7,13 @@ namespace Logtracker.Services
     {
         private readonly AktivitasRepository _repo;
 
+        private int _maxDurasiMenit = 600;
+        public int MaxDurasiMenit
+        {
+            get => _maxDurasiMenit;
+            set => _maxDurasiMenit = value < 1 ? 1 : value;
+        }
+
         public AktivitasService(AktivitasRepository repo)
         {
             _repo = repo;
@@ -18,7 +25,8 @@ namespace Logtracker.Services
         public Aktivitas? GetById(int id)
             => _repo.GetById(id);
 
-        private static (bool Valid, string Message) Validate(Aktivitas a)
+        // Validasi inti sebelum simpan: nama wajib, kategori dipilih, durasi 1..MaxDurasiMenit.
+        private (bool Valid, string Message) Validate(Aktivitas a)
         {
             if (string.IsNullOrWhiteSpace(a.Nama))
                 return (false, "Nama aktivitas tidak boleh kosong.");
@@ -26,6 +34,8 @@ namespace Logtracker.Services
                 return (false, "Pilih kategori.");
             if (a.Durasi <= 0)
                 return (false, "Durasi harus lebih dari 0.");
+            if (a.Durasi > MaxDurasiMenit)
+                return (false, $"Durasi maksimal {MaxDurasiMenit} menit.");
             return (true, "");
         }
 
@@ -41,6 +51,7 @@ namespace Logtracker.Services
         {
             var existing = _repo.GetById(a.Id);
             if (existing == null) return (false, "Data tidak ditemukan.");
+            // Aturan inti: aktivitas yang sudah Disetujui (status 2) dikunci dari perubahan.
             if (existing.StatusId == 2) return (false, $"Aktivitas berstatus \"{existing.NamaStatus}\" tidak dapat diedit.");
 
             var (valid, msg) = Validate(a);
