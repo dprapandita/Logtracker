@@ -1,15 +1,8 @@
 namespace Logtracker.Models
 {
-    public class KategoriLatihan
+    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    public class KategoriLatihan : BaseEntity
     {
-        // ENKAPSULASI berkondisi: field privat + setter berlogika (bukan auto-property).
-        private int _id;
-        public int Id
-        {
-            get => _id;
-            set => _id = value < 0 ? 0 : value;
-        }
-
         private string _namaLatihan = string.Empty;
         public string NamaLatihan
         {

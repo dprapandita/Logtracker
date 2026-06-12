@@ -4,30 +4,35 @@ using Logtracker.Models;
 
 namespace Logtracker.Repositories
 {
-    public class PesertaDetailRepository
+    // INHERITANCE: mewarisi DatabaseHelper dan helper koneksi dari BaseRepository.
+    public class PesertaDetailRepository : BaseRepository
     {
-        private readonly DatabaseHelper _db;
-
-        public PesertaDetailRepository(DatabaseHelper db)
+        public PesertaDetailRepository(DatabaseHelper db) : base(db)
         {
-            _db = db;
         }
 
         public void Insert(PesertaDetail pd)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand(
-                "INSERT INTO peserta_details (user_id, kode_peserta) VALUES (@uid, @kode)", conn);
-            cmd.Parameters.AddWithValue("uid", pd.UserId);
-            cmd.Parameters.AddWithValue("kode", pd.KodePeserta);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery(InsertSql, p => BindInsert(p, pd));
+        }
+
+        // Versi transaksi: dipakai saat register agar atomik bersama insert lain.
+        public void Insert(PesertaDetail pd, NpgsqlConnection conn, NpgsqlTransaction tx)
+        {
+            ExecuteNonQuery(conn, tx, InsertSql, p => BindInsert(p, pd));
+        }
+
+        private const string InsertSql = "INSERT INTO peserta_details (user_id, kode_peserta) VALUES (@uid, @kode)";
+
+        private static void BindInsert(NpgsqlParameterCollection p, PesertaDetail pd)
+        {
+            p.AddWithValue("uid", pd.UserId);
+            p.AddWithValue("kode", pd.KodePeserta);
         }
 
         public PesertaDetail? GetByUserId(int userId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 "SELECT user_id, kode_peserta FROM peserta_details WHERE user_id = @uid", conn);
             cmd.Parameters.AddWithValue("uid", userId);
@@ -38,8 +43,7 @@ namespace Logtracker.Repositories
 
         public PesertaDetail? GetByKode(string kode)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 "SELECT user_id, kode_peserta FROM peserta_details WHERE kode_peserta = @kode", conn);
             cmd.Parameters.AddWithValue("kode", kode);
@@ -50,13 +54,19 @@ namespace Logtracker.Repositories
 
         public string GenerateKodePeserta()
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand(
-                "SELECT COALESCE(MAX(CAST(SUBSTRING(kode_peserta FROM 5) AS INTEGER)), 0) + 1 FROM peserta_details", conn);
-            var next = (int)cmd.ExecuteScalar()!;
+            var next = (int)ExecuteScalar(NextKodeSql)!;
             return $"PST-{next:D4}";
         }
+
+        // Versi transaksi: hitung kode berikutnya di dalam transaksi yang sama.
+        public string GenerateKodePeserta(NpgsqlConnection conn, NpgsqlTransaction tx)
+        {
+            var next = (int)ExecuteScalar(conn, tx, NextKodeSql)!;
+            return $"PST-{next:D4}";
+        }
+
+        private const string NextKodeSql =
+            "SELECT COALESCE(MAX(CAST(SUBSTRING(kode_peserta FROM 5) AS INTEGER)), 0) + 1 FROM peserta_details";
 
         private static PesertaDetail Map(NpgsqlDataReader reader)
         {

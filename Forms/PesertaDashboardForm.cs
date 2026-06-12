@@ -20,9 +20,27 @@ namespace Logtracker.Forms
             _laporanService = laporanService;
             _profile = profile;
 
+            RefreshUserInfo();
+            LoadData();
+        }
+
+        private void RefreshUserInfo()
+        {
             var kode = string.IsNullOrEmpty(_profile.KodePeserta) ? "(belum ada)" : _profile.KodePeserta;
             lblUserInfo.Text = $"{_profile.Nama} | Kode: {kode}";
-            LoadData();
+        }
+
+        private void btnProfil_Click(object? sender, EventArgs e)
+        {
+            var app = Program.GetInstance();
+            if (app == null) return;
+
+            var form = new EditProfileForm(app.GetProfileService(), _profile.UserId);
+            if (form.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(form.UpdatedNama))
+            {
+                _profile.Nama = form.UpdatedNama;
+                RefreshUserInfo();
+            }
         }
 
         private void LoadData()

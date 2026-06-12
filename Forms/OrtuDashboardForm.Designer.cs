@@ -11,6 +11,7 @@ namespace Logtracker.Forms
         private Label lblNoData;
         private Button btnRefresh;
         private Button btnLaporan;
+        private Button btnProfil;
 
         protected override void Dispose(bool disposing)
         {
@@ -28,6 +29,7 @@ namespace Logtracker.Forms
             lblNoData = new Label();
             btnRefresh = new Button();
             btnLaporan = new Button();
+            btnProfil = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).BeginInit();
             SuspendLayout();
             // 
@@ -37,7 +39,7 @@ namespace Logtracker.Forms
             lblUserInfo.ForeColor = Color.FromArgb(55, 36, 20);
             lblUserInfo.Location = new Point(10, 10);
             lblUserInfo.Name = "lblUserInfo";
-            lblUserInfo.Size = new Size(665, 36);
+            lblUserInfo.Size = new Size(565, 36);
             lblUserInfo.TabIndex = 0;
             lblUserInfo.Text = "Orang Tua";
             // 
@@ -132,9 +134,23 @@ namespace Logtracker.Forms
             btnLaporan.Text = "Laporan";
             btnLaporan.UseVisualStyleBackColor = false;
             btnLaporan.Click += btnLaporan_Click;
-            // 
+            //
+            // btnProfil
+            //
+            btnProfil.BackColor = Color.FromArgb(213, 184, 147);
+            btnProfil.FlatStyle = FlatStyle.Flat;
+            btnProfil.ForeColor = Color.FromArgb(55, 36, 20);
+            btnProfil.Location = new Point(581, 11);
+            btnProfil.Margin = new Padding(3, 2, 3, 2);
+            btnProfil.Name = "btnProfil";
+            btnProfil.Size = new Size(95, 30);
+            btnProfil.TabIndex = 8;
+            btnProfil.Text = "Profil";
+            btnProfil.UseVisualStyleBackColor = false;
+            btnProfil.Click += btnProfil_Click;
+            //
             // OrtuDashboardForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
@@ -145,6 +161,7 @@ namespace Logtracker.Forms
             Controls.Add(btnHubungkan);
             Controls.Add(btnRefresh);
             Controls.Add(btnLaporan);
+            Controls.Add(btnProfil);
             Controls.Add(dgvAktivitas);
             Controls.Add(lblNoData);
             Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);

@@ -17,6 +17,7 @@ namespace Logtracker.Forms
         private Button btnLaporan;
         private Button btnKelolaKategori;
         private Button btnDetailAktivitas;
+        private Button btnProfil;
         private GroupBox grpFeedback;
         private ListBox lstExistingFeedback;
 
@@ -42,6 +43,7 @@ namespace Logtracker.Forms
             btnLaporan = new Button();
             btnKelolaKategori = new Button();
             btnDetailAktivitas = new Button();
+            btnProfil = new Button();
             grpFeedback = new GroupBox();
             lstExistingFeedback = new ListBox();
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).BeginInit();
@@ -53,7 +55,7 @@ namespace Logtracker.Forms
             lblUserInfo.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold);
             lblUserInfo.Location = new Point(10, 10);
             lblUserInfo.Name = "lblUserInfo";
-            lblUserInfo.Size = new Size(665, 36);
+            lblUserInfo.Size = new Size(565, 36);
             lblUserInfo.TabIndex = 0;
             lblUserInfo.Text = "Coach";
             // 
@@ -213,9 +215,23 @@ namespace Logtracker.Forms
             btnDetailAktivitas.Text = "Detail";
             btnDetailAktivitas.UseVisualStyleBackColor = false;
             btnDetailAktivitas.Click += btnDetailAktivitas_Click;
-            // 
+            //
+            // btnProfil
+            //
+            btnProfil.BackColor = Color.FromArgb(213, 184, 147);
+            btnProfil.FlatStyle = FlatStyle.Flat;
+            btnProfil.ForeColor = Color.FromArgb(55, 36, 20);
+            btnProfil.Location = new Point(581, 11);
+            btnProfil.Margin = new Padding(3, 2, 3, 2);
+            btnProfil.Name = "btnProfil";
+            btnProfil.Size = new Size(95, 30);
+            btnProfil.TabIndex = 10;
+            btnProfil.Text = "Profil";
+            btnProfil.UseVisualStyleBackColor = false;
+            btnProfil.Click += btnProfil_Click;
+            //
             // grpFeedback
-            // 
+            //
             grpFeedback.Controls.Add(lstExistingFeedback);
             grpFeedback.Controls.Add(lblStatus);
             grpFeedback.Controls.Add(cboStatus);
@@ -258,6 +274,7 @@ namespace Logtracker.Forms
             Controls.Add(btnLaporan);
             Controls.Add(btnKelolaKategori);
             Controls.Add(btnDetailAktivitas);
+            Controls.Add(btnProfil);
             Controls.Add(dgvAktivitas);
             Controls.Add(lblNoData);
             Controls.Add(grpFeedback);

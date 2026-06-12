@@ -5,20 +5,17 @@ using Logtracker.Models;
 
 namespace Logtracker.Repositories
 {
-    public class AktivitasRepository
+    // INHERITANCE: mewarisi DatabaseHelper dan helper koneksi dari BaseRepository.
+    public class AktivitasRepository : BaseRepository
     {
-        private readonly DatabaseHelper _db;
-
-        public AktivitasRepository(DatabaseHelper db)
+        public AktivitasRepository(DatabaseHelper db) : base(db)
         {
-            _db = db;
         }
 
         public List<Aktivitas> GetAllByPesertaId(int pesertaId)
         {
             var list = new List<Aktivitas>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT a.*, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
                   FROM aktivitas a
@@ -36,8 +33,7 @@ namespace Logtracker.Repositories
         public List<Aktivitas> GetAllByPesertaIdWithName(int pesertaId)
         {
             var list = new List<Aktivitas>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT * FROM v_aktivitas_lengkap
                   WHERE peserta_id = @pid
@@ -51,8 +47,7 @@ namespace Logtracker.Repositories
 
         public Aktivitas? GetById(int id)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT a.*, kl.nama_latihan AS nama_kategori, sa.nama AS nama_status
                   FROM aktivitas a
@@ -66,51 +61,45 @@ namespace Logtracker.Repositories
 
         public void Insert(Aktivitas a)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand(
-                "INSERT INTO aktivitas (peserta_id, nama, kategori_id, durasi, tanggal) VALUES (@pid, @nama, @kid, @durasi, @tanggal)", conn);
-            cmd.Parameters.AddWithValue("pid", a.PesertaId);
-            cmd.Parameters.AddWithValue("nama", a.Nama);
-            cmd.Parameters.AddWithValue("kid", a.KategoriId);
-            cmd.Parameters.AddWithValue("durasi", a.Durasi);
-            cmd.Parameters.AddWithValue("tanggal", a.Tanggal);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery(
+                "INSERT INTO aktivitas (peserta_id, nama, kategori_id, durasi, tanggal) VALUES (@pid, @nama, @kid, @durasi, @tanggal)", p =>
+                {
+                    p.AddWithValue("pid", a.PesertaId);
+                    p.AddWithValue("nama", a.Nama);
+                    p.AddWithValue("kid", a.KategoriId);
+                    p.AddWithValue("durasi", a.Durasi);
+                    p.AddWithValue("tanggal", a.Tanggal);
+                });
         }
 
         public void Update(Aktivitas a)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
             // status_id sengaja tidak di-set di sini: trigger trg_reset_status_saat_edit
             // otomatis mengembalikannya ke 'Menunggu' (1) saat data latihan berubah.
-            using var cmd = new NpgsqlCommand(
-                "UPDATE aktivitas SET nama=@nama, kategori_id=@kid, durasi=@durasi, tanggal=@tanggal WHERE id=@id AND status_id IN (1, 3)", conn);
-            cmd.Parameters.AddWithValue("id", a.Id);
-            cmd.Parameters.AddWithValue("nama", a.Nama);
-            cmd.Parameters.AddWithValue("kid", a.KategoriId);
-            cmd.Parameters.AddWithValue("durasi", a.Durasi);
-            cmd.Parameters.AddWithValue("tanggal", a.Tanggal);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery(
+                "UPDATE aktivitas SET nama=@nama, kategori_id=@kid, durasi=@durasi, tanggal=@tanggal WHERE id=@id AND status_id IN (1, 3)", p =>
+                {
+                    p.AddWithValue("id", a.Id);
+                    p.AddWithValue("nama", a.Nama);
+                    p.AddWithValue("kid", a.KategoriId);
+                    p.AddWithValue("durasi", a.Durasi);
+                    p.AddWithValue("tanggal", a.Tanggal);
+                });
         }
 
         public void Delete(int id)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand("DELETE FROM aktivitas WHERE id=@id AND status_id IN (1, 3)", conn);
-            cmd.Parameters.AddWithValue("id", id);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery("DELETE FROM aktivitas WHERE id=@id AND status_id IN (1, 3)",
+                p => p.AddWithValue("id", id));
         }
 
         public void UpdateStatus(int aktivitasId, int statusId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand("UPDATE aktivitas SET status_id=@sid WHERE id=@id", conn);
-            cmd.Parameters.AddWithValue("id", aktivitasId);
-            cmd.Parameters.AddWithValue("sid", statusId);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery("UPDATE aktivitas SET status_id=@sid WHERE id=@id", p =>
+            {
+                p.AddWithValue("id", aktivitasId);
+                p.AddWithValue("sid", statusId);
+            });
         }
 
         public List<Aktivitas> GetByPesertaIds(List<int> pesertaIds)
@@ -118,8 +107,7 @@ namespace Logtracker.Repositories
             var list = new List<Aktivitas>();
             if (pesertaIds.Count == 0) return list;
 
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             var ph = string.Join(",", pesertaIds.Select((_, i) => $"@p{i}"));
             using var cmd = new NpgsqlCommand(
                 $@"SELECT * FROM v_aktivitas_lengkap
@@ -168,27 +156,20 @@ namespace Logtracker.Repositories
         // berstatus 'Disetujui' milik peserta.
         public int GetTotalDurasiDisetujui(int pesertaId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT hitung_total_durasi(@pid)", conn);
-            cmd.Parameters.AddWithValue("pid", pesertaId);
-            return Convert.ToInt32(cmd.ExecuteScalar());
+            return Convert.ToInt32(ExecuteScalar("SELECT hitung_total_durasi(@pid)",
+                p => p.AddWithValue("pid", pesertaId)));
         }
 
         // Memanggil stored function level_keaktifan() — klasifikasi keaktifan peserta.
         public string GetLevelKeaktifan(int pesertaId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT level_keaktifan(@pid)", conn);
-            cmd.Parameters.AddWithValue("pid", pesertaId);
-            return cmd.ExecuteScalar() as string ?? "-";
+            return ExecuteScalar("SELECT level_keaktifan(@pid)",
+                p => p.AddWithValue("pid", pesertaId)) as string ?? "-";
         }
 
         private DataTable GetReport(string sql, int pesertaId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("pid", pesertaId);
             using var adapter = new NpgsqlDataAdapter(cmd);
@@ -221,8 +202,8 @@ namespace Logtracker.Repositories
             {
                 Id = (int)reader["id"],
                 PesertaId = (int)reader["peserta_id"],
-                KategoriId = (int)reader["kategori_id"],
                 NamaKategori = reader["nama_kategori"] as string,
+                KategoriId = (int)reader["kategori_id"],
                 StatusId = reader["status_id"] is int sid ? sid : 1,
                 NamaStatus = reader["nama_status"] as string,
                 Nama = (string)reader["nama"],

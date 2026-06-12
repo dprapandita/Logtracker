@@ -4,19 +4,16 @@ using Logtracker.Models;
 
 namespace Logtracker.Repositories
 {
-    public class RelasiRepository
+    // INHERITANCE: mewarisi DatabaseHelper dan helper koneksi dari BaseRepository.
+    public class RelasiRepository : BaseRepository
     {
-        private readonly DatabaseHelper _db;
-
-        public RelasiRepository(DatabaseHelper db)
+        public RelasiRepository(DatabaseHelper db) : base(db)
         {
-            _db = db;
         }
 
         public PesertaCoach? GetCoachByPeserta(int pesertaId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand("SELECT * FROM peserta_coach WHERE peserta_id = @pid", conn);
             cmd.Parameters.AddWithValue("pid", pesertaId);
             using var reader = cmd.ExecuteReader();
@@ -31,34 +28,35 @@ namespace Logtracker.Repositories
 
         public void SetCoach(int pesertaId, int coachId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
             var existing = GetCoachByPeserta(pesertaId);
-            if (existing != null)
+            var sql = existing != null
+                ? "UPDATE peserta_coach SET coach_id = @cid WHERE peserta_id = @pid"
+                : "INSERT INTO peserta_coach (peserta_id, coach_id) VALUES (@pid, @cid)";
+            ExecuteNonQuery(sql, p =>
             {
-                using var cmd = new NpgsqlCommand("UPDATE peserta_coach SET coach_id = @cid WHERE peserta_id = @pid", conn);
-                cmd.Parameters.AddWithValue("pid", pesertaId);
-                cmd.Parameters.AddWithValue("cid", coachId);
-                cmd.ExecuteNonQuery();
-            }
-            else
-            {
-                using var cmd = new NpgsqlCommand("INSERT INTO peserta_coach (peserta_id, coach_id) VALUES (@pid, @cid)", conn);
-                cmd.Parameters.AddWithValue("pid", pesertaId);
-                cmd.Parameters.AddWithValue("cid", coachId);
-                cmd.ExecuteNonQuery();
-            }
+                p.AddWithValue("pid", pesertaId);
+                p.AddWithValue("cid", coachId);
+            });
         }
 
         public void ConnectAnak(int ortuId, int pesertaId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand(
-                "INSERT INTO orang_tua_peserta (ortu_id, peserta_id) VALUES (@oid, @pid) ON CONFLICT DO NOTHING", conn);
-            cmd.Parameters.AddWithValue("oid", ortuId);
-            cmd.Parameters.AddWithValue("pid", pesertaId);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery(ConnectAnakSql, p => BindConnectAnak(p, ortuId, pesertaId));
+        }
+
+        // Versi transaksi: dipakai saat register ortu agar atomik bersama insert lain.
+        public void ConnectAnak(int ortuId, int pesertaId, NpgsqlConnection conn, NpgsqlTransaction tx)
+        {
+            ExecuteNonQuery(conn, tx, ConnectAnakSql, p => BindConnectAnak(p, ortuId, pesertaId));
+        }
+
+        private const string ConnectAnakSql =
+            "INSERT INTO orang_tua_peserta (ortu_id, peserta_id) VALUES (@oid, @pid) ON CONFLICT DO NOTHING";
+
+        private static void BindConnectAnak(NpgsqlParameterCollection p, int ortuId, int pesertaId)
+        {
+            p.AddWithValue("oid", ortuId);
+            p.AddWithValue("pid", pesertaId);
         }
     }
 }

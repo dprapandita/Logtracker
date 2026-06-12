@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using Logtracker.Data;
 using Logtracker.Models;
 using Logtracker.Repositories;
 
@@ -12,8 +13,10 @@ namespace Logtracker.Services
         public string Username { get; set; } = string.Empty;
     }
 
-    public class AuthService
+    // INHERITANCE: bagian dari hierarki service yang sama (BaseService).
+    public class AuthService : BaseService
     {
+        private readonly DatabaseHelper _db;
         private readonly UserRepository _userRepo;
         private readonly ProfileRepository _profileRepo;
         private readonly PesertaDetailRepository _pesertaDetailRepo;
@@ -21,12 +24,14 @@ namespace Logtracker.Services
         private readonly RoleRepository _roleRepo;
 
         public AuthService(
+            DatabaseHelper db,
             UserRepository userRepo,
             ProfileRepository profileRepo,
             PesertaDetailRepository pesertaDetailRepo,
             RelasiRepository relasiRepo,
             RoleRepository roleRepo)
         {
+            _db = db;
             _userRepo = userRepo;
             _profileRepo = profileRepo;
             _pesertaDetailRepo = pesertaDetailRepo;
@@ -86,6 +91,11 @@ namespace Logtracker.Services
                 var roleId = _roleRepo.GetRoleIdByName(roleName)
                     ?? throw new InvalidOperationException("Role tidak ditemukan di database.");
 
+                // Semua insert dibungkus satu transaksi: sukses semua atau rollback semua.
+                using var conn = _db.GetConnection();
+                conn.Open();
+                using var tx = conn.BeginTransaction();
+
                 var user = new User
                 {
                     Username = username.Trim().ToLower(),
@@ -94,29 +104,31 @@ namespace Logtracker.Services
                     Nama = nama.Trim(),
                     RoleId = roleId
                 };
-                var userId = _userRepo.Insert(user);
+                var userId = _userRepo.Insert(user, conn, tx);
 
                 var profile = new Profile
                 {
                     UserId = userId
                 };
-                var profileId = _profileRepo.Insert(profile);
+                var profileId = _profileRepo.Insert(profile, conn, tx);
 
                 string? kodePeserta = null;
                 if (roleName == "peserta")
                 {
-                    kodePeserta = _pesertaDetailRepo.GenerateKodePeserta();
+                    kodePeserta = _pesertaDetailRepo.GenerateKodePeserta(conn, tx);
                     _pesertaDetailRepo.Insert(new PesertaDetail
                     {
                         UserId = userId,
                         KodePeserta = kodePeserta
-                    });
+                    }, conn, tx);
                 }
 
                 if (roleName == "ortu" && anakProfile != null)
                 {
-                    _relasiRepo.ConnectAnak(profileId, anakProfile.Id);
+                    _relasiRepo.ConnectAnak(profileId, anakProfile.Id, conn, tx);
                 }
+
+                tx.Commit();
 
                 var msg = roleName == "peserta"
                     ? $"Registrasi berhasil! Kode peserta Anda: {kodePeserta}"

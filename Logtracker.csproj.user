@@ -10,6 +10,9 @@
     <Compile Update="Forms\Components\DetailAktivitasForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\Components\EditProfileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Components\KelolaKategoriForm.cs">
       <SubType>Form</SubType>
     </Compile>

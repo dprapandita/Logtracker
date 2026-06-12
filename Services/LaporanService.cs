@@ -3,7 +3,8 @@ using Logtracker.Repositories;
 
 namespace Logtracker.Services
 {
-    public class LaporanService
+    // INHERITANCE: bagian dari hierarki service yang sama (BaseService).
+    public class LaporanService : BaseService
     {
         private readonly AktivitasRepository _aktivitasRepo;
 

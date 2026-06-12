@@ -3,7 +3,8 @@ using Logtracker.Repositories;
 
 namespace Logtracker.Services
 {
-    public class CoachService
+    // INHERITANCE: mewarisi helper Execute (pola try/catch) dari BaseService.
+    public class CoachService : BaseService
     {
         private readonly ProfileRepository _profileRepo;
         private readonly AktivitasRepository _aktivitasRepo;
@@ -36,21 +37,12 @@ namespace Logtracker.Services
             if (string.IsNullOrWhiteSpace(feedback))
                 return (false, "Feedback tidak boleh kosong.");
 
-            try
+            return Execute(() => _feedbackRepo.Insert(new FeedbackAktivitas
             {
-                var fb = new FeedbackAktivitas
-                {
-                    AktivitasId = aktivitasId,
-                    CoachId = coachId,
-                    Feedback = feedback.Trim()
-                };
-                _feedbackRepo.Insert(fb);
-                return (true, "Feedback berhasil disimpan.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Gagal: {ex.Message}");
-            }
+                AktivitasId = aktivitasId,
+                CoachId = coachId,
+                Feedback = feedback.Trim()
+            }), "Feedback berhasil disimpan.");
         }
 
         // Jalur transaksional: feedback + keputusan status (Disetujui/Revisi) sekaligus,
@@ -60,15 +52,9 @@ namespace Logtracker.Services
             if (string.IsNullOrWhiteSpace(feedback))
                 return (false, "Feedback tidak boleh kosong.");
 
-            try
-            {
-                _feedbackRepo.BeriFeedbackTransaksional(aktivitasId, coachId, feedback.Trim(), statusId);
-                return (true, "Feedback & status berhasil disimpan.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Gagal: {ex.Message}");
-            }
+            return Execute(
+                () => _feedbackRepo.BeriFeedbackTransaksional(aktivitasId, coachId, feedback.Trim(), statusId),
+                "Feedback & status berhasil disimpan.");
         }
 
         public (bool Success, string Message) UpdateStatus(int aktivitasId, int statusId)
@@ -76,28 +62,14 @@ namespace Logtracker.Services
             if (statusId <= 0)
                 return (false, "Pilih status.");
 
-            try
-            {
-                _aktivitasRepo.UpdateStatus(aktivitasId, statusId);
-                return (true, "Status berhasil diperbarui.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Gagal: {ex.Message}");
-            }
+            return Execute(() => _aktivitasRepo.UpdateStatus(aktivitasId, statusId),
+                "Status berhasil diperbarui.");
         }
 
         public (bool Success, string Message) AddPeserta(int coachId, int pesertaId)
         {
-            try
-            {
-                _relasiRepo.SetCoach(pesertaId, coachId);
-                return (true, "Peserta berhasil ditambahkan.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Gagal: {ex.Message}");
-            }
+            return Execute(() => _relasiRepo.SetCoach(pesertaId, coachId),
+                "Peserta berhasil ditambahkan.");
         }
     }
 }

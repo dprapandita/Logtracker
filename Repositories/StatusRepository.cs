@@ -4,20 +4,17 @@ using Logtracker.Models;
 
 namespace Logtracker.Repositories
 {
-    public class StatusRepository
+    // INHERITANCE: mewarisi DatabaseHelper dan helper koneksi dari BaseRepository.
+    public class StatusRepository : BaseRepository
     {
-        private readonly DatabaseHelper _db;
-
-        public StatusRepository(DatabaseHelper db)
+        public StatusRepository(DatabaseHelper db) : base(db)
         {
-            _db = db;
         }
 
         public List<StatusAktivitas> GetAll()
         {
             var list = new List<StatusAktivitas>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand("SELECT * FROM status_aktivitas ORDER BY id", conn);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())

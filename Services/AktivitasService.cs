@@ -3,7 +3,8 @@ using Logtracker.Repositories;
 
 namespace Logtracker.Services
 {
-    public class AktivitasService
+    // INHERITANCE: mewarisi helper Execute (pola try/catch) dari BaseService.
+    public class AktivitasService : BaseService
     {
         private readonly AktivitasRepository _repo;
 
@@ -43,8 +44,7 @@ namespace Logtracker.Services
         {
             var (valid, msg) = Validate(a);
             if (!valid) return (false, msg);
-            try { _repo.Insert(a); return (true, "Aktivitas berhasil ditambahkan."); }
-            catch (Exception ex) { return (false, $"Gagal: {ex.Message}"); }
+            return Execute(() => _repo.Insert(a), "Aktivitas berhasil ditambahkan.");
         }
 
         public (bool Success, string Message) Update(Aktivitas a)
@@ -56,8 +56,7 @@ namespace Logtracker.Services
 
             var (valid, msg) = Validate(a);
             if (!valid) return (false, msg);
-            try { _repo.Update(a); return (true, "Aktivitas berhasil diperbarui."); }
-            catch (Exception ex) { return (false, $"Gagal: {ex.Message}"); }
+            return Execute(() => _repo.Update(a), "Aktivitas berhasil diperbarui.");
         }
 
         public (bool Success, string Message) Delete(int id)
@@ -66,8 +65,7 @@ namespace Logtracker.Services
             if (existing == null) return (false, "Data tidak ditemukan.");
             if (existing.StatusId == 2) return (false, $"Aktivitas berstatus \"{existing.NamaStatus}\" tidak dapat dihapus.");
 
-            try { _repo.Delete(id); return (true, "Aktivitas berhasil dihapus."); }
-            catch (Exception ex) { return (false, $"Gagal: {ex.Message}"); }
+            return Execute(() => _repo.Delete(id), "Aktivitas berhasil dihapus.");
         }
     }
 }

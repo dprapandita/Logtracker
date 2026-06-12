@@ -3,7 +3,8 @@ using Logtracker.Repositories;
 
 namespace Logtracker.Services
 {
-    public class StatusService
+    // INHERITANCE: bagian dari hierarki service yang sama (BaseService).
+    public class StatusService : BaseService
     {
         private readonly StatusRepository _repo;
 

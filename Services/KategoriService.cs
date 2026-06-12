@@ -3,7 +3,8 @@ using Logtracker.Repositories;
 
 namespace Logtracker.Services
 {
-    public class KategoriService
+    // INHERITANCE: mewarisi helper Execute (pola try/catch) dari BaseService.
+    public class KategoriService : BaseService
     {
         private readonly KategoriRepository _repo;
 
@@ -18,43 +19,21 @@ namespace Logtracker.Services
         {
             if (string.IsNullOrWhiteSpace(nama))
                 return (false, "Nama kategori tidak boleh kosong.");
-            try
-            {
-                _repo.Insert(new KategoriLatihan { NamaLatihan = nama.Trim() });
-                return (true, "Kategori berhasil ditambahkan.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Gagal: {ex.Message}");
-            }
+            return Execute(() => _repo.Insert(new KategoriLatihan { NamaLatihan = nama.Trim() }),
+                "Kategori berhasil ditambahkan.");
         }
 
         public (bool Success, string Message) Update(int id, string nama)
         {
             if (string.IsNullOrWhiteSpace(nama))
                 return (false, "Nama kategori tidak boleh kosong.");
-            try
-            {
-                _repo.Update(new KategoriLatihan { Id = id, NamaLatihan = nama.Trim() });
-                return (true, "Kategori berhasil diperbarui.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Gagal: {ex.Message}");
-            }
+            return Execute(() => _repo.Update(new KategoriLatihan { Id = id, NamaLatihan = nama.Trim() }),
+                "Kategori berhasil diperbarui.");
         }
 
         public (bool Success, string Message) Delete(int id)
         {
-            try
-            {
-                _repo.Delete(id);
-                return (true, "Kategori berhasil dihapus.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Gagal: {ex.Message}");
-            }
+            return Execute(() => _repo.Delete(id), "Kategori berhasil dihapus.");
         }
     }
 }

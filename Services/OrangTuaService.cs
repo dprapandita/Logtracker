@@ -3,7 +3,8 @@ using Logtracker.Repositories;
 
 namespace Logtracker.Services
 {
-    public class OrangTuaService
+    // INHERITANCE: mewarisi helper Execute (pola try/catch) dari BaseService.
+    public class OrangTuaService : BaseService
     {
         private readonly ProfileRepository _profileRepo;
         private readonly RelasiRepository _relasiRepo;
@@ -34,15 +35,8 @@ namespace Logtracker.Services
             if (peserta == null)
                 return (false, "Kode peserta tidak ditemukan.");
 
-            try
-            {
-                _relasiRepo.ConnectAnak(ortuId, peserta.Id);
-                return (true, $"Berhasil terhubung dengan {peserta.Nama}.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Gagal: {ex.Message}");
-            }
+            return Execute(() => _relasiRepo.ConnectAnak(ortuId, peserta.Id),
+                $"Berhasil terhubung dengan {peserta.Nama}.");
         }
     }
 }

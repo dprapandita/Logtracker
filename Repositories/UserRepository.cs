@@ -4,19 +4,16 @@ using Logtracker.Models;
 
 namespace Logtracker.Repositories
 {
-    public class UserRepository
+    // INHERITANCE: mewarisi DatabaseHelper dan helper koneksi dari BaseRepository.
+    public class UserRepository : BaseRepository
     {
-        private readonly DatabaseHelper _db;
-
-        public UserRepository(DatabaseHelper db)
+        public UserRepository(DatabaseHelper db) : base(db)
         {
-            _db = db;
         }
 
         public User? GetByUsername(string username)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT u.*, r.nama AS role_name
                   FROM users u
@@ -31,8 +28,7 @@ namespace Logtracker.Repositories
         public User? GetByEmail(string? email)
         {
             if (string.IsNullOrWhiteSpace(email)) return null;
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT u.*, r.nama AS role_name
                   FROM users u
@@ -44,18 +40,60 @@ namespace Logtracker.Repositories
             return Map(reader);
         }
 
+        public User? GetById(int id)
+        {
+            using var conn = OpenConnection();
+            using var cmd = new NpgsqlCommand(
+                @"SELECT u.*, r.nama AS role_name
+                  FROM users u
+                  JOIN roles r ON u.role_id = r.id
+                  WHERE u.id = @id", conn);
+            cmd.Parameters.AddWithValue("id", id);
+            using var reader = cmd.ExecuteReader();
+            if (!reader.Read()) return null;
+            return Map(reader);
+        }
+
         public int Insert(User user)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand(
-                "INSERT INTO users (username, email, password_hash, nama, role_id) VALUES (@username, @email, @pass, @nama, @roleId) RETURNING id", conn);
-            cmd.Parameters.AddWithValue("username", user.Username);
-            cmd.Parameters.AddWithValue("email", (object)user.Email ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("pass", user.PasswordHash);
-            cmd.Parameters.AddWithValue("nama", user.Nama);
-            cmd.Parameters.AddWithValue("roleId", user.RoleId);
-            return (int)cmd.ExecuteScalar()!;
+            return (int)ExecuteScalar(InsertSql, p => BindInsert(p, user))!;
+        }
+
+        // Versi transaksi: dipakai saat register agar atomik bersama insert lain.
+        public int Insert(User user, NpgsqlConnection conn, NpgsqlTransaction tx)
+        {
+            return (int)ExecuteScalar(conn, tx, InsertSql, p => BindInsert(p, user))!;
+        }
+
+        private const string InsertSql =
+            "INSERT INTO users (username, email, password_hash, nama, role_id) VALUES (@username, @email, @pass, @nama, @roleId) RETURNING id";
+
+        private static void BindInsert(NpgsqlParameterCollection p, User user)
+        {
+            p.AddWithValue("username", user.Username);
+            p.AddWithValue("email", (object?)user.Email ?? DBNull.Value);
+            p.AddWithValue("pass", user.PasswordHash);
+            p.AddWithValue("nama", user.Nama);
+            p.AddWithValue("roleId", user.RoleId);
+        }
+
+        public void UpdateProfile(int userId, string nama, string? email)
+        {
+            ExecuteNonQuery("UPDATE users SET nama = @nama, email = @email WHERE id = @id", p =>
+            {
+                p.AddWithValue("id", userId);
+                p.AddWithValue("nama", nama);
+                p.AddWithValue("email", (object?)email ?? DBNull.Value);
+            });
+        }
+
+        public void UpdatePassword(int userId, string newPassword)
+        {
+            ExecuteNonQuery("UPDATE users SET password_hash = @pass WHERE id = @id", p =>
+            {
+                p.AddWithValue("id", userId);
+                p.AddWithValue("pass", newPassword);
+            });
         }
 
         private static User Map(NpgsqlDataReader reader)

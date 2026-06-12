@@ -4,20 +4,17 @@ using Logtracker.Models;
 
 namespace Logtracker.Repositories
 {
-    public class KategoriRepository
+    // INHERITANCE: mewarisi DatabaseHelper dan helper koneksi dari BaseRepository.
+    public class KategoriRepository : BaseRepository
     {
-        private readonly DatabaseHelper _db;
-
-        public KategoriRepository(DatabaseHelper db)
+        public KategoriRepository(DatabaseHelper db) : base(db)
         {
-            _db = db;
         }
 
         public List<KategoriLatihan> GetAll()
         {
             var list = new List<KategoriLatihan>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand("SELECT * FROM kategori_latihan ORDER BY nama_latihan", conn);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -33,30 +30,23 @@ namespace Logtracker.Repositories
 
         public void Insert(KategoriLatihan kategori)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand("INSERT INTO kategori_latihan (nama_latihan) VALUES (@nama)", conn);
-            cmd.Parameters.AddWithValue("nama", kategori.NamaLatihan);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery("INSERT INTO kategori_latihan (nama_latihan) VALUES (@nama)",
+                p => p.AddWithValue("nama", kategori.NamaLatihan));
         }
 
         public void Update(KategoriLatihan kategori)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand("UPDATE kategori_latihan SET nama_latihan = @nama WHERE id = @id", conn);
-            cmd.Parameters.AddWithValue("id", kategori.Id);
-            cmd.Parameters.AddWithValue("nama", kategori.NamaLatihan);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery("UPDATE kategori_latihan SET nama_latihan = @nama WHERE id = @id", p =>
+            {
+                p.AddWithValue("id", kategori.Id);
+                p.AddWithValue("nama", kategori.NamaLatihan);
+            });
         }
 
         public void Delete(int id)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand("DELETE FROM kategori_latihan WHERE id = @id", conn);
-            cmd.Parameters.AddWithValue("id", id);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery("DELETE FROM kategori_latihan WHERE id = @id",
+                p => p.AddWithValue("id", id));
         }
     }
 }

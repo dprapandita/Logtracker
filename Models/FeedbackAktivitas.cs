@@ -1,14 +1,8 @@
 namespace Logtracker.Models
 {
-    public class FeedbackAktivitas
+    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    public class FeedbackAktivitas : BaseEntity
     {
-        private int _id;
-        public int Id
-        {
-            get => _id;
-            set => _id = value < 0 ? 0 : value;
-        }
-
         private int _aktivitasId;
         public int AktivitasId
         {

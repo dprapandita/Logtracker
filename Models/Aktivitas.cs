@@ -1,15 +1,8 @@
 namespace Logtracker.Models
 {
-    public class Aktivitas
+    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    public class Aktivitas : BaseEntity
     {
-        // ENKAPSULASI berkondisi: field privat + setter berlogika (bukan auto-property).
-        private int _id;
-        public int Id
-        {
-            get => _id;
-            set => _id = value < 0 ? 0 : value;
-        }
-
         private int _pesertaId;
         public int PesertaId
         {

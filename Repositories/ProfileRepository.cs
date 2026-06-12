@@ -4,19 +4,16 @@ using Logtracker.Models;
 
 namespace Logtracker.Repositories
 {
-    public class ProfileRepository
+    // Akses data tabel profiles.
+    public class ProfileRepository : BaseRepository
     {
-        private readonly DatabaseHelper _db;
-
-        public ProfileRepository(DatabaseHelper db)
+        public ProfileRepository(DatabaseHelper db) : base(db)
         {
-            _db = db;
         }
 
         public Profile? GetById(int id)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
                          u.nama,
@@ -35,8 +32,7 @@ namespace Logtracker.Repositories
 
         public Profile? GetByUserId(int userId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
                          u.nama,
@@ -53,20 +49,40 @@ namespace Logtracker.Repositories
             return profile;
         }
 
+        // Ambil detail profil dari join users + roles + peserta_details.
+        public ProfileDetail? GetDetailByUserId(int userId)
+        {
+            using var conn = OpenConnection();
+            using var cmd = new NpgsqlCommand(
+                @"SELECT u.id AS user_id, u.username, u.nama, u.email,
+                         r.nama AS role,
+                         pd.kode_peserta
+                  FROM users u
+                  JOIN roles r ON u.role_id = r.id
+                  LEFT JOIN peserta_details pd ON u.id = pd.user_id
+                  WHERE u.id = @uid", conn);
+            cmd.Parameters.AddWithValue("uid", userId);
+            using var reader = cmd.ExecuteReader();
+            if (!reader.Read()) return null;
+            return MapDetail(reader);
+        }
+
         public int Insert(Profile profile)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand(
-                "INSERT INTO profiles (user_id) VALUES (@uid) RETURNING id", conn);
-            cmd.Parameters.AddWithValue("uid", profile.UserId);
-            return (int)cmd.ExecuteScalar()!;
+            return (int)ExecuteScalar(InsertSql, p => p.AddWithValue("uid", profile.UserId))!;
         }
+
+        // Versi transaksi: dipakai saat register agar atomik bersama insert lain.
+        public int Insert(Profile profile, NpgsqlConnection conn, NpgsqlTransaction tx)
+        {
+            return (int)ExecuteScalar(conn, tx, InsertSql, p => p.AddWithValue("uid", profile.UserId))!;
+        }
+
+        private const string InsertSql = "INSERT INTO profiles (user_id) VALUES (@uid) RETURNING id";
 
         public Profile? GetPesertaByKode(string kode)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
                          u.nama,
@@ -85,8 +101,7 @@ namespace Logtracker.Repositories
         public List<Profile> GetPesertaByCoach(int coachId)
         {
             var list = new List<Profile>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
                          u.nama,
@@ -107,8 +122,7 @@ namespace Logtracker.Repositories
         public List<Profile> GetCoachList()
         {
             var list = new List<Profile>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
                          u.nama,
@@ -128,8 +142,7 @@ namespace Logtracker.Repositories
         public List<Profile> GetAllPeserta()
         {
             var list = new List<Profile>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
                          u.nama,
@@ -149,8 +162,7 @@ namespace Logtracker.Repositories
         public List<Profile> GetAnakByOrtu(int ortuId)
         {
             var list = new List<Profile>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT p.id, p.user_id, p.created_at, p.updated_at,
                          u.nama,
@@ -174,8 +186,7 @@ namespace Logtracker.Repositories
 
             try
             {
-                using var conn = _db.GetConnection();
-                conn.Open();
+                using var conn = OpenConnection();
 
                 using var roleCmd = new NpgsqlCommand(
                     @"SELECT r.nama FROM users u
@@ -203,6 +214,20 @@ namespace Logtracker.Repositories
             {
                 // Silently ignore; KodePeserta stays null
             }
+        }
+
+        private static ProfileDetail MapDetail(NpgsqlDataReader reader)
+        {
+            // Normalisasi (null/trim/default) ditangani setter ProfileDetail.
+            return new ProfileDetail
+            {
+                UserId = reader["user_id"] is int uid ? uid : 0,
+                Username = reader["username"] as string ?? string.Empty,
+                Nama = reader["nama"] as string ?? string.Empty,
+                Email = reader["email"] as string,
+                Role = reader["role"] as string ?? string.Empty,
+                KodePeserta = reader["kode_peserta"] as string
+            };
         }
 
         private static Profile Map(NpgsqlDataReader reader)

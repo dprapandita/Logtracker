@@ -235,6 +235,19 @@ namespace Logtracker.Forms
             form.ShowDialog();
         }
 
+        private void btnProfil_Click(object? sender, EventArgs e)
+        {
+            var app = Program.GetInstance();
+            if (app == null) return;
+
+            var form = new EditProfileForm(app.GetProfileService(), _profile.UserId);
+            if (form.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(form.UpdatedNama))
+            {
+                _profile.Nama = form.UpdatedNama;
+                lblUserInfo.Text = $"Coach: {_profile.Nama}";
+            }
+        }
+
         private void btnRefresh_Click(object? sender, EventArgs e) => LoadPeserta();
 
         private void btnLaporan_Click(object? sender, EventArgs e)

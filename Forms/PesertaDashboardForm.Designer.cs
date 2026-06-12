@@ -11,6 +11,7 @@ namespace Logtracker.Forms
         private Button btnPilihCoach;
         private Button btnDetail;
         private Button btnLaporan;
+        private Button btnProfil;
         private DataGridView dgvAktivitas;
 
         protected override void Dispose(bool disposing)
@@ -29,6 +30,7 @@ namespace Logtracker.Forms
             btnPilihCoach = new Button();
             btnDetail = new Button();
             btnLaporan = new Button();
+            btnProfil = new Button();
             dgvAktivitas = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).BeginInit();
             SuspendLayout();
@@ -141,9 +143,23 @@ namespace Logtracker.Forms
             btnLaporan.Text = "Laporan";
             btnLaporan.UseVisualStyleBackColor = false;
             btnLaporan.Click += btnLaporan_Click;
-            // 
+            //
+            // btnProfil
+            //
+            btnProfil.BackColor = Color.FromArgb(213, 184, 147);
+            btnProfil.FlatStyle = FlatStyle.Flat;
+            btnProfil.ForeColor = Color.FromArgb(55, 36, 20);
+            btnProfil.Location = new Point(681, 9);
+            btnProfil.Margin = new Padding(3, 2, 3, 2);
+            btnProfil.Name = "btnProfil";
+            btnProfil.Size = new Size(79, 28);
+            btnProfil.TabIndex = 9;
+            btnProfil.Text = "Profil";
+            btnProfil.UseVisualStyleBackColor = false;
+            btnProfil.Click += btnProfil_Click;
+            //
             // dgvAktivitas
-            // 
+            //
             dgvAktivitas.AllowUserToAddRows = false;
             dgvAktivitas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvAktivitas.BackgroundColor = Color.FromArgb(111, 77, 56);
@@ -176,6 +192,7 @@ namespace Logtracker.Forms
             Controls.Add(btnPilihCoach);
             Controls.Add(btnDetail);
             Controls.Add(btnLaporan);
+            Controls.Add(btnProfil);
             Controls.Add(dgvAktivitas);
             Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
             ForeColor = Color.FromArgb(64, 64, 64);

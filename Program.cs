@@ -40,13 +40,14 @@ namespace Logtracker
 
             _instance = new ProgramInstance
             {
-                AuthService = new AuthService(userRepo, profileRepo, pesertaDetailRepo, relasiRepo, roleRepo),
+                AuthService = new AuthService(db, userRepo, profileRepo, pesertaDetailRepo, relasiRepo, roleRepo),
                 AktivitasService = new AktivitasService(aktivitasRepo),
                 CoachService = new CoachService(profileRepo, aktivitasRepo, feedbackRepo, relasiRepo),
                 OrangTuaService = new OrangTuaService(profileRepo, relasiRepo, aktivitasRepo, feedbackRepo),
                 LaporanService = new LaporanService(aktivitasRepo),
                 KategoriService = new KategoriService(kategoriRepo),
-                StatusService = new StatusService(statusRepo)
+                StatusService = new StatusService(statusRepo),
+                ProfileService = new ProfileService(userRepo, profileRepo)
             };
         }
 
@@ -62,6 +63,7 @@ namespace Logtracker
         public required LaporanService LaporanService { get; set; }
         public required KategoriService KategoriService { get; set; }
         public required StatusService StatusService { get; set; }
+        public required ProfileService ProfileService { get; set; }
 
         public AuthService GetAuthService() => AuthService;
         public AktivitasService GetAktivitasService() => AktivitasService;
@@ -70,5 +72,6 @@ namespace Logtracker
         public LaporanService GetLaporanService() => LaporanService;
         public KategoriService GetKategoriService() => KategoriService;
         public StatusService GetStatusService() => StatusService;
+        public ProfileService GetProfileService() => ProfileService;
     }
 }

@@ -4,25 +4,22 @@ using Logtracker.Models;
 
 namespace Logtracker.Repositories
 {
-    public class FeedbackRepository
+    // INHERITANCE: mewarisi DatabaseHelper dan helper koneksi dari BaseRepository.
+    public class FeedbackRepository : BaseRepository
     {
-        private readonly DatabaseHelper _db;
-
-        public FeedbackRepository(DatabaseHelper db)
+        public FeedbackRepository(DatabaseHelper db) : base(db)
         {
-            _db = db;
         }
 
         public void Insert(FeedbackAktivitas fb)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand(
-                "INSERT INTO feedback_aktivitas (aktivitas_id, coach_id, feedback) VALUES (@aid, @cid, @fb)", conn);
-            cmd.Parameters.AddWithValue("aid", fb.AktivitasId);
-            cmd.Parameters.AddWithValue("cid", fb.CoachId);
-            cmd.Parameters.AddWithValue("fb", fb.Feedback);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery(
+                "INSERT INTO feedback_aktivitas (aktivitas_id, coach_id, feedback) VALUES (@aid, @cid, @fb)", p =>
+                {
+                    p.AddWithValue("aid", fb.AktivitasId);
+                    p.AddWithValue("cid", fb.CoachId);
+                    p.AddWithValue("fb", fb.Feedback);
+                });
         }
 
         // Memanggil stored procedure sp_beri_feedback: menyimpan feedback DAN
@@ -30,21 +27,19 @@ namespace Logtracker.Repositories
         // Tidak dibungkus NpgsqlTransaction agar COMMIT/ROLLBACK dalam prosedur berjalan.
         public void BeriFeedbackTransaksional(int aktivitasId, int coachId, string feedback, int statusId)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand("CALL sp_beri_feedback(@aid, @cid, @fb, @sid)", conn);
-            cmd.Parameters.AddWithValue("aid", aktivitasId);
-            cmd.Parameters.AddWithValue("cid", coachId);
-            cmd.Parameters.AddWithValue("fb", feedback);
-            cmd.Parameters.AddWithValue("sid", statusId);
-            cmd.ExecuteNonQuery();
+            ExecuteNonQuery("CALL sp_beri_feedback(@aid, @cid, @fb, @sid)", p =>
+            {
+                p.AddWithValue("aid", aktivitasId);
+                p.AddWithValue("cid", coachId);
+                p.AddWithValue("fb", feedback);
+                p.AddWithValue("sid", statusId);
+            });
         }
 
         public List<FeedbackAktivitas> GetByAktivitasId(int aktivitasId)
         {
             var list = new List<FeedbackAktivitas>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT f.*, u.nama AS nama_coach
                   FROM feedback_aktivitas f
@@ -62,8 +57,7 @@ namespace Logtracker.Repositories
         public List<FeedbackAktivitas> GetFeedbackForPeserta(int pesertaId)
         {
             var list = new List<FeedbackAktivitas>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand(
                 @"SELECT f.*, u.nama AS nama_coach, a.nama AS nama_aktivitas, a.tanggal AS tanggal_aktivitas
                   FROM feedback_aktivitas f

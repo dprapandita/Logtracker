@@ -4,20 +4,17 @@ using Logtracker.Models;
 
 namespace Logtracker.Repositories
 {
-    public class RoleRepository
+    // INHERITANCE: mewarisi DatabaseHelper dan helper koneksi dari BaseRepository.
+    public class RoleRepository : BaseRepository
     {
-        private readonly DatabaseHelper _db;
-
-        public RoleRepository(DatabaseHelper db)
+        public RoleRepository(DatabaseHelper db) : base(db)
         {
-            _db = db;
         }
 
         public List<Role> GetAll()
         {
             var roles = new List<Role>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            using var conn = OpenConnection();
             using var cmd = new NpgsqlCommand("SELECT id, nama FROM roles ORDER BY nama", conn);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -38,11 +35,8 @@ namespace Logtracker.Repositories
 
         public int? GetRoleIdByName(string nama)
         {
-            using var conn = _db.GetConnection();
-            conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT id FROM roles WHERE nama = @nama", conn);
-            cmd.Parameters.AddWithValue("nama", nama);
-            return cmd.ExecuteScalar() as int?;
+            return ExecuteScalar("SELECT id FROM roles WHERE nama = @nama",
+                p => p.AddWithValue("nama", nama)) as int?;
         }
     }
 }
