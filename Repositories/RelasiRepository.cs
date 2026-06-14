@@ -1,11 +1,12 @@
 using Npgsql;
 using Logtracker.Data;
 using Logtracker.Models;
+using Logtracker.Interfaces;
 
 namespace Logtracker.Repositories
 {
-    // INHERITANCE: mewarisi DatabaseHelper dan helper koneksi dari BaseRepository.
-    public class RelasiRepository : BaseRepository
+    // INHERITANCE dari BaseRepository, memenuhi kontrak IRelasiRepository (ABSTRACTION).
+    public class RelasiRepository : BaseRepository, IRelasiRepository
     {
         public RelasiRepository(DatabaseHelper db) : base(db)
         {

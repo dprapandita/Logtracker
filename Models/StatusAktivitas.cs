@@ -1,6 +1,6 @@
 namespace Logtracker.Models
 {
-    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    // Turunan BaseEntity, nyimpen nama status aktivitas.
     public class StatusAktivitas : BaseEntity
     {
         private string _nama = string.Empty;

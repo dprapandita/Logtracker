@@ -1,26 +1,26 @@
-using Logtracker.Services;
+using Logtracker.Controllers;
 
 namespace Logtracker.Forms
 {
     public partial class EditProfileForm : Form
     {
-        private readonly ProfileService _profileService;
+        private readonly ProfileController _profileController;
         private readonly int _userId;
 
         // Nama terbaru setelah berhasil disimpan; dipakai dashboard untuk refresh header.
         public string? UpdatedNama { get; private set; }
 
-        public EditProfileForm(ProfileService profileService, int userId)
+        public EditProfileForm(ProfileController profileController, int userId)
         {
             InitializeComponent();
-            _profileService = profileService;
+            _profileController = profileController;
             _userId = userId;
             LoadDetail();
         }
 
         private void LoadDetail()
         {
-            var detail = _profileService.GetDetail(_userId);
+            var detail = _profileController.GetDetail(_userId);
             if (detail == null)
             {
                 MessageBox.Show("Data profil tidak ditemukan.", "Error",
@@ -46,7 +46,7 @@ namespace Logtracker.Forms
 
         private void btnSimpan_Click(object? sender, EventArgs e)
         {
-            var (success, msg) = _profileService.UpdateProfile(
+            var (success, msg) = _profileController.UpdateProfile(
                 _userId,
                 txtNama.Text.Trim(),
                 txtEmail.Text.Trim(),

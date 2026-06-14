@@ -1,18 +1,19 @@
+using Logtracker.Interfaces;
 using Logtracker.Models;
-using Logtracker.Repositories;
 
 namespace Logtracker.Services
 {
-    // INHERITANCE: mewarisi helper Execute (pola try/catch) dari BaseService.
+    // INHERITANCE dari BaseService (helper Execute).
+    // Bergantung ke interface repository (ABSTRACTION), bukan kelas konkret.
     public class CoachService : BaseService
     {
-        private readonly ProfileRepository _profileRepo;
-        private readonly AktivitasRepository _aktivitasRepo;
-        private readonly FeedbackRepository _feedbackRepo;
-        private readonly RelasiRepository _relasiRepo;
+        private readonly IProfileRepository _profileRepo;
+        private readonly IAktivitasRepository _aktivitasRepo;
+        private readonly IFeedbackRepository _feedbackRepo;
+        private readonly IRelasiRepository _relasiRepo;
 
-        public CoachService(ProfileRepository profileRepo, AktivitasRepository aktivitasRepo,
-            FeedbackRepository feedbackRepo, RelasiRepository relasiRepo)
+        public CoachService(IProfileRepository profileRepo, IAktivitasRepository aktivitasRepo,
+            IFeedbackRepository feedbackRepo, IRelasiRepository relasiRepo)
         {
             _profileRepo = profileRepo;
             _aktivitasRepo = aktivitasRepo;
@@ -26,17 +27,19 @@ namespace Logtracker.Services
         public List<Profile> GetAllPeserta()
             => _profileRepo.GetAllPeserta();
 
+        public List<Profile> GetCoachList()
+            => _profileRepo.GetCoachList();
+
         public List<Aktivitas> GetAktivitasPeserta(int pesertaId)
             => _aktivitasRepo.GetAllByPesertaIdWithName(pesertaId);
 
         public List<FeedbackAktivitas> GetFeedbackByAktivitas(int aktivitasId)
             => _feedbackRepo.GetByAktivitasId(aktivitasId);
 
+        // Validasi input (feedback kosong / status belum dipilih) sekarang ditangani
+        // di CoachDashboardController. Service fokus ke business rule + persistensi.
         public (bool Success, string Message) SaveFeedback(int aktivitasId, int coachId, string feedback)
         {
-            if (string.IsNullOrWhiteSpace(feedback))
-                return (false, "Feedback tidak boleh kosong.");
-
             return Execute(() => _feedbackRepo.Insert(new FeedbackAktivitas
             {
                 AktivitasId = aktivitasId,
@@ -49,9 +52,6 @@ namespace Logtracker.Services
         // lewat stored procedure sp_beri_feedback.
         public (bool Success, string Message) BeriFeedback(int aktivitasId, int coachId, string feedback, int statusId)
         {
-            if (string.IsNullOrWhiteSpace(feedback))
-                return (false, "Feedback tidak boleh kosong.");
-
             return Execute(
                 () => _feedbackRepo.BeriFeedbackTransaksional(aktivitasId, coachId, feedback.Trim(), statusId),
                 "Feedback & status berhasil disimpan.");
@@ -59,9 +59,6 @@ namespace Logtracker.Services
 
         public (bool Success, string Message) UpdateStatus(int aktivitasId, int statusId)
         {
-            if (statusId <= 0)
-                return (false, "Pilih status.");
-
             return Execute(() => _aktivitasRepo.UpdateStatus(aktivitasId, statusId),
                 "Status berhasil diperbarui.");
         }

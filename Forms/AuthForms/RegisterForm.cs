@@ -1,5 +1,5 @@
+using Logtracker.Controllers;
 using Logtracker.Models;
-using Logtracker.Services;
 
 namespace Logtracker.Forms
 {
@@ -14,13 +14,13 @@ namespace Logtracker.Forms
             var app = Program.GetInstance();
             if (app != null)
             {
-                _authService = app.GetAuthService();
-                if (_authService != null)
+                _authController = app.AuthController;
+                if (_authController != null)
                     LoadRoles();
             }
         }
 
-        private readonly AuthService? _authService;
+        private readonly AuthController? _authController;
 
         private void cboRole_SelectedIndexChanged(object? sender, EventArgs e)
         {
@@ -32,9 +32,9 @@ namespace Logtracker.Forms
 
         private void btnRegister_Click(object? sender, EventArgs e)
         {
-            if (_authService == null)
+            if (_authController == null)
             {
-                MessageBox.Show("Service tidak tersedia.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Controller tidak tersedia.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -45,7 +45,7 @@ namespace Logtracker.Forms
             var role = (cboRole.SelectedItem as Role)?.Nama ?? "peserta";
             var kodePeserta = txtKodePeserta.Visible ? txtKodePeserta.Text.Trim() : null;
 
-            var (success, message) = _authService.Register(username, nama, email, password, role, kodePeserta);
+            var (success, message) = _authController.Register(username, nama, email, password, role, kodePeserta);
 
             if (success)
             {
@@ -67,8 +67,8 @@ namespace Logtracker.Forms
 
         private void LoadRoles()
         {
-            if (_authService == null) return;
-            var roles = _authService.GetRoles();
+            if (_authController == null) return;
+            var roles = _authController.GetRoles();
             cboRole.DataSource = roles;
             cboRole.DisplayMember = "Nama";
             cboRole.ValueMember = "Nama";

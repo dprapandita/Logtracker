@@ -1,9 +1,8 @@
 namespace Logtracker.Models
 {
-    // Gabungan data user + profil untuk ditampilkan di form.
+    // Gabungan data user + profil buat ditampilin di form.
     public class ProfileDetail
     {
-        // ENKAPSULASI berkondisi: field privat + setter berlogika (bukan auto-property).
         private int _userId;
         public int UserId
         {

@@ -1,14 +1,14 @@
+using Logtracker.Interfaces;
 using Logtracker.Models;
-using Logtracker.Repositories;
 
 namespace Logtracker.Services
 {
-    // INHERITANCE: bagian dari hierarki service yang sama (BaseService).
+    // INHERITANCE dari BaseService. Bergantung ke IStatusRepository (ABSTRACTION).
     public class StatusService : BaseService
     {
-        private readonly StatusRepository _repo;
+        private readonly IStatusRepository _repo;
 
-        public StatusService(StatusRepository repo)
+        public StatusService(IStatusRepository repo)
         {
             _repo = repo;
         }

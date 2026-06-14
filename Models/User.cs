@@ -1,6 +1,6 @@
 namespace Logtracker.Models
 {
-    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    // Id-nya nurun dari BaseEntity, di sini tinggal data akunnya.
     public class User : BaseEntity
     {
         private string _username = string.Empty;
@@ -45,6 +45,14 @@ namespace Logtracker.Models
             set => _roleName = value?.Trim();
         }
 
-        public DateTime CreatedAt { get; set; }
+        private DateTime _createdAt;
+        public DateTime CreatedAt
+        {
+            get => _createdAt;
+            set => _createdAt = value == default ? DateTime.Now : value;
+        }
+
+        // POLYMORPHISM: override cara User mendeskripsikan dirinya.
+        public override string Deskripsi() => $"{Nama} (@{Username})";
     }
 }

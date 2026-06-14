@@ -23,7 +23,7 @@ namespace Logtracker.Forms
                 var app = Program.GetInstance();
                 if (app == null) return;
 
-                var result = app.GetAuthService().Login(username, password);
+                var result = app.AuthController.Login(username, password);
                 if (result == null)
                 {
                     MessageBox.Show("Username atau password salah.", "Login Gagal", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -32,9 +32,9 @@ namespace Logtracker.Forms
 
                 Form dashboard = result.Role switch
                 {
-                    "peserta" => new PesertaDashboardForm(app.GetAktivitasService(), app.GetCoachService(), app.GetLaporanService(), result.Profile),
-                    "coach" => new CoachDashboardForm(app.GetCoachService(), app.GetLaporanService(), app.GetStatusService(), result.Profile),
-                    "ortu" => new OrtuDashboardForm(app.GetOrangTuaService(), app.GetLaporanService(), result.Profile),
+                    "peserta" => new PesertaDashboardForm(app.PesertaDashboardController, result.Profile),
+                    "coach" => new CoachDashboardForm(app.CoachDashboardController, result.Profile),
+                    "ortu" => new OrtuDashboardForm(app.OrtuDashboardController, result.Profile),
                     _ => throw new InvalidOperationException("Role tidak dikenal.")
                 };
 

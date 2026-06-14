@@ -3,10 +3,7 @@ using Logtracker.Data;
 
 namespace Logtracker.Repositories
 {
-    // ABSTRAKSI + INHERITANCE: kelas dasar abstrak untuk semua repository.
-    // Menyimpan dependensi DatabaseHelper dan menyembunyikan detail pembukaan
-    // koneksi serta eksekusi perintah, sehingga repository turunan cukup fokus
-    // pada query-nya masing-masing.
+    // Induk abstract buat semua repository. DatabaseHelper sama urusan buka koneksi
     public abstract class BaseRepository
     {
         protected readonly DatabaseHelper _db;

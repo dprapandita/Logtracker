@@ -1,24 +1,21 @@
+using Logtracker.Controllers;
+using Logtracker.Helpers;
 using Logtracker.Models;
-using Logtracker.Services;
 
 namespace Logtracker.Forms
 {
     public partial class CoachDashboardForm : Form
     {
-        private readonly CoachService _coachService;
-        private readonly LaporanService _laporanService;
-        private readonly StatusService _statusService;
+        private readonly CoachDashboardController _controller;
         private readonly Profile _profile;
         private List<Profile> _pesertaList = [];
         private List<StatusAktivitas> _statusList = [];
         private int _selectedAktivitasId;
 
-        public CoachDashboardForm(CoachService coachService, LaporanService laporanService, StatusService statusService, Profile profile)
+        public CoachDashboardForm(CoachDashboardController controller, Profile profile)
         {
             InitializeComponent();
-            _coachService = coachService;
-            _laporanService = laporanService;
-            _statusService = statusService;
+            _controller = controller;
             _profile = profile;
 
             lblUserInfo.Text = $"Coach: {_profile.Nama}";
@@ -28,7 +25,7 @@ namespace Logtracker.Forms
 
         private void LoadStatusList()
         {
-            _statusList = _statusService.GetAll();
+            _statusList = _controller.GetStatusList();
             cboStatus.Items.Clear();
             foreach (var s in _statusList)
                 cboStatus.Items.Add(s);
@@ -39,7 +36,7 @@ namespace Logtracker.Forms
         {
             try
             {
-                _pesertaList = _coachService.GetPesertaList(_profile.Id);
+                _pesertaList = _controller.GetPesertaList(_profile.Id);
                 cboPeserta.Items.Clear();
                 foreach (var p in _pesertaList)
                     cboPeserta.Items.Add($"{p.Nama} ({p.KodePeserta})");
@@ -73,17 +70,11 @@ namespace Logtracker.Forms
             try
             {
                 dgvAktivitas.DataSource = null;
-                dgvAktivitas.DataSource = _coachService.GetAktivitasPeserta(pesertaId);
-                if (dgvAktivitas.Columns["PesertaId"] != null) dgvAktivitas.Columns["PesertaId"].Visible = false;
-                if (dgvAktivitas.Columns["KategoriId"] != null) dgvAktivitas.Columns["KategoriId"].Visible = false;
-                if (dgvAktivitas.Columns["StatusId"] != null) dgvAktivitas.Columns["StatusId"].Visible = false;
-                if (dgvAktivitas.Columns["CreatedAt"] != null) dgvAktivitas.Columns["CreatedAt"].Visible = false;
-                if (dgvAktivitas.Columns["UpdatedAt"] != null) dgvAktivitas.Columns["UpdatedAt"].Visible = false;
-                if (dgvAktivitas.Columns["NamaPeserta"] != null) dgvAktivitas.Columns["NamaPeserta"].Visible = false;
-                if (dgvAktivitas.Columns["NamaKategori"] != null) dgvAktivitas.Columns["NamaKategori"].HeaderText = "Kategori";
-                if (dgvAktivitas.Columns["NamaStatus"] != null) dgvAktivitas.Columns["NamaStatus"].HeaderText = "Status";
-                if (dgvAktivitas.Columns["Tanggal"] != null)
-                    dgvAktivitas.Columns["Tanggal"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                dgvAktivitas.DataSource = _controller.GetAktivitasPeserta(pesertaId);
+                dgvAktivitas.HideColumns("PesertaId", "KategoriId", "StatusId", "CreatedAt", "UpdatedAt", "NamaPeserta", "Id");
+                dgvAktivitas.SetHeader("NamaKategori", "Kategori");
+                dgvAktivitas.SetHeader("NamaStatus", "Status");
+                dgvAktivitas.SetDateFormat("Tanggal", "yyyy-MM-dd");
 
                 if (dgvAktivitas.Rows.Count > 0)
                 {
@@ -133,7 +124,7 @@ namespace Logtracker.Forms
             lstExistingFeedback.Items.Clear();
             try
             {
-                var feedbackList = _coachService.GetFeedbackByAktivitas(aktivitasId);
+                var feedbackList = _controller.GetFeedbackByAktivitas(aktivitasId);
                 foreach (var fb in feedbackList)
                 {
                     lstExistingFeedback.Items.Add($"[{fb.CreatedAt:dd-MM-yyyy HH:mm}] {fb.NamaCoach}: {fb.Feedback}");
@@ -167,7 +158,7 @@ namespace Logtracker.Forms
             if (adaFeedback && adaKeputusan)
             {
                 // Feedback + keputusan (Disetujui/Revisi) → satu transaksi via stored procedure.
-                var (suc, msg) = _coachService.BeriFeedback(_selectedAktivitasId, _profile.Id, feedbackText, selectedStatus!.Id);
+                var (suc, msg) = _controller.BeriFeedback(_selectedAktivitasId, _profile.Id, feedbackText, selectedStatus!.Id);
                 if (!suc)
                 {
                     MessageBox.Show(msg, "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -183,7 +174,7 @@ namespace Logtracker.Forms
             {
                 if (selectedStatus != null)
                 {
-                    var (suc1, msg1) = _coachService.UpdateStatus(_selectedAktivitasId, selectedStatus.Id);
+                    var (suc1, msg1) = _controller.UpdateStatus(_selectedAktivitasId, selectedStatus.Id);
                     if (!suc1)
                     {
                         MessageBox.Show(msg1, "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -193,7 +184,7 @@ namespace Logtracker.Forms
 
                 if (adaFeedback)
                 {
-                    var (suc2, msg2) = _coachService.SaveFeedback(_selectedAktivitasId, _profile.Id, feedbackText);
+                    var (suc2, msg2) = _controller.SaveFeedback(_selectedAktivitasId, _profile.Id, feedbackText);
                     if (!suc2)
                     {
                         MessageBox.Show(msg2, "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -218,7 +209,7 @@ namespace Logtracker.Forms
         {
             var app = Program.GetInstance();
             if (app == null) return;
-            var form = new KelolaKategoriForm(app.GetKategoriService());
+            var form = new KelolaKategoriForm(app.KategoriController);
             form.ShowDialog();
         }
 
@@ -231,7 +222,10 @@ namespace Logtracker.Forms
                 return;
             }
 
-            var form = new DetailAktivitasForm(selected, _coachService);
+            var app = Program.GetInstance();
+            if (app == null) return;
+
+            var form = new DetailAktivitasForm(selected, app.DetailAktivitasController);
             form.ShowDialog();
         }
 
@@ -240,7 +234,7 @@ namespace Logtracker.Forms
             var app = Program.GetInstance();
             if (app == null) return;
 
-            var form = new EditProfileForm(app.GetProfileService(), _profile.UserId);
+            var form = new EditProfileForm(app.ProfileController, _profile.UserId);
             if (form.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(form.UpdatedNama))
             {
                 _profile.Nama = form.UpdatedNama;
@@ -254,7 +248,10 @@ namespace Logtracker.Forms
         {
             if (cboPeserta.SelectedIndex < 0 || cboPeserta.SelectedIndex >= _pesertaList.Count) return;
             var peserta = _pesertaList[cboPeserta.SelectedIndex];
-            var form = new LaporanForm(_laporanService, peserta.Id, peserta.Nama);
+            var app = Program.GetInstance();
+            if (app == null) return;
+
+            var form = new LaporanForm(app.LaporanController, peserta.Id, peserta.Nama);
             form.ShowDialog();
         }
 

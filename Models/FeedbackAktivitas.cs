@@ -1,6 +1,6 @@
 namespace Logtracker.Models
 {
-    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    // Turunan BaseEntity. Catatan/feedback coach untuk sebuah aktivitas.
     public class FeedbackAktivitas : BaseEntity
     {
         private int _aktivitasId;
@@ -24,8 +24,19 @@ namespace Logtracker.Models
             set => _feedback = value?.Trim() ?? string.Empty;
         }
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        private DateTime _createdAt;
+        public DateTime CreatedAt
+        {
+            get => _createdAt;
+            set => _createdAt = value == default ? DateTime.Now : value;
+        }
+
+        private DateTime _updatedAt;
+        public DateTime UpdatedAt
+        {
+            get => _updatedAt;
+            set => _updatedAt = value == default ? DateTime.Now : value;
+        }
 
         private string? _namaCoach;
         public string? NamaCoach
@@ -41,6 +52,11 @@ namespace Logtracker.Models
             set => _namaAktivitas = value?.Trim();
         }
 
-        public DateTime? TanggalAktivitas { get; set; }
+        private DateTime? _tanggalAktivitas;
+        public DateTime? TanggalAktivitas
+        {
+            get => _tanggalAktivitas;
+            set => _tanggalAktivitas = value;
+        }
     }
 }

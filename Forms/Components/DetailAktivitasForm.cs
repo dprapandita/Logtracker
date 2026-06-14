@@ -1,18 +1,18 @@
+using Logtracker.Controllers;
 using Logtracker.Models;
-using Logtracker.Services;
 
 namespace Logtracker.Forms
 {
     public partial class DetailAktivitasForm : Form
     {
         private readonly Aktivitas _aktivitas;
-        private readonly CoachService _coachService;
+        private readonly DetailAktivitasController _controller;
 
-        public DetailAktivitasForm(Aktivitas aktivitas, CoachService coachService)
+        public DetailAktivitasForm(Aktivitas aktivitas, DetailAktivitasController controller)
         {
             InitializeComponent();
             _aktivitas = aktivitas;
-            _coachService = coachService;
+            _controller = controller;
             LoadDetail();
             LoadFeedback();
         }
@@ -39,7 +39,7 @@ namespace Logtracker.Forms
             try
             {
                 lstFeedback.Items.Clear();
-                var feedbackList = _coachService.GetFeedbackByAktivitas(_aktivitas.Id);
+                var feedbackList = _controller.GetFeedbackByAktivitas(_aktivitas.Id);
                 foreach (var fb in feedbackList)
                 {
                     lstFeedback.Items.Add($"[{fb.CreatedAt:dd-MM-yyyy HH:mm}] {fb.NamaCoach}: {fb.Feedback}");

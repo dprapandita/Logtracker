@@ -1,6 +1,6 @@
 namespace Logtracker.Models
 {
-    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    // Diwarisi dari BaseEntity, isinya tinggal nama kategori latihan.
     public class KategoriLatihan : BaseEntity
     {
         private string _namaLatihan = string.Empty;

@@ -1,20 +1,19 @@
+using Logtracker.Controllers;
+using Logtracker.Helpers;
 using Logtracker.Models;
-using Logtracker.Services;
 
 namespace Logtracker.Forms
 {
     public partial class OrtuDashboardForm : Form
     {
-        private readonly OrangTuaService _orangTuaService;
-        private readonly LaporanService _laporanService;
+        private readonly OrtuDashboardController _controller;
         private readonly Profile _profile;
         private List<Profile> _anakList = [];
 
-        public OrtuDashboardForm(OrangTuaService orangTuaService, LaporanService laporanService, Profile profile)
+        public OrtuDashboardForm(OrtuDashboardController controller, Profile profile)
         {
             InitializeComponent();
-            _orangTuaService = orangTuaService;
-            _laporanService = laporanService;
+            _controller = controller;
             _profile = profile;
 
             lblUserInfo.Text = $"Orang Tua: {_profile.Nama}";
@@ -25,7 +24,7 @@ namespace Logtracker.Forms
         {
             try
             {
-                _anakList = _orangTuaService.GetDaftarAnak(_profile.Id);
+                _anakList = _controller.GetDaftarAnak(_profile.Id);
                 cboAnak.Items.Clear();
                 foreach (var a in _anakList)
                     cboAnak.Items.Add($"{a.Nama} ({a.KodePeserta})");
@@ -59,17 +58,12 @@ namespace Logtracker.Forms
             try
             {
                 dgvAktivitas.DataSource = null;
-                dgvAktivitas.DataSource = _orangTuaService.GetAktivitasAnak(pesertaId);
-                if (dgvAktivitas.Columns["PesertaId"] != null) dgvAktivitas.Columns["PesertaId"].Visible = false;
-                if (dgvAktivitas.Columns["StatusId"] != null) dgvAktivitas.Columns["StatusId"].Visible = false;
-                if (dgvAktivitas.Columns["KategoriId"] != null) dgvAktivitas.Columns["KategoriId"].Visible = false;
-                if (dgvAktivitas.Columns["NamaKategori"] != null) dgvAktivitas.Columns["NamaKategori"].HeaderText = "Kategori";
-                if (dgvAktivitas.Columns["NamaStatus"] != null) dgvAktivitas.Columns["NamaStatus"].HeaderText = "Status";
-                if (dgvAktivitas.Columns["UpdatedAt"] != null) dgvAktivitas.Columns["UpdatedAt"].HeaderText = "Di ubah pada";
-                if (dgvAktivitas.Columns["CreatedAt"] != null) dgvAktivitas.Columns["CreatedAt"].Visible = false;
-                if (dgvAktivitas.Columns["NamaPeserta"] != null) dgvAktivitas.Columns["NamaPeserta"].Visible = false;
-                if (dgvAktivitas.Columns["Tanggal"] != null)
-                    dgvAktivitas.Columns["Tanggal"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                dgvAktivitas.DataSource = _controller.GetAktivitasAnak(pesertaId);
+                dgvAktivitas.HideColumns("PesertaId", "StatusId", "KategoriId", "CreatedAt", "NamaPeserta", "AktivitasId", "Id");
+                dgvAktivitas.SetHeader("NamaKategori", "Kategori");
+                dgvAktivitas.SetHeader("NamaStatus", "Status");
+                dgvAktivitas.SetHeader("UpdatedAt", "Di ubah pada");
+                dgvAktivitas.SetDateFormat("Tanggal", "yyyy-MM-dd");
             }
             catch (Exception ex)
             {
@@ -82,7 +76,7 @@ namespace Logtracker.Forms
             var kode = ShowInputDialog("Masukkan kode peserta anak:", "Hubungkan Anak");
             if (string.IsNullOrWhiteSpace(kode)) return;
 
-            var (success, msg) = _orangTuaService.ConnectAnak(_profile.Id, kode.Trim());
+            var (success, msg) = _controller.ConnectAnak(_profile.Id, kode.Trim());
             MessageBox.Show(msg, success ? "Sukses" : "Gagal",
                 MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
             if (success) LoadAnak();
@@ -93,7 +87,7 @@ namespace Logtracker.Forms
             var app = Program.GetInstance();
             if (app == null) return;
 
-            var form = new EditProfileForm(app.GetProfileService(), _profile.UserId);
+            var form = new EditProfileForm(app.ProfileController, _profile.UserId);
             if (form.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(form.UpdatedNama))
             {
                 _profile.Nama = form.UpdatedNama;
@@ -107,7 +101,10 @@ namespace Logtracker.Forms
         {
             if (cboAnak.SelectedIndex < 0 || cboAnak.SelectedIndex >= _anakList.Count) return;
             var anak = _anakList[cboAnak.SelectedIndex];
-            var form = new LaporanForm(_laporanService, anak.Id, anak.Nama);
+            var app = Program.GetInstance();
+            if (app == null) return;
+
+            var form = new LaporanForm(app.LaporanController, anak.Id, anak.Nama);
             form.ShowDialog();
         }
 

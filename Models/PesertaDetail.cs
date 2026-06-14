@@ -2,7 +2,7 @@ namespace Logtracker.Models
 {
     public class PesertaDetail
     {
-        // ENKAPSULASI berkondisi: field privat + setter berlogika (bukan auto-property).
+        // Field privat dengan setter yang divalidasi dulu, bukan auto-property.
         private int _userId;
         public int UserId
         {

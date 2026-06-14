@@ -1,23 +1,18 @@
+using Logtracker.Controllers;
+using Logtracker.Helpers;
 using Logtracker.Models;
-using Logtracker.Repositories;
-using Logtracker.Services;
 
 namespace Logtracker.Forms
 {
     public partial class PesertaDashboardForm : Form
     {
-        private readonly AktivitasService _aktivitasService;
-        private readonly CoachService _coachService;
-        private readonly LaporanService _laporanService;
+        private readonly PesertaDashboardController _controller;
         private readonly Profile _profile;
 
-        public PesertaDashboardForm(AktivitasService aktivitasService, CoachService coachService,
-            LaporanService laporanService, Profile profile)
+        public PesertaDashboardForm(PesertaDashboardController controller, Profile profile)
         {
             InitializeComponent();
-            _aktivitasService = aktivitasService;
-            _coachService = coachService;
-            _laporanService = laporanService;
+            _controller = controller;
             _profile = profile;
 
             RefreshUserInfo();
@@ -35,7 +30,7 @@ namespace Logtracker.Forms
             var app = Program.GetInstance();
             if (app == null) return;
 
-            var form = new EditProfileForm(app.GetProfileService(), _profile.UserId);
+            var form = new EditProfileForm(app.ProfileController, _profile.UserId);
             if (form.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(form.UpdatedNama))
             {
                 _profile.Nama = form.UpdatedNama;
@@ -48,17 +43,11 @@ namespace Logtracker.Forms
             try
             {
                 dgvAktivitas.DataSource = null;
-                dgvAktivitas.DataSource = _aktivitasService.GetAllByPesertaId(_profile.Id);
-                if (dgvAktivitas.Columns["PesertaId"] != null) dgvAktivitas.Columns["PesertaId"].Visible = false;
-                if (dgvAktivitas.Columns["CreatedAt"] != null) dgvAktivitas.Columns["CreatedAt"].Visible = false;
-                if (dgvAktivitas.Columns["UpdatedAt"] != null) dgvAktivitas.Columns["UpdatedAt"].Visible = false;
-                if (dgvAktivitas.Columns["KategoriId"] != null) dgvAktivitas.Columns["KategoriId"].Visible = false;
-                if (dgvAktivitas.Columns["StatusId"] != null) dgvAktivitas.Columns["StatusId"].Visible = false;
-                if (dgvAktivitas.Columns["NamaKategori"] != null) dgvAktivitas.Columns["NamaKategori"].HeaderText = "Kategori";
-                if (dgvAktivitas.Columns["NamaStatus"] != null) dgvAktivitas.Columns["NamaStatus"].HeaderText = "Status";
-                if (dgvAktivitas.Columns["NamaPeserta"] != null) dgvAktivitas.Columns["NamaPeserta"].Visible = false;
-                if (dgvAktivitas.Columns["Tanggal"] != null)
-                    dgvAktivitas.Columns["Tanggal"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                dgvAktivitas.DataSource = _controller.GetAktivitas(_profile.Id);
+                dgvAktivitas.HideColumns("PesertaId", "CreatedAt", "UpdatedAt", "KategoriId", "StatusId", "NamaPeserta", "Id");
+                dgvAktivitas.SetHeader("NamaKategori", "Kategori");
+                dgvAktivitas.SetHeader("NamaStatus", "Status");
+                dgvAktivitas.SetDateFormat("Tanggal", "yyyy-MM-dd");
             }
             catch (Exception ex)
             {
@@ -68,11 +57,14 @@ namespace Logtracker.Forms
 
         private void btnTambah_Click(object? sender, EventArgs e)
         {
-            var form = new AktivitasForm();
+            var app = Program.GetInstance();
+            if (app == null) return;
+
+            var form = new AktivitasForm(app.KategoriController);
             if (form.ShowDialog() == DialogResult.OK && form.Aktivitas != null)
             {
                 form.Aktivitas.PesertaId = _profile.Id;
-                var (success, msg) = _aktivitasService.Add(form.Aktivitas);
+                var (success, msg) = _controller.AddAktivitas(form.Aktivitas);
                 MessageBox.Show(msg, success ? "Sukses" : "Gagal",
                     MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
                 if (success) LoadData();
@@ -97,13 +89,16 @@ namespace Logtracker.Forms
                 return;
             }
 
-            var form = new AktivitasForm(selected);
+            var app = Program.GetInstance();
+            if (app == null) return;
+
+            var form = new AktivitasForm(selected, app.KategoriController);
             if (form.ShowDialog() == DialogResult.OK && form.Aktivitas != null)
             {
                 form.Aktivitas.Id = selected.Id;
                 form.Aktivitas.PesertaId = _profile.Id;
                 form.Aktivitas.StatusId = selected.StatusId;
-                var (success, msg) = _aktivitasService.Update(form.Aktivitas);
+                var (success, msg) = _controller.UpdateAktivitas(form.Aktivitas);
                 MessageBox.Show(msg, success ? "Sukses" : "Gagal",
                     MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
                 if (success) LoadData();
@@ -132,7 +127,7 @@ namespace Logtracker.Forms
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirm == DialogResult.Yes)
             {
-                var (success, msg) = _aktivitasService.Delete(selected.Id);
+                var (success, msg) = _controller.DeleteAktivitas(selected.Id);
                 MessageBox.Show(msg, success ? "Sukses" : "Gagal",
                     MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
                 if (success) LoadData();
@@ -143,8 +138,7 @@ namespace Logtracker.Forms
 
         private void btnPilihCoach_Click(object? sender, EventArgs e)
         {
-            var coachList = new ProfileRepository(
-                new Data.DatabaseHelper(Program.ConnectionString)).GetCoachList();
+            var coachList = _controller.GetCoachList();
 
             if (coachList.Count == 0)
             {
@@ -156,17 +150,9 @@ namespace Logtracker.Forms
             var selected = InputComboBox("Pilih Coach", "Pilih coach Anda:", names);
             if (selected >= 0)
             {
-                try
-                {
-                    var relasiRepo = new RelasiRepository(
-                        new Data.DatabaseHelper(Program.ConnectionString));
-                    relasiRepo.SetCoach(_profile.Id, coachList[selected].Id);
-                    MessageBox.Show("Coach berhasil dipilih.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Gagal: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                var (success, msg) = _controller.PilihCoach(_profile.Id, coachList[selected].Id);
+                MessageBox.Show(msg, success ? "Sukses" : "Gagal",
+                    MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
             }
         }
 
@@ -181,13 +167,19 @@ namespace Logtracker.Forms
             var selected = dgvAktivitas.CurrentRow.DataBoundItem as Aktivitas;
             if (selected == null) return;
 
-            var form = new DetailAktivitasForm(selected, _coachService);
+            var app = Program.GetInstance();
+            if (app == null) return;
+
+            var form = new DetailAktivitasForm(selected, app.DetailAktivitasController);
             form.ShowDialog();
         }
 
         private void btnLaporan_Click(object? sender, EventArgs e)
         {
-            var form = new LaporanForm(_laporanService, _profile.Id, _profile.Nama);
+            var app = Program.GetInstance();
+            if (app == null) return;
+
+            var form = new LaporanForm(app.LaporanController, _profile.Id, _profile.Nama);
             form.ShowDialog();
         }
 

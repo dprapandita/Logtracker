@@ -1,17 +1,17 @@
-using Logtracker.Services;
+using Logtracker.Controllers;
 
 namespace Logtracker.Forms
 {
     public partial class LaporanForm : Form
     {
-        private readonly LaporanService _laporanService;
+        private readonly LaporanController _laporanController;
         private readonly int _pesertaId;
         private readonly string _pesertaNama;
 
-        public LaporanForm(LaporanService laporanService, int pesertaId, string pesertaNama)
+        public LaporanForm(LaporanController laporanController, int pesertaId, string pesertaNama)
         {
             InitializeComponent();
-            _laporanService = laporanService;
+            _laporanController = laporanController;
             _pesertaId = pesertaId;
             _pesertaNama = pesertaNama;
 
@@ -22,14 +22,14 @@ namespace Logtracker.Forms
         {
             try
             {
-                dgvKategoriDurasi.DataSource = _laporanService.TotalDurasiPerKategori(_pesertaId);
-                dgvKategoriJumlah.DataSource = _laporanService.JumlahAktivitasPerKategori(_pesertaId);
-                dgvTanggalDurasi.DataSource = _laporanService.TotalDurasiPerTanggal(_pesertaId);
-                dgvStatus.DataSource = _laporanService.StatusCount(_pesertaId);
+                dgvKategoriDurasi.DataSource = _laporanController.TotalDurasiPerKategori(_pesertaId);
+                dgvKategoriJumlah.DataSource = _laporanController.JumlahAktivitasPerKategori(_pesertaId);
+                dgvTanggalDurasi.DataSource = _laporanController.TotalDurasiPerTanggal(_pesertaId);
+                dgvStatus.DataSource = _laporanController.StatusCount(_pesertaId);
 
                 // Stored function: total durasi disetujui + level keaktifan.
-                var total = _laporanService.TotalDurasiDisetujui(_pesertaId);
-                var level = _laporanService.LevelKeaktifan(_pesertaId);
+                var total = _laporanController.TotalDurasiDisetujui(_pesertaId);
+                var level = _laporanController.LevelKeaktifan(_pesertaId);
                 lblPeserta.Text = $"Laporan Aktivitas: {_pesertaNama}  |  Total Durasi Disetujui: {total} menit  |  Keaktifan: {level}";
             }
             catch (Exception ex)

@@ -1,5 +1,5 @@
+using Logtracker.Controllers;
 using Logtracker.Models;
-using Logtracker.Services;
 
 namespace Logtracker.Forms
 {
@@ -7,16 +7,30 @@ namespace Logtracker.Forms
     {
         public Aktivitas? Aktivitas { get; private set; }
         public bool IsEdit { get; private set; }
+        private readonly KategoriController? _kategoriController;
 
-        public AktivitasForm()
+        public AktivitasForm() : this(Program.GetInstance()?.KategoriController)
+        {
+        }
+
+        public AktivitasForm(KategoriController? kategoriController)
         {
             InitializeComponent();
+            _kategoriController = kategoriController;
             LoadKategori();
             dtpTanggal.Value = DateTime.Today;
             numDurasi.Value = 30;
         }
 
-        public AktivitasForm(Aktivitas aktivitas) : this()
+        public AktivitasForm(Aktivitas aktivitas) : this(Program.GetInstance()?.KategoriController, aktivitas)
+        {
+        }
+
+        public AktivitasForm(Aktivitas aktivitas, KategoriController kategoriController) : this(kategoriController, aktivitas)
+        {
+        }
+
+        private AktivitasForm(KategoriController? kategoriController, Aktivitas aktivitas) : this(kategoriController)
         {
             IsEdit = true;
             Aktivitas = aktivitas;
@@ -44,15 +58,14 @@ namespace Logtracker.Forms
         {
             try
             {
-                var app = Program.GetInstance();
-                if (app == null)
+                if (_kategoriController == null)
                 {
-                    MessageBox.Show("Service tidak tersedia.", "Error",
+                    MessageBox.Show("Controller tidak tersedia.", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                var list = app.GetKategoriService().GetAll();
+                var list = _kategoriController.GetAll();
                 cboKategori.Items.Clear();
                 cboKategori.DisplayMember = "NamaLatihan";
                 foreach (var k in list)

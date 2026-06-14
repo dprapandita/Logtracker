@@ -1,33 +1,32 @@
+using Logtracker.Controllers;
 using Logtracker.Models;
-using Logtracker.Services;
 
 namespace Logtracker.Forms
 {
     public partial class KelolaKategoriForm : Form
     {
-        private readonly KategoriService _service;
+        private readonly KategoriController _controller;
 
-        public KelolaKategoriForm(KategoriService service)
+        public KelolaKategoriForm(KategoriController controller)
         {
             InitializeComponent();
-            _service = service;
+            _controller = controller;
             dgvKategori.DataBindingComplete += DgvKategori_DataBindingComplete;
             LoadData();
         }
 
         private void DgvKategori_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
-            if (dgvKategori.Columns["Id"] != null)
-            {
-                dgvKategori.Columns["Id"].Width = 50;
-                dgvKategori.Columns["NamaLatihan"].HeaderText = "Nama Latihan";
-            }
+            if (dgvKategori.Columns["Id"] is DataGridViewColumn idColumn)
+                idColumn.Width = 50;
+            if (dgvKategori.Columns["NamaLatihan"] is DataGridViewColumn namaColumn)
+                namaColumn.HeaderText = "Nama Latihan";
         }
 
         private void LoadData()
         {
             dgvKategori.DataSource = null;
-            dgvKategori.DataSource = _service.GetAll();
+            dgvKategori.DataSource = _controller.GetAll();
         }
 
         private void btnTambah_Click(object? sender, EventArgs e)
@@ -38,7 +37,7 @@ namespace Logtracker.Forms
                 MessageBox.Show("Masukkan nama kategori.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var (success, msg) = _service.Add(nama);
+            var (success, msg) = _controller.Add(nama);
             MessageBox.Show(msg, success ? "Sukses" : "Gagal",
                 MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
             if (success)
@@ -63,7 +62,7 @@ namespace Logtracker.Forms
             var result = ShowInputDialog("Edit nama kategori:", "Edit Kategori", selected.NamaLatihan);
             if (result == null) return;
 
-            var (success, msg) = _service.Update(selected.Id, result);
+            var (success, msg) = _controller.Update(selected.Id, result);
             MessageBox.Show(msg, success ? "Sukses" : "Gagal",
                 MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
             if (success) LoadData();
@@ -84,7 +83,7 @@ namespace Logtracker.Forms
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirm != DialogResult.Yes) return;
 
-            var (success, msg) = _service.Delete(selected.Id);
+            var (success, msg) = _controller.Delete(selected.Id);
             MessageBox.Show(msg, success ? "Sukses" : "Gagal",
                 MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
             if (success) LoadData();

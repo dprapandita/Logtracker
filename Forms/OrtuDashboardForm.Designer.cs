@@ -35,7 +35,7 @@ namespace Logtracker.Forms
             // 
             // lblUserInfo
             // 
-            lblUserInfo.Font = new Font("Dungeon", 15.75F, FontStyle.Bold);
+            lblUserInfo.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold);
             lblUserInfo.ForeColor = Color.FromArgb(55, 36, 20);
             lblUserInfo.Location = new Point(10, 10);
             lblUserInfo.Name = "lblUserInfo";
@@ -61,7 +61,7 @@ namespace Logtracker.Forms
             cboAnak.Location = new Point(10, 70);
             cboAnak.Margin = new Padding(3, 2, 3, 2);
             cboAnak.Name = "cboAnak";
-            cboAnak.Size = new Size(307, 25);
+            cboAnak.Size = new Size(307, 29);
             cboAnak.TabIndex = 2;
             cboAnak.SelectedIndexChanged += cboAnak_SelectedIndexChanged;
             // 
@@ -70,6 +70,7 @@ namespace Logtracker.Forms
             dgvAktivitas.AllowUserToAddRows = false;
             dgvAktivitas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvAktivitas.BackgroundColor = Color.FromArgb(111, 77, 56);
+            dgvAktivitas.ColumnHeadersHeight = 29;
             dgvAktivitas.GridColor = Color.FromArgb(213, 184, 147);
             dgvAktivitas.Location = new Point(10, 102);
             dgvAktivitas.Margin = new Padding(3, 2, 3, 2);
@@ -77,6 +78,7 @@ namespace Logtracker.Forms
             dgvAktivitas.Name = "dgvAktivitas";
             dgvAktivitas.ReadOnly = true;
             dgvAktivitas.RowHeadersVisible = false;
+            dgvAktivitas.RowHeadersWidth = 51;
             dgvAktivitas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvAktivitas.Size = new Size(665, 331);
             dgvAktivitas.TabIndex = 6;
@@ -134,9 +136,9 @@ namespace Logtracker.Forms
             btnLaporan.Text = "Laporan";
             btnLaporan.UseVisualStyleBackColor = false;
             btnLaporan.Click += btnLaporan_Click;
-            //
+            // 
             // btnProfil
-            //
+            // 
             btnProfil.BackColor = Color.FromArgb(213, 184, 147);
             btnProfil.FlatStyle = FlatStyle.Flat;
             btnProfil.ForeColor = Color.FromArgb(55, 36, 20);
@@ -148,10 +150,10 @@ namespace Logtracker.Forms
             btnProfil.Text = "Profil";
             btnProfil.UseVisualStyleBackColor = false;
             btnProfil.Click += btnProfil_Click;
-            //
+            // 
             // OrtuDashboardForm
-            //
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            // 
+            AutoScaleDimensions = new SizeF(10F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
             ClientSize = new Size(686, 447);
@@ -165,7 +167,7 @@ namespace Logtracker.Forms
             Controls.Add(dgvAktivitas);
             Controls.Add(lblNoData);
             Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
-            ForeColor = Color.FromArgb(247, 235, 223);
+            ForeColor = Color.FromArgb(64, 64, 64);
             Margin = new Padding(3, 2, 3, 2);
             Name = "OrtuDashboardForm";
             StartPosition = FormStartPosition.CenterScreen;

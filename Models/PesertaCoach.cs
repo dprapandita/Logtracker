@@ -1,6 +1,6 @@
 namespace Logtracker.Models
 {
-    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    // Tabel relasi peserta-coach. Id-nya nurun dari BaseEntity.
     public class PesertaCoach : BaseEntity
     {
         private int _pesertaId;

@@ -1,6 +1,6 @@
 namespace Logtracker.Models
 {
-    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    // Ngambil Id dari BaseEntity. Ini data log latihan tiap peserta.
     public class Aktivitas : BaseEntity
     {
         private int _pesertaId;
@@ -52,9 +52,26 @@ namespace Logtracker.Models
             set => _durasi = value < 0 ? 0 : value;
         }
 
-        public DateTime Tanggal { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        private DateTime _tanggal;
+        public DateTime Tanggal
+        {
+            get => _tanggal;
+            set => _tanggal = value == default ? DateTime.Now : value;
+        }
+
+        private DateTime _createdAt;
+        public DateTime CreatedAt
+        {
+            get => _createdAt;
+            set => _createdAt = value == default ? DateTime.Now : value;
+        }
+
+        private DateTime _updatedAt;
+        public DateTime UpdatedAt
+        {
+            get => _updatedAt;
+            set => _updatedAt = value == default ? DateTime.Now : value;
+        }
 
         private string? _namaPeserta;
         public string? NamaPeserta
@@ -62,5 +79,8 @@ namespace Logtracker.Models
             get => _namaPeserta;
             set => _namaPeserta = value?.Trim();
         }
+
+        // POLYMORPHISM: override cara Aktivitas mendeskripsikan dirinya.
+        public override string Deskripsi() => $"{Nama} - {Durasi} menit";
     }
 }

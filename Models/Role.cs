@@ -1,6 +1,6 @@
 namespace Logtracker.Models
 {
-    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    // Cuma nyimpen nama peran, Id-nya udah diwarisi dari BaseEntity.
     public class Role : BaseEntity
     {
         private string _nama = string.Empty;

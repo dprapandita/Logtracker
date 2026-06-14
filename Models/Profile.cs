@@ -1,6 +1,6 @@
 namespace Logtracker.Models
 {
-    // INHERITANCE: mewarisi properti Id dari BaseEntity.
+    // Turunan BaseEntity, Id udah dapet dari sana.
     public class Profile : BaseEntity
     {
         private int _userId;
@@ -24,7 +24,18 @@ namespace Logtracker.Models
             set => _kodePeserta = value?.Trim();
         }
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        private DateTime _createdAt;
+        public DateTime CreatedAt
+        {
+            get => _createdAt;
+            set => _createdAt = value == default ? DateTime.Now : value;
+        }
+
+        private DateTime _updatedAt;
+        public DateTime UpdatedAt
+        {
+            get => _updatedAt;
+            set => _updatedAt = value == default ? DateTime.Now : value;
+        }
     }
 }

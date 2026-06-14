@@ -1,11 +1,13 @@
 using Npgsql;
 using Logtracker.Data;
 using Logtracker.Models;
+using Logtracker.Interfaces;
 
 namespace Logtracker.Repositories
 {
-    // Akses data tabel profiles.
-    public class ProfileRepository : BaseRepository
+    // Akses data tabel profiles. INHERITANCE dari BaseRepository, dan memenuhi
+    // kontrak IProfileRepository (ABSTRACTION).
+    public class ProfileRepository : BaseRepository, IProfileRepository
     {
         public ProfileRepository(DatabaseHelper db) : base(db)
         {
