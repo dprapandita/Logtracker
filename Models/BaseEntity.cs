@@ -10,8 +10,7 @@ namespace Logtracker.Models
             set => _id = value < 0 ? 0 : value;
         }
 
-        // POLYMORPHISM: method virtual yang bisa dipakai/di-override entity mana pun.
-        // Default-nya menampilkan Id; tiap turunan boleh override sesuai datanya.
+        // Default : deskripsi sederhana pakai Id. Turunan bisa override untuk info lebih spesifik.
         public virtual string Deskripsi() => $"#{Id}";
     }
 }

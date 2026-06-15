@@ -54,11 +54,6 @@ namespace Logtracker.Repositories
             return Map(reader);
         }
 
-        public int Insert(User user)
-        {
-            return (int)ExecuteScalar(InsertSql, p => BindInsert(p, user))!;
-        }
-
         // Versi transaksi: dipakai saat register agar atomik bersama insert lain.
         public int Insert(User user, NpgsqlConnection conn, NpgsqlTransaction tx)
         {

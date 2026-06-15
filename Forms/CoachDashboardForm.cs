@@ -78,10 +78,16 @@ namespace Logtracker.Forms
 
                 if (dgvAktivitas.Rows.Count > 0)
                 {
-                    dgvAktivitas.CurrentCell = dgvAktivitas.Rows[0].Cells[0];
+                    // Set fokus ke sel pertama yang visible (bukan kolom tersembunyi).
+                    var firstVisibleCol = dgvAktivitas.Columns.Cast<DataGridViewColumn>()
+                                            .FirstOrDefault(c => c.Visible);
+
+                    if (firstVisibleCol != null)
+                    {
+                        dgvAktivitas.CurrentCell = dgvAktivitas.Rows[0].Cells[firstVisibleCol.Index];
+                    }
                     dgvAktivitas.Rows[0].Selected = true;
-                    // The grid auto-selects row 0 on binding, so SelectionChanged may not
-                    // re-fire here. Populate the panel explicitly.
+                    
                     PopulateFeedbackPanel(dgvAktivitas.Rows[0].DataBoundItem as Aktivitas);
                 }
                 else
