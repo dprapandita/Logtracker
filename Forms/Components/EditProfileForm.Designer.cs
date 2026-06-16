@@ -32,6 +32,7 @@ namespace Logtracker.Forms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditProfileForm));
             lblTitle = new Label();
             grpInfo = new GroupBox();
             lblUsernameLabel = new Label();
@@ -52,23 +53,25 @@ namespace Logtracker.Forms
             txtNewPassword = new TextBox();
             btnSimpan = new Button();
             btnTutup = new Button();
+            pictureBox1 = new PictureBox();
             grpInfo.SuspendLayout();
             grpEdit.SuspendLayout();
             grpPassword.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            //
+            // 
             // lblTitle
-            //
+            // 
             lblTitle.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(55, 36, 20);
-            lblTitle.Location = new Point(14, 14);
+            lblTitle.Location = new Point(39, 14);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(430, 30);
+            lblTitle.Size = new Size(110, 25);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Profil Saya";
-            //
+            // 
             // grpInfo
-            //
+            // 
             grpInfo.Controls.Add(lblUsernameLabel);
             grpInfo.Controls.Add(lblUsernameValue);
             grpInfo.Controls.Add(lblRoleLabel);
@@ -83,9 +86,9 @@ namespace Logtracker.Forms
             grpInfo.TabIndex = 1;
             grpInfo.TabStop = false;
             grpInfo.Text = "Informasi Akun";
-            //
+            // 
             // lblUsernameLabel
-            //
+            // 
             lblUsernameLabel.Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
             lblUsernameLabel.ForeColor = Color.FromArgb(55, 36, 20);
             lblUsernameLabel.Location = new Point(10, 25);
@@ -93,9 +96,9 @@ namespace Logtracker.Forms
             lblUsernameLabel.Size = new Size(110, 20);
             lblUsernameLabel.TabIndex = 0;
             lblUsernameLabel.Text = "Username:";
-            //
+            // 
             // lblUsernameValue
-            //
+            // 
             lblUsernameValue.Font = new Font("Palatino Linotype", 9F);
             lblUsernameValue.ForeColor = Color.FromArgb(30, 30, 30);
             lblUsernameValue.Location = new Point(125, 25);
@@ -103,9 +106,9 @@ namespace Logtracker.Forms
             lblUsernameValue.Size = new Size(295, 20);
             lblUsernameValue.TabIndex = 1;
             lblUsernameValue.Text = "-";
-            //
+            // 
             // lblRoleLabel
-            //
+            // 
             lblRoleLabel.Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
             lblRoleLabel.ForeColor = Color.FromArgb(55, 36, 20);
             lblRoleLabel.Location = new Point(10, 50);
@@ -113,9 +116,9 @@ namespace Logtracker.Forms
             lblRoleLabel.Size = new Size(110, 20);
             lblRoleLabel.TabIndex = 2;
             lblRoleLabel.Text = "Role:";
-            //
+            // 
             // lblRoleValue
-            //
+            // 
             lblRoleValue.Font = new Font("Palatino Linotype", 9F);
             lblRoleValue.ForeColor = Color.FromArgb(30, 30, 30);
             lblRoleValue.Location = new Point(125, 50);
@@ -123,9 +126,9 @@ namespace Logtracker.Forms
             lblRoleValue.Size = new Size(295, 20);
             lblRoleValue.TabIndex = 3;
             lblRoleValue.Text = "-";
-            //
+            // 
             // lblKodeLabel
-            //
+            // 
             lblKodeLabel.Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
             lblKodeLabel.ForeColor = Color.FromArgb(55, 36, 20);
             lblKodeLabel.Location = new Point(10, 75);
@@ -133,9 +136,9 @@ namespace Logtracker.Forms
             lblKodeLabel.Size = new Size(110, 20);
             lblKodeLabel.TabIndex = 4;
             lblKodeLabel.Text = "Kode Peserta:";
-            //
+            // 
             // lblKodeValue
-            //
+            // 
             lblKodeValue.Font = new Font("Palatino Linotype", 9F);
             lblKodeValue.ForeColor = Color.FromArgb(30, 30, 30);
             lblKodeValue.Location = new Point(125, 75);
@@ -143,9 +146,9 @@ namespace Logtracker.Forms
             lblKodeValue.Size = new Size(295, 20);
             lblKodeValue.TabIndex = 5;
             lblKodeValue.Text = "-";
-            //
+            // 
             // grpEdit
-            //
+            // 
             grpEdit.Controls.Add(lblNamaLabel);
             grpEdit.Controls.Add(txtNama);
             grpEdit.Controls.Add(lblEmailLabel);
@@ -158,9 +161,9 @@ namespace Logtracker.Forms
             grpEdit.TabIndex = 2;
             grpEdit.TabStop = false;
             grpEdit.Text = "Ubah Data";
-            //
+            // 
             // lblNamaLabel
-            //
+            // 
             lblNamaLabel.Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
             lblNamaLabel.ForeColor = Color.FromArgb(55, 36, 20);
             lblNamaLabel.Location = new Point(10, 28);
@@ -168,20 +171,20 @@ namespace Logtracker.Forms
             lblNamaLabel.Size = new Size(110, 20);
             lblNamaLabel.TabIndex = 0;
             lblNamaLabel.Text = "Nama:";
-            //
+            // 
             // txtNama
-            //
-            txtNama.BackColor = Color.FromArgb(247, 235, 223);
+            // 
+            txtNama.BackColor = Color.FromArgb(111, 77, 56);
             txtNama.BorderStyle = BorderStyle.FixedSingle;
             txtNama.Font = new Font("Palatino Linotype", 9F);
             txtNama.ForeColor = Color.FromArgb(30, 30, 30);
             txtNama.Location = new Point(125, 25);
             txtNama.Name = "txtNama";
-            txtNama.Size = new Size(295, 25);
+            txtNama.Size = new Size(295, 24);
             txtNama.TabIndex = 1;
-            //
+            // 
             // lblEmailLabel
-            //
+            // 
             lblEmailLabel.Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
             lblEmailLabel.ForeColor = Color.FromArgb(55, 36, 20);
             lblEmailLabel.Location = new Point(10, 60);
@@ -189,20 +192,20 @@ namespace Logtracker.Forms
             lblEmailLabel.Size = new Size(110, 20);
             lblEmailLabel.TabIndex = 2;
             lblEmailLabel.Text = "Email:";
-            //
+            // 
             // txtEmail
-            //
-            txtEmail.BackColor = Color.FromArgb(247, 235, 223);
+            // 
+            txtEmail.BackColor = Color.FromArgb(111, 77, 56);
             txtEmail.BorderStyle = BorderStyle.FixedSingle;
             txtEmail.Font = new Font("Palatino Linotype", 9F);
             txtEmail.ForeColor = Color.FromArgb(30, 30, 30);
             txtEmail.Location = new Point(125, 57);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(295, 25);
+            txtEmail.Size = new Size(295, 24);
             txtEmail.TabIndex = 3;
-            //
+            // 
             // grpPassword
-            //
+            // 
             grpPassword.Controls.Add(lblCurrentLabel);
             grpPassword.Controls.Add(txtCurrentPassword);
             grpPassword.Controls.Add(lblNewLabel);
@@ -215,9 +218,9 @@ namespace Logtracker.Forms
             grpPassword.TabIndex = 3;
             grpPassword.TabStop = false;
             grpPassword.Text = "Ganti Password (opsional)";
-            //
+            // 
             // lblCurrentLabel
-            //
+            // 
             lblCurrentLabel.Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
             lblCurrentLabel.ForeColor = Color.FromArgb(55, 36, 20);
             lblCurrentLabel.Location = new Point(10, 28);
@@ -225,21 +228,21 @@ namespace Logtracker.Forms
             lblCurrentLabel.Size = new Size(125, 20);
             lblCurrentLabel.TabIndex = 0;
             lblCurrentLabel.Text = "Password Lama:";
-            //
+            // 
             // txtCurrentPassword
-            //
-            txtCurrentPassword.BackColor = Color.FromArgb(247, 235, 223);
+            // 
+            txtCurrentPassword.BackColor = Color.FromArgb(111, 77, 56);
             txtCurrentPassword.BorderStyle = BorderStyle.FixedSingle;
             txtCurrentPassword.Font = new Font("Palatino Linotype", 9F);
             txtCurrentPassword.ForeColor = Color.FromArgb(30, 30, 30);
             txtCurrentPassword.Location = new Point(140, 25);
             txtCurrentPassword.Name = "txtCurrentPassword";
-            txtCurrentPassword.Size = new Size(280, 25);
+            txtCurrentPassword.Size = new Size(280, 24);
             txtCurrentPassword.TabIndex = 1;
             txtCurrentPassword.UseSystemPasswordChar = true;
-            //
+            // 
             // lblNewLabel
-            //
+            // 
             lblNewLabel.Font = new Font("Palatino Linotype", 9F, FontStyle.Bold);
             lblNewLabel.ForeColor = Color.FromArgb(55, 36, 20);
             lblNewLabel.Location = new Point(10, 60);
@@ -247,21 +250,21 @@ namespace Logtracker.Forms
             lblNewLabel.Size = new Size(125, 20);
             lblNewLabel.TabIndex = 2;
             lblNewLabel.Text = "Password Baru:";
-            //
+            // 
             // txtNewPassword
-            //
-            txtNewPassword.BackColor = Color.FromArgb(247, 235, 223);
+            // 
+            txtNewPassword.BackColor = Color.FromArgb(111, 77, 56);
             txtNewPassword.BorderStyle = BorderStyle.FixedSingle;
             txtNewPassword.Font = new Font("Palatino Linotype", 9F);
             txtNewPassword.ForeColor = Color.FromArgb(30, 30, 30);
             txtNewPassword.Location = new Point(140, 57);
             txtNewPassword.Name = "txtNewPassword";
-            txtNewPassword.Size = new Size(280, 25);
+            txtNewPassword.Size = new Size(280, 24);
             txtNewPassword.TabIndex = 3;
             txtNewPassword.UseSystemPasswordChar = true;
-            //
+            // 
             // btnSimpan
-            //
+            // 
             btnSimpan.BackColor = Color.FromArgb(213, 184, 147);
             btnSimpan.FlatStyle = FlatStyle.Flat;
             btnSimpan.ForeColor = Color.FromArgb(55, 36, 20);
@@ -272,9 +275,9 @@ namespace Logtracker.Forms
             btnSimpan.Text = "Simpan";
             btnSimpan.UseVisualStyleBackColor = false;
             btnSimpan.Click += btnSimpan_Click;
-            //
+            // 
             // btnTutup
-            //
+            // 
             btnTutup.BackColor = Color.FromArgb(213, 184, 147);
             btnTutup.FlatStyle = FlatStyle.Flat;
             btnTutup.ForeColor = Color.FromArgb(55, 36, 20);
@@ -285,13 +288,23 @@ namespace Logtracker.Forms
             btnTutup.Text = "Tutup";
             btnTutup.UseVisualStyleBackColor = false;
             btnTutup.Click += btnTutup_Click;
-            //
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(14, 14);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(25, 25);
+            pictureBox1.TabIndex = 6;
+            pictureBox1.TabStop = false;
+            // 
             // EditProfileForm
-            //
+            // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
             ClientSize = new Size(458, 415);
+            Controls.Add(pictureBox1);
             Controls.Add(lblTitle);
             Controls.Add(grpInfo);
             Controls.Add(grpEdit);
@@ -310,7 +323,10 @@ namespace Logtracker.Forms
             grpEdit.PerformLayout();
             grpPassword.ResumeLayout(false);
             grpPassword.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
+
+        private PictureBox pictureBox1;
     }
 }

@@ -21,6 +21,7 @@ namespace Logtracker.Forms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OrtuDashboardForm));
             lblUserInfo = new Label();
             lblAnak = new Label();
             cboAnak = new ComboBox();
@@ -30,7 +31,9 @@ namespace Logtracker.Forms
             btnRefresh = new Button();
             btnLaporan = new Button();
             btnProfil = new Button();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // lblUserInfo
@@ -61,7 +64,7 @@ namespace Logtracker.Forms
             cboAnak.Location = new Point(10, 70);
             cboAnak.Margin = new Padding(3, 2, 3, 2);
             cboAnak.Name = "cboAnak";
-            cboAnak.Size = new Size(307, 29);
+            cboAnak.Size = new Size(307, 25);
             cboAnak.TabIndex = 2;
             cboAnak.SelectedIndexChanged += cboAnak_SelectedIndexChanged;
             // 
@@ -151,12 +154,22 @@ namespace Logtracker.Forms
             btnProfil.UseVisualStyleBackColor = false;
             btnProfil.Click += btnProfil_Click;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(548, 12);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(29, 29);
+            pictureBox1.TabIndex = 9;
+            pictureBox1.TabStop = false;
+            // 
             // OrtuDashboardForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 21F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
             ClientSize = new Size(686, 447);
+            Controls.Add(pictureBox1);
             Controls.Add(lblUserInfo);
             Controls.Add(lblAnak);
             Controls.Add(cboAnak);
@@ -173,7 +186,10 @@ namespace Logtracker.Forms
             StartPosition = FormStartPosition.CenterScreen;
             Text = "LOGTRACKER - Dashboard Orang Tua";
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
+
+        private PictureBox pictureBox1;
     }
 }

@@ -78,5 +78,15 @@ namespace Logtracker.Forms
         {
 
         }
+
+        private void lblEmail_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTitle_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -29,6 +29,7 @@ namespace Logtracker.Forms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CoachDashboardForm));
             lblUserInfo = new Label();
             lblPeserta = new Label();
             cboPeserta = new ComboBox();
@@ -46,8 +47,10 @@ namespace Logtracker.Forms
             btnProfil = new Button();
             grpFeedback = new GroupBox();
             lstExistingFeedback = new ListBox();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).BeginInit();
             grpFeedback.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // lblUserInfo
@@ -76,7 +79,7 @@ namespace Logtracker.Forms
             cboPeserta.Location = new Point(10, 70);
             cboPeserta.Margin = new Padding(3, 2, 3, 2);
             cboPeserta.Name = "cboPeserta";
-            cboPeserta.Size = new Size(307, 29);
+            cboPeserta.Size = new Size(307, 25);
             cboPeserta.TabIndex = 2;
             cboPeserta.SelectedIndexChanged += cboPeserta_SelectedIndexChanged;
             // 
@@ -117,7 +120,7 @@ namespace Logtracker.Forms
             cboStatus.Location = new Point(9, 120);
             cboStatus.Margin = new Padding(3, 2, 3, 2);
             cboStatus.Name = "cboStatus";
-            cboStatus.Size = new Size(140, 29);
+            cboStatus.Size = new Size(140, 25);
             cboStatus.TabIndex = 2;
             cboStatus.SelectedIndexChanged += cboStatus_SelectedIndexChanged;
             // 
@@ -215,9 +218,9 @@ namespace Logtracker.Forms
             btnDetailAktivitas.Text = "Detail";
             btnDetailAktivitas.UseVisualStyleBackColor = false;
             btnDetailAktivitas.Click += btnDetailAktivitas_Click;
-            //
+            // 
             // btnProfil
-            //
+            // 
             btnProfil.BackColor = Color.FromArgb(213, 184, 147);
             btnProfil.FlatStyle = FlatStyle.Flat;
             btnProfil.ForeColor = Color.FromArgb(55, 36, 20);
@@ -229,9 +232,9 @@ namespace Logtracker.Forms
             btnProfil.Text = "Profil";
             btnProfil.UseVisualStyleBackColor = false;
             btnProfil.Click += btnProfil_Click;
-            //
+            // 
             // grpFeedback
-            //
+            // 
             grpFeedback.Controls.Add(lstExistingFeedback);
             grpFeedback.Controls.Add(lblStatus);
             grpFeedback.Controls.Add(cboStatus);
@@ -257,16 +260,26 @@ namespace Logtracker.Forms
             lstExistingFeedback.Location = new Point(9, 22);
             lstExistingFeedback.Margin = new Padding(3, 2, 3, 2);
             lstExistingFeedback.Name = "lstExistingFeedback";
-            lstExistingFeedback.Size = new Size(648, 63);
+            lstExistingFeedback.Size = new Size(648, 51);
             lstExistingFeedback.TabIndex = 0;
             lstExistingFeedback.SelectedIndexChanged += lstExistingFeedback_SelectedIndexChanged;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(549, 12);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(29, 29);
+            pictureBox1.TabIndex = 11;
+            pictureBox1.TabStop = false;
+            // 
             // CoachDashboardForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 21F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
             ClientSize = new Size(686, 485);
+            Controls.Add(pictureBox1);
             Controls.Add(lblUserInfo);
             Controls.Add(lblPeserta);
             Controls.Add(cboPeserta);
@@ -287,7 +300,10 @@ namespace Logtracker.Forms
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).EndInit();
             grpFeedback.ResumeLayout(false);
             grpFeedback.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
+
+        private PictureBox pictureBox1;
     }
 }

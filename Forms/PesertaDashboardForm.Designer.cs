@@ -22,6 +22,7 @@ namespace Logtracker.Forms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PesertaDashboardForm));
             lblUserInfo = new Label();
             btnTambah = new Button();
             btnEdit = new Button();
@@ -32,7 +33,9 @@ namespace Logtracker.Forms
             btnLaporan = new Button();
             btnProfil = new Button();
             dgvAktivitas = new DataGridView();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // lblUserInfo
@@ -143,23 +146,23 @@ namespace Logtracker.Forms
             btnLaporan.Text = "Laporan";
             btnLaporan.UseVisualStyleBackColor = false;
             btnLaporan.Click += btnLaporan_Click;
-            //
+            // 
             // btnProfil
-            //
+            // 
             btnProfil.BackColor = Color.FromArgb(213, 184, 147);
             btnProfil.FlatStyle = FlatStyle.Flat;
             btnProfil.ForeColor = Color.FromArgb(55, 36, 20);
             btnProfil.Location = new Point(681, 9);
             btnProfil.Margin = new Padding(3, 2, 3, 2);
             btnProfil.Name = "btnProfil";
-            btnProfil.Size = new Size(79, 28);
+            btnProfil.Size = new Size(79, 29);
             btnProfil.TabIndex = 9;
             btnProfil.Text = "Profil";
             btnProfil.UseVisualStyleBackColor = false;
             btnProfil.Click += btnProfil_Click;
-            //
+            // 
             // dgvAktivitas
-            //
+            // 
             dgvAktivitas.AllowUserToAddRows = false;
             dgvAktivitas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvAktivitas.BackgroundColor = Color.FromArgb(111, 77, 56);
@@ -178,12 +181,22 @@ namespace Logtracker.Forms
             dgvAktivitas.CellContentClick += dgvAktivitas_CellContentClick;
             dgvAktivitas.CellFormatting += dgvAktivitas_CellFormatting;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(648, 9);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(29, 29);
+            pictureBox1.TabIndex = 10;
+            pictureBox1.TabStop = false;
+            // 
             // PesertaDashboardForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
             ClientSize = new Size(770, 525);
+            Controls.Add(pictureBox1);
             Controls.Add(lblUserInfo);
             Controls.Add(btnTambah);
             Controls.Add(btnEdit);
@@ -201,7 +214,10 @@ namespace Logtracker.Forms
             StartPosition = FormStartPosition.CenterScreen;
             Text = "LOGTRACKER - Dashboard Peserta";
             ((System.ComponentModel.ISupportInitialize)dgvAktivitas).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
+
+        private PictureBox pictureBox1;
     }
 }

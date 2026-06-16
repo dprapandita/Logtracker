@@ -27,6 +27,7 @@ namespace Logtracker.Forms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterForm));
             lblTitle = new Label();
             lblNama = new Label();
             txtNama = new TextBox();
@@ -42,6 +43,16 @@ namespace Logtracker.Forms
             txtKodePeserta = new TextBox();
             btnRegister = new Button();
             btnBatal = new Button();
+            pictureBox1 = new PictureBox();
+            pictureBox2 = new PictureBox();
+            pictureBox3 = new PictureBox();
+            pictureBox4 = new PictureBox();
+            pictureBox5 = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
             SuspendLayout();
             // 
             // lblTitle
@@ -55,13 +66,14 @@ namespace Logtracker.Forms
             lblTitle.TabIndex = 0;
             lblTitle.Text = "REGISTER";
             lblTitle.TextAlign = ContentAlignment.MiddleCenter;
+            lblTitle.Click += lblTitle_Click;
             // 
             // lblNama
             // 
             lblNama.ForeColor = Color.FromArgb(55, 36, 20);
-            lblNama.Location = new Point(35, 59);
+            lblNama.Location = new Point(54, 59);
             lblNama.Name = "lblNama";
-            lblNama.Size = new Size(70, 22);
+            lblNama.Size = new Size(70, 19);
             lblNama.TabIndex = 1;
             lblNama.Text = "Nama:";
             // 
@@ -79,9 +91,9 @@ namespace Logtracker.Forms
             // lblUsername
             // 
             lblUsername.ForeColor = Color.FromArgb(55, 36, 20);
-            lblUsername.Location = new Point(35, 114);
+            lblUsername.Location = new Point(54, 102);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(70, 22);
+            lblUsername.Size = new Size(70, 19);
             lblUsername.TabIndex = 3;
             lblUsername.Text = "Username:";
             // 
@@ -90,7 +102,7 @@ namespace Logtracker.Forms
             txtUsername.BackColor = Color.FromArgb(111, 77, 56);
             txtUsername.BorderStyle = BorderStyle.None;
             txtUsername.ForeColor = Color.FromArgb(247, 235, 223);
-            txtUsername.Location = new Point(35, 138);
+            txtUsername.Location = new Point(35, 126);
             txtUsername.Margin = new Padding(3, 2, 3, 2);
             txtUsername.Name = "txtUsername";
             txtUsername.Size = new Size(280, 17);
@@ -99,18 +111,19 @@ namespace Logtracker.Forms
             // lblEmail
             // 
             lblEmail.ForeColor = Color.FromArgb(55, 36, 20);
-            lblEmail.Location = new Point(35, 170);
+            lblEmail.Location = new Point(54, 145);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(70, 22);
+            lblEmail.Size = new Size(70, 19);
             lblEmail.TabIndex = 5;
             lblEmail.Text = "Email:";
+            lblEmail.Click += lblEmail_Click;
             // 
             // txtEmail
             // 
             txtEmail.BackColor = Color.FromArgb(111, 77, 56);
             txtEmail.BorderStyle = BorderStyle.None;
             txtEmail.ForeColor = Color.FromArgb(247, 235, 223);
-            txtEmail.Location = new Point(35, 193);
+            txtEmail.Location = new Point(35, 169);
             txtEmail.Margin = new Padding(3, 2, 3, 2);
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(280, 17);
@@ -119,9 +132,9 @@ namespace Logtracker.Forms
             // lblPassword
             // 
             lblPassword.ForeColor = Color.FromArgb(55, 36, 20);
-            lblPassword.Location = new Point(35, 226);
+            lblPassword.Location = new Point(54, 188);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(70, 22);
+            lblPassword.Size = new Size(70, 19);
             lblPassword.TabIndex = 7;
             lblPassword.Text = "Password:";
             // 
@@ -130,7 +143,7 @@ namespace Logtracker.Forms
             txtPassword.BackColor = Color.FromArgb(111, 77, 56);
             txtPassword.BorderStyle = BorderStyle.None;
             txtPassword.ForeColor = Color.FromArgb(247, 235, 223);
-            txtPassword.Location = new Point(35, 248);
+            txtPassword.Location = new Point(35, 212);
             txtPassword.Margin = new Padding(3, 2, 3, 2);
             txtPassword.Name = "txtPassword";
             txtPassword.Size = new Size(280, 17);
@@ -140,9 +153,9 @@ namespace Logtracker.Forms
             // lblRole
             // 
             lblRole.ForeColor = Color.FromArgb(55, 36, 20);
-            lblRole.Location = new Point(35, 281);
+            lblRole.Location = new Point(54, 231);
             lblRole.Name = "lblRole";
-            lblRole.Size = new Size(70, 22);
+            lblRole.Size = new Size(70, 19);
             lblRole.TabIndex = 9;
             lblRole.Text = "Role:";
             // 
@@ -152,7 +165,7 @@ namespace Logtracker.Forms
             cboRole.DropDownStyle = ComboBoxStyle.DropDownList;
             cboRole.FlatStyle = FlatStyle.Flat;
             cboRole.ForeColor = Color.FromArgb(247, 235, 223);
-            cboRole.Location = new Point(35, 304);
+            cboRole.Location = new Point(35, 255);
             cboRole.Margin = new Padding(3, 2, 3, 2);
             cboRole.Name = "cboRole";
             cboRole.Size = new Size(280, 25);
@@ -162,9 +175,9 @@ namespace Logtracker.Forms
             // lblKodePeserta
             // 
             lblKodePeserta.ForeColor = Color.FromArgb(55, 36, 20);
-            lblKodePeserta.Location = new Point(35, 335);
+            lblKodePeserta.Location = new Point(35, 282);
             lblKodePeserta.Name = "lblKodePeserta";
-            lblKodePeserta.Size = new Size(122, 22);
+            lblKodePeserta.Size = new Size(122, 19);
             lblKodePeserta.TabIndex = 11;
             lblKodePeserta.Text = "Kode Peserta Anak:";
             lblKodePeserta.Click += lblKodePeserta_Click;
@@ -174,7 +187,7 @@ namespace Logtracker.Forms
             txtKodePeserta.BackColor = Color.FromArgb(111, 77, 56);
             txtKodePeserta.BorderStyle = BorderStyle.None;
             txtKodePeserta.ForeColor = Color.FromArgb(247, 235, 223);
-            txtKodePeserta.Location = new Point(35, 358);
+            txtKodePeserta.Location = new Point(35, 306);
             txtKodePeserta.Margin = new Padding(3, 2, 3, 2);
             txtKodePeserta.Name = "txtKodePeserta";
             txtKodePeserta.Size = new Size(280, 17);
@@ -184,7 +197,7 @@ namespace Logtracker.Forms
             // 
             btnRegister.BackColor = Color.FromArgb(213, 184, 147);
             btnRegister.FlatStyle = FlatStyle.Flat;
-            btnRegister.Location = new Point(35, 396);
+            btnRegister.Location = new Point(35, 371);
             btnRegister.Margin = new Padding(3, 2, 3, 2);
             btnRegister.Name = "btnRegister";
             btnRegister.Size = new Size(131, 29);
@@ -197,7 +210,7 @@ namespace Logtracker.Forms
             // 
             btnBatal.BackColor = Color.FromArgb(213, 184, 147);
             btnBatal.FlatStyle = FlatStyle.Flat;
-            btnBatal.Location = new Point(184, 396);
+            btnBatal.Location = new Point(184, 371);
             btnBatal.Margin = new Padding(3, 2, 3, 2);
             btnBatal.Name = "btnBatal";
             btnBatal.Size = new Size(131, 29);
@@ -206,12 +219,62 @@ namespace Logtracker.Forms
             btnBatal.UseVisualStyleBackColor = false;
             btnBatal.Click += btnBatal_Click;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(35, 59);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(19, 19);
+            pictureBox1.TabIndex = 15;
+            pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
+            pictureBox2.Location = new Point(35, 102);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(19, 19);
+            pictureBox2.TabIndex = 16;
+            pictureBox2.TabStop = false;
+            // 
+            // pictureBox3
+            // 
+            pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
+            pictureBox3.Location = new Point(35, 145);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(19, 19);
+            pictureBox3.TabIndex = 17;
+            pictureBox3.TabStop = false;
+            // 
+            // pictureBox4
+            // 
+            pictureBox4.Image = (Image)resources.GetObject("pictureBox4.Image");
+            pictureBox4.Location = new Point(35, 188);
+            pictureBox4.Name = "pictureBox4";
+            pictureBox4.Size = new Size(19, 19);
+            pictureBox4.TabIndex = 18;
+            pictureBox4.TabStop = false;
+            // 
+            // pictureBox5
+            // 
+            pictureBox5.Image = (Image)resources.GetObject("pictureBox5.Image");
+            pictureBox5.Location = new Point(35, 231);
+            pictureBox5.Name = "pictureBox5";
+            pictureBox5.Size = new Size(19, 19);
+            pictureBox5.TabIndex = 19;
+            pictureBox5.TabStop = false;
+            // 
             // RegisterForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
-            ClientSize = new Size(350, 447);
+            ClientSize = new Size(350, 409);
+            Controls.Add(pictureBox5);
+            Controls.Add(pictureBox4);
+            Controls.Add(pictureBox3);
+            Controls.Add(pictureBox2);
+            Controls.Add(pictureBox1);
             Controls.Add(lblTitle);
             Controls.Add(lblNama);
             Controls.Add(txtNama);
@@ -234,8 +297,19 @@ namespace Logtracker.Forms
             Name = "RegisterForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "LOGTRACKER - Register";
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
+
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox3;
+        private PictureBox pictureBox4;
+        private PictureBox pictureBox5;
     }
 }

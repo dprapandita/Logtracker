@@ -35,7 +35,7 @@ namespace Logtracker.Forms
             lblTitle.ForeColor = Color.FromArgb(55, 36, 20);
             lblTitle.Location = new Point(10, 10);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(402, 36);
+            lblTitle.Size = new Size(402, 29);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Kelola Kategori Latihan";
             // 
@@ -46,7 +46,7 @@ namespace Logtracker.Forms
             txtNama.Location = new Point(9, 41);
             txtNama.Margin = new Padding(3, 2, 3, 2);
             txtNama.Name = "txtNama";
-            txtNama.Size = new Size(246, 28);
+            txtNama.Size = new Size(246, 24);
             txtNama.TabIndex = 1;
             txtNama.TextChanged += txtNama_TextChanged;
             // 
@@ -127,7 +127,7 @@ namespace Logtracker.Forms
             // 
             // KelolaKategoriForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 21F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(183, 160, 135);
             ClientSize = new Size(424, 335);

@@ -55,6 +55,11 @@ namespace Logtracker.Forms
         }
 
         private void lblPassword_Click(object sender, EventArgs e)
+ 
+       {
+        }
+
+        private void lblUsername_Click(object sender, EventArgs e)
         {
 
         }
